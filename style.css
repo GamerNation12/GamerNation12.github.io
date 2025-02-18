@@ -27,7 +27,7 @@ nav ul li {
   margin: 0 20px;
   cursor: pointer;
   position: relative;
-  color: #333;
+  color: #2192ff;
 }
 nav ul li:after {
   content: "";
