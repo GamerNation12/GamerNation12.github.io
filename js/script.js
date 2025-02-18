@@ -143,7 +143,7 @@ webSocket.addEventListener("message", (event) => {
         } else {
           document.getElementById(
             "rpcSmallIcon"
-          ).src = ``;
+          ).src = `./template/transparent.png`;
         }
       } else {
         rpcName.innerText = "None";
