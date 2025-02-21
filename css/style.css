@@ -23,10 +23,7 @@ p.mal {
 
 body {
   background:
-           /* top, transparent black, faked with gradient */ linear-gradient(
-      rgba(10, 10, 12, 0.9),
-      rgba(10, 10, 12, 0.9)
-    ),
+           /* top, transparent black, faked with gradient */ 
    url("../images/bg.gif");
   background-size: contain;
   background-attachment: fixed;
