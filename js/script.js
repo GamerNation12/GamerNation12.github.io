@@ -18,8 +18,11 @@
 
   fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
     .then((response) => {
+      console.log('Response Status:', response.status); // Log the response status
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        return response.text().then(text => { // Get the response body as text
+          throw new Error(`Network response was not ok: ${text}`);
+        });
       }
       return response.json();
     })
