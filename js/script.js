@@ -85,15 +85,15 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         document.getElementById("rpcIcon").src = `game.png`;
         document.getElementById(
           "rpcSmallIcon"
-        ).src = `gamer.png`;
+        ).src = `game.png`;
       }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
-      document.getElementById("rpcIcon").src = `gamer.png`;
+      document.getElementById("rpcIcon").src = `game.png`;
       document.getElementById(
         "rpcSmallIcon"
-      ).src = `gamer.png`;
+      ).src = `game.png`;
     }
   });
 
