@@ -129,7 +129,20 @@
   function resetRpcInfo() {
     rpcName.innerText = "None";
     rpcDetails.innerText = "I'm not currently playing anything";
-    document.getElementById("rpcIcon").src = `gamer.png`;
-    document.getElementById("rpcSmallIcon").src = `gamer.png`;
+    
+    const rpcIcon = document.getElementById("rpcIcon");
+    const rpcSmallIcon = document.getElementById("rpcSmallIcon");
+
+    if (rpcIcon) {
+      rpcIcon.src = `gamer.png`;
+    } else {
+      console.error('RPC Icon element not found');
+    }
+
+    if (rpcSmallIcon) {
+      rpcSmallIcon.src = `gamer.png`;
+    } else {
+      console.error('RPC Small Icon element not found');
+    }
   }
 })();
