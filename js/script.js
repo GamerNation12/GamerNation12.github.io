@@ -183,7 +183,7 @@ function calculateAge(birthDate) {
 }
 
 window.onload = function() {
-  var birthDate = "27.7.232323";
+  var birthDate = "01.23.2006";
   var age = calculateAge(birthDate);
   var ageElement = document.getElementById("age");
   ageElement.textContent = age;
