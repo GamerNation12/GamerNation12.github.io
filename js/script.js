@@ -18,11 +18,8 @@
 
   fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
     .then((response) => {
-      console.log('Response Status:', response.status); // Log the response status
       if (!response.ok) {
-        return response.text().then(text => { // Get the response body as text
-          throw new Error(`Network response was not ok: ${text}`);
-        });
+        throw new Error('Network response was not ok');
       }
       return response.json();
     })
@@ -129,20 +126,7 @@
   function resetRpcInfo() {
     rpcName.innerText = "None";
     rpcDetails.innerText = "I'm not currently playing anything";
-    
-    const rpcIcon = document.getElementById("rpcIcon");
-    const rpcSmallIcon = document.getElementById("rpcSmallIcon");
-
-    if (rpcIcon) {
-      rpcIcon.src = `gamer.png`;
-    } else {
-      console.error('RPC Icon element not found');
-    }
-
-    if (rpcSmallIcon) {
-      rpcSmallIcon.src = `gamer.png`;
-    } else {
-      console.error('RPC Small Icon element not found');
-    }
+    document.getElementById("rpcIcon").src = `gamer.png`;
+    document.getElementById("rpcSmallIcon").src = `gamer.png`;
   }
 })();
