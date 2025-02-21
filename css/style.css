@@ -14,7 +14,7 @@ html {
 
 @font-face {
     font-family: "AGRevueCyr Roman Medium";
-    src: url("../images/bg.gif") format("truetype");
+    src: url("../images/bg.jpeg") format("truetype");
 }
 p.mal { 
     font-family: "AGRevueCyr Roman Medium", Verdana, Tahoma;
@@ -24,7 +24,7 @@ p.mal {
 body {
   background:
            /* top, transparent black, faked with gradient */ 
-   url("../images/bg.gif");
+   url("../images/bg.jpg");
   background-size: contain;
   background-attachment: fixed;
   background-repeat: no-repeat;
