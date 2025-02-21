@@ -77,7 +77,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         } else {
           document.getElementById(
             "rpcSmallIcon"
-          ).src = `./template/transparent.png`;
+          ).src = `./transparent.png`;
         }
       } else {
         rpcName.innerText = "None";
@@ -85,15 +85,15 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         document.getElementById("rpcIcon").src = `game.png`;
         document.getElementById(
           "rpcSmallIcon"
-        ).src = `game.png`;
+        ).src = `gamer.png`;
       }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
-      document.getElementById("rpcIcon").src = `game.png`;
+      document.getElementById("rpcIcon").src = `gamer.png`;
       document.getElementById(
         "rpcSmallIcon"
-      ).src = `game.png`;
+      ).src = `gamer.png`;
     }
   });
 
@@ -143,7 +143,7 @@ webSocket.addEventListener("message", (event) => {
         } else {
           document.getElementById(
             "rpcSmallIcon"
-          ).src = `./template/transparent.png`;
+          ).src = `./transparent.png`;
         }
       } else {
         rpcName.innerText = "None";
