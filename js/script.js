@@ -29,6 +29,8 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       const discordAvatar = document.getElementById("discordAvatar");
       if (discordAvatar) {
         discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data.discord_user.avatar}.png?size=4096`;
+      } else {
+        console.error('Element with id "discordAvatar" not found.');
       }
 
       const statusCircle = document.getElementById("statusCircle");
@@ -64,6 +66,8 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       const trackImg = document.getElementById("trackImg");
       if (trackImg) {
         trackImg.src = e.data.spotify.album_art_url;
+      } else {
+        console.error('Element with id "trackImg" not found.');
       }
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
     } else {
@@ -72,6 +76,8 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       const trackImg = document.getElementById("trackImg");
       if (trackImg) {
         trackImg.src = "music.png";
+      } else {
+        console.error('Element with id "trackImg" not found.');
       }
     }
 
@@ -83,6 +89,8 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
           rpcIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        } else {
+          console.error('Element with id "rpcIcon" not found.');
         }
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
@@ -91,6 +99,8 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
           } else {
             rpcSmallIcon.src = `./template/transparent.png`;
           }
+        } else {
+          console.error('Element with id "rpcSmallIcon" not found.');
         }
       } else {
         rpcName.innerText = "None";
@@ -98,10 +108,14 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
           rpcIcon.src = `game.png`;
+        } else {
+          console.error('Element with id "rpcIcon" not found.');
         }
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
           rpcSmallIcon.src = `gamer.png`;
+        } else {
+          console.error('Element with id "rpcSmallIcon" not found.');
         }
       }
     } else {
@@ -110,10 +124,14 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       const rpcIcon = document.getElementById("rpcIcon");
       if (rpcIcon) {
         rpcIcon.src = `gamer.png`;
+      } else {
+        console.error('Element with id "rpcIcon" not found.');
       }
       const rpcSmallIcon = document.getElementById("rpcSmallIcon");
       if (rpcSmallIcon) {
         rpcSmallIcon.src = `gamer.png`;
+      } else {
+        console.error('Element with id "rpcSmallIcon" not found.');
       }
     }
   })
@@ -148,6 +166,8 @@ webSocket.addEventListener("message", (event) => {
       const trackImg = document.getElementById("trackImg");
       if (trackImg) {
         trackImg.src = data.d.spotify.album_art_url;
+      } else {
+        console.error('Element with id "trackImg" not found.');
       }
       trackLink.href = `https://open.spotify.com/track/${data.d.spotify.track_id}`;
     } else if (data.d.activities.length > 0) {
@@ -158,6 +178,8 @@ webSocket.addEventListener("message", (event) => {
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
           rpcIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        } else {
+          console.error('Element with id "rpcIcon" not found.');
         }
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
@@ -166,6 +188,8 @@ webSocket.addEventListener("message", (event) => {
           } else {
             rpcSmallIcon.src = `./template/transparent.png`;
           }
+        } else {
+          console.error('Element with id "rpcSmallIcon" not found.');
         }
       } else {
         rpcName.innerText = "None";
@@ -173,10 +197,14 @@ webSocket.addEventListener("message", (event) => {
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
           rpcIcon.src = `gamer.png`;
+        } else {
+          console.error('Element with id "rpcIcon" not found.');
         }
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
           rpcSmallIcon.src = `gamer.png`;
+        } else {
+          console.error('Element with id "rpcSmallIcon" not found.');
         }
       }
     } else {
@@ -185,10 +213,14 @@ webSocket.addEventListener("message", (event) => {
       const rpcIcon = document.getElementById("rpcIcon");
       if (rpcIcon) {
         rpcIcon.src = `gamer.png`;
+      } else {
+        console.error('Element with id "rpcIcon" not found.');
       }
       const rpcSmallIcon = document.getElementById("rpcSmallIcon");
       if (rpcSmallIcon) {
         rpcSmallIcon.src = `gamer.png`;
+      } else {
+        console.error('Element with id "rpcSmallIcon" not found.');
       }
     }
   }
