@@ -1,17 +1,17 @@
-let trackName = document.getElementById("trackName");
-let trackArtist = document.getElementById("trackArtist");
-let trackLink = document.getElementById("trackLink");
+const trackName = document.getElementById("trackName");
+const trackArtist = document.getElementById("trackArtist");
+const trackLink = document.getElementById("trackLink");
 
-let dscName = document.getElementById("nameNeksio");
-let discordName = document.getElementById("discordName");
-let discordMotd = document.getElementById("discordMotd");
-let avatarLink = document.getElementById("avatarLink");
+const dscName = document.getElementById("nameNeksio");
+const discordName = document.getElementById("discordName");
+const discordMotd = document.getElementById("discordMotd");
+const avatarLink = document.getElementById("avatarLink");
 
-let rpcName = document.getElementById("rpcName");
-let rpcDetails = document.getElementById("rpcDetails");
+const rpcName = document.getElementById("rpcName");
+const rpcDetails = document.getElementById("rpcDetails");
 
-let webSocket = new WebSocket("wss://api.lanyard.rest/socket");
-let discordID = '759433582107426816';
+const webSocket = new WebSocket("wss://api.lanyard.rest/socket");
+const discordID = '759433582107426816';
 
 fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
   .then((response) => {
@@ -24,8 +24,18 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
     console.log(e); // Log the entire response to check its structure
 
     if (e.data.discord_user) {
-      discordName.innerText = `@${e.data.discord_user.username}`;
-      avatarLink.href = `https://discord.com/users/${discordID}`;
+      if (discordName) {
+        discordName.innerText = `@${e.data.discord_user.username}`;
+      } else {
+        console.error('Element with id "discordName" not found.');
+      }
+
+      if (avatarLink) {
+        avatarLink.href = `https://discord.com/users/${discordID}`;
+      } else {
+        console.error('Element with id "avatarLink" not found.');
+      }
+
       const discordAvatar = document.getElementById("discordAvatar");
       if (discordAvatar) {
         discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data.discord_user.avatar}.png?size=4096`;
@@ -34,45 +44,86 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       }
 
       const statusCircle = document.getElementById("statusCircle");
-      switch (e.data.discord_status) {
-        case 'online':
-          statusCircle.style.backgroundColor = "#23a55a";
-          break;
-        case 'idle':
-          statusCircle.style.backgroundColor = "#f0b232";
-          break;
-        case 'dnd':
-          statusCircle.style.backgroundColor = "#f23f43";
-          break;
-        case 'offline':
-          statusCircle.style.backgroundColor = "#80848e";
-          break;
+      if (statusCircle) {
+        switch (e.data.discord_status) {
+          case 'online':
+            statusCircle.style.backgroundColor = "#23a55a";
+            break;
+          case 'idle':
+            statusCircle.style.backgroundColor = "#f0b232";
+            break;
+          case 'dnd':
+            statusCircle.style.backgroundColor = "#f23f43";
+            break;
+          case 'offline':
+            statusCircle.style.backgroundColor = "#80848e";
+            break;
+        }
+      } else {
+        console.error('Element with id "statusCircle" not found.');
       }
     }
 
     // Set custom or regular status message
     const customStatus = e.data.activities.find(activity => activity.type === 4); // type 4 indicates custom status
     if (customStatus && customStatus.state) {
-      discordMotd.innerText = customStatus.state;
+      if (discordMotd) {
+        discordMotd.innerText = customStatus.state;
+      } else {
+        console.error('Element with id "discordMotd" not found.');
+      }
     } else if (e.data.discord_user.bio) {
-      discordMotd.innerText = e.data.discord_user.bio;
+      if (discordMotd) {
+        discordMotd.innerText = e.data.discord_user.bio;
+      } else {
+        console.error('Element with id "discordMotd" not found.');
+      }
     } else {
-      discordMotd.innerText = "No status message";
+      if (discordMotd) {
+        discordMotd.innerText = "No status message";
+      } else {
+        console.error('Element with id "discordMotd" not found.');
+      }
     }
 
     if (e.data.listening_to_spotify) {
-      trackName.innerText = e.data.spotify.song;
-      trackArtist.innerText = e.data.spotify.artist.replace(/;/g, ",");
+      if (trackName) {
+        trackName.innerText = e.data.spotify.song;
+      } else {
+        console.error('Element with id "trackName" not found.');
+      }
+
+      if (trackArtist) {
+        trackArtist.innerText = e.data.spotify.artist.replace(/;/g, ",");
+      } else {
+        console.error('Element with id "trackArtist" not found.');
+      }
+
       const trackImg = document.getElementById("trackImg");
       if (trackImg) {
         trackImg.src = e.data.spotify.album_art_url;
       } else {
         console.error('Element with id "trackImg" not found.');
       }
-      trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+
+      if (trackLink) {
+        trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+      } else {
+        console.error('Element with id "trackLink" not found.');
+      }
     } else {
-      trackName.innerText = "None";
-      trackArtist.innerText = "I'm not currently listening to anything";
+      if (trackName) {
+        trackName.innerText = "None";
+      } else {
+        console.error('Element with id "trackName" not found.');
+      }
+
+      if (trackArtist) {
+        trackArtist.innerText = "I'm not currently listening to anything";
+      } else {
+        console.error('Element with id "trackArtist" not found.');
+      }
+
       const trackImg = document.getElementById("trackImg");
       if (trackImg) {
         trackImg.src = "music.png";
@@ -84,14 +135,25 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
     if (e.data.activities.length > 0) {
       const gameActivity = e.data.activities.find(activity => activity.type === 0);
       if (gameActivity) {
-        rpcName.innerText = gameActivity.name;
-        rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
+        if (rpcName) {
+          rpcName.innerText = gameActivity.name;
+        } else {
+          console.error('Element with id "rpcName" not found.');
+        }
+
+        if (rpcDetails) {
+          rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
+        } else {
+          console.error('Element with id "rpcDetails" not found.');
+        }
+
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
           rpcIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
         } else {
           console.error('Element with id "rpcIcon" not found.');
         }
+
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
           if (gameActivity.assets.small_image) {
@@ -103,14 +165,25 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
           console.error('Element with id "rpcSmallIcon" not found.');
         }
       } else {
-        rpcName.innerText = "None";
-        rpcDetails.innerText = "I'm not currently playing anything";
+        if (rpcName) {
+          rpcName.innerText = "None";
+        } else {
+          console.error('Element with id "rpcName" not found.');
+        }
+
+        if (rpcDetails) {
+          rpcDetails.innerText = "I'm not currently playing anything";
+        } else {
+          console.error('Element with id "rpcDetails" not found.');
+        }
+
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
           rpcIcon.src = `game.png`;
         } else {
           console.error('Element with id "rpcIcon" not found.');
         }
+
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
           rpcSmallIcon.src = `gamer.png`;
@@ -119,14 +192,25 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         }
       }
     } else {
-      rpcName.innerText = "None";
-      rpcDetails.innerText = "I'm not currently playing anything";
+      if (rpcName) {
+        rpcName.innerText = "None";
+      } else {
+        console.error('Element with id "rpcName" not found.');
+      }
+
+      if (rpcDetails) {
+        rpcDetails.innerText = "I'm not currently playing anything";
+      } else {
+        console.error('Element with id "rpcDetails" not found.');
+      }
+
       const rpcIcon = document.getElementById("rpcIcon");
       if (rpcIcon) {
         rpcIcon.src = `gamer.png`;
       } else {
         console.error('Element with id "rpcIcon" not found.');
       }
+
       const rpcSmallIcon = document.getElementById("rpcSmallIcon");
       if (rpcSmallIcon) {
         rpcSmallIcon.src = `gamer.png`;
@@ -161,26 +245,52 @@ webSocket.addEventListener("message", (event) => {
 
   if (data.t === "PRESENCE_UPDATE") {
     if (data.d.spotify) {
-      trackName.innerText = data.d.spotify.song;
-      trackArtist.innerText = data.d.spotify.artist.replace(/;/g, ",");
+      if (trackName) {
+        trackName.innerText = data.d.spotify.song;
+      } else {
+        console.error('Element with id "trackName" not found.');
+      }
+
+      if (trackArtist) {
+        trackArtist.innerText = data.d.spotify.artist.replace(/;/g, ",");
+      } else {
+        console.error('Element with id "trackArtist" not found.');
+      }
+
       const trackImg = document.getElementById("trackImg");
       if (trackImg) {
         trackImg.src = data.d.spotify.album_art_url;
       } else {
         console.error('Element with id "trackImg" not found.');
       }
-      trackLink.href = `https://open.spotify.com/track/${data.d.spotify.track_id}`;
+
+      if (trackLink) {
+        trackLink.href = `https://open.spotify.com/track/${data.d.spotify.track_id}`;
+      } else {
+        console.error('Element with id "trackLink" not found.');
+      }
     } else if (data.d.activities.length > 0) {
       const gameActivity = data.d.activities.find(activity => activity.type === 0);
       if (gameActivity) {
-        rpcName.innerText = gameActivity.name;
-        rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
+        if (rpcName) {
+          rpcName.innerText = gameActivity.name;
+        } else {
+          console.error('Element with id "rpcName" not found.');
+        }
+
+        if (rpcDetails) {
+          rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
+        } else {
+          console.error('Element with id "rpcDetails" not found.');
+        }
+
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
           rpcIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
         } else {
           console.error('Element with id "rpcIcon" not found.');
         }
+
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
           if (gameActivity.assets.small_image) {
@@ -192,14 +302,25 @@ webSocket.addEventListener("message", (event) => {
           console.error('Element with id "rpcSmallIcon" not found.');
         }
       } else {
-        rpcName.innerText = "None";
-        rpcDetails.innerText = "I'm not currently playing anything";
+        if (rpcName) {
+          rpcName.innerText = "None";
+        } else {
+          console.error('Element with id "rpcName" not found.');
+        }
+
+        if (rpcDetails) {
+          rpcDetails.innerText = "I'm not currently playing anything";
+        } else {
+          console.error('Element with id "rpcDetails" not found.');
+        }
+
         const rpcIcon = document.getElementById("rpcIcon");
         if (rpcIcon) {
-          rpcIcon.src = `gamer.png`;
+          rpcIcon.src = `game.png`;
         } else {
           console.error('Element with id "rpcIcon" not found.');
         }
+
         const rpcSmallIcon = document.getElementById("rpcSmallIcon");
         if (rpcSmallIcon) {
           rpcSmallIcon.src = `gamer.png`;
@@ -208,14 +329,25 @@ webSocket.addEventListener("message", (event) => {
         }
       }
     } else {
-      rpcName.innerText = "None";
-      rpcDetails.innerText = "I'm not currently playing anything";
+      if (rpcName) {
+        rpcName.innerText = "None";
+      } else {
+        console.error('Element with id "rpcName" not found.');
+      }
+
+      if (rpcDetails) {
+        rpcDetails.innerText = "I'm not currently playing anything";
+      } else {
+        console.error('Element with id "rpcDetails" not found.');
+      }
+
       const rpcIcon = document.getElementById("rpcIcon");
       if (rpcIcon) {
         rpcIcon.src = `gamer.png`;
       } else {
         console.error('Element with id "rpcIcon" not found.');
       }
+
       const rpcSmallIcon = document.getElementById("rpcSmallIcon");
       if (rpcSmallIcon) {
         rpcSmallIcon.src = `gamer.png`;
@@ -252,6 +384,8 @@ window.onload = function() {
   const ageElement = document.getElementById("age");
   if (ageElement) {
     ageElement.textContent = age;
+  } else {
+    console.error('Element with id "age" not found.');
   }
 
   // Countdown timer for auto-refresh
@@ -266,6 +400,8 @@ window.onload = function() {
 
       if (element) {
         element.textContent = minutes + ":" + seconds;
+      } else {
+        console.error('Element with id "timer" not found.');
       }
 
       if (--timer < 0) {
