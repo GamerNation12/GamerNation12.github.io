@@ -11,15 +11,14 @@ html {
     "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-
 @font-face {
     font-family: "AGRevueCyr Roman Medium";
     src: url("../images/bg.jpeg") format("truetype");
 }
+
 p.mal { 
     font-family: "AGRevueCyr Roman Medium", Verdana, Tahoma;
 }
-
 
 body {
   background:
@@ -36,6 +35,7 @@ body {
   visibility: hidden;
   opacity: 0;
 }
+
 .countdown {
   position: fixed;
   bottom: 20px;
@@ -151,7 +151,7 @@ body {
 
 .discordBG {
   background-color: #7289DA;
- }
+}
 
 .rpcIcon {
   margin-right: 15px;
@@ -184,8 +184,6 @@ body {
 .discordTXT {
   color: #d9d9d9;
 }
-
-
 
 .center {
   top: 50%;
@@ -261,7 +259,6 @@ body {
   color: white;
   /* color: #ffc107; */
 }
-
 
 .inviteURL a {
   position: absolute;
@@ -342,5 +339,3 @@ a:link { text-decoration: none; }
   -moz-box-shadow: 1px 1px 3px #333;
   box-shadow: 1px 1px 3px #333;
 }
-
-
