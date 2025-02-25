@@ -200,6 +200,7 @@ window.onload = function() {
   function startCountdown(duration, element) {
     let timer = duration, minutes, seconds;
     setInterval(function () {
+      console.log("Timer running"); // Debug log
       minutes = parseInt(timer / 60, 10);
       seconds = parseInt(timer % 60, 10);
 
@@ -215,6 +216,11 @@ window.onload = function() {
   }
 
   var countdownElement = document.getElementById("timer");
-  var countdownDuration = 60 * 3; // 3 minutes countdown
-  startCountdown(countdownDuration, countdownElement);
+  if (countdownElement) {
+    console.log("Countdown element found"); // Debug log
+    var countdownDuration = 60 * 3; // 3 minutes countdown
+    startCountdown(countdownDuration, countdownElement);
+  } else {
+    console.error("Countdown element not found"); // Debug log
+  }
 };
