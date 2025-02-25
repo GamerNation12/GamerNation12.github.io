@@ -148,10 +148,10 @@ webSocket.addEventListener("message", (event) => {
       } else {
         rpcName.innerText = "None";
         rpcDetails.innerText = "I'm not currently playing anything";
-        document.getElementById("rpcIcon").src = `game.png`;
+        document.getElementById("rpcIcon").src = `gamer.png`;
         document.getElementById(
           "rpcSmallIcon"
-        ).src = `game.png`;
+        ).src = `gamer.png`;
       }
     } else {
       rpcName.innerText = "None";
