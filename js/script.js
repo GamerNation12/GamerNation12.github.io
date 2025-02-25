@@ -151,7 +151,7 @@ webSocket.addEventListener("message", (event) => {
         document.getElementById("rpcIcon").src = `game.png`;
         document.getElementById(
           "rpcSmallIcon"
-        ).src = `gamer.png`;
+        ).src = `game.png`;
       }
     } else {
       rpcName.innerText = "None";
