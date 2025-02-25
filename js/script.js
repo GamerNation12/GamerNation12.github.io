@@ -188,6 +188,12 @@ window.onload = function() {
   var ageElement = document.getElementById("age");
   ageElement.textContent = age;
 
+  // Create the countdown element
+  var countdownElement = document.createElement('div');
+  countdownElement.id = 'refreshCountdown';
+  countdownElement.className = 'countdown';
+  document.body.appendChild(countdownElement);
+
   // Start the countdown timer
   startCountdown(180);
 };
