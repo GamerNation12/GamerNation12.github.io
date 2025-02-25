@@ -187,4 +187,26 @@ window.onload = function() {
   var age = calculateAge(birthDate);
   var ageElement = document.getElementById("age");
   ageElement.textContent = age;
+
+  // Start the countdown timer
+  startCountdown(180);
 };
+
+function startCountdown(duration) {
+  var timer = duration, minutes, seconds;
+  var countdownElement = document.getElementById('refreshCountdown');
+  var countdownInterval = setInterval(function () {
+    minutes = parseInt(timer / 60, 10);
+    seconds = parseInt(timer % 60, 10);
+
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    countdownElement.textContent = minutes + ":" + seconds;
+
+    if (--timer < 0) {
+      clearInterval(countdownInterval);
+      location.reload();
+    }
+  }, 1000);
+}
