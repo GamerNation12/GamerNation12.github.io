@@ -26,7 +26,10 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
     if (e.data.discord_user) {
       discordName.innerText = `@${e.data.discord_user.username}`;
       avatarLink.href = `https://discord.com/users/${discordID}`;
-      document.getElementById("discordAvatar").src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data.discord_user.avatar}.png?size=4096`;
+      const discordAvatar = document.getElementById("discordAvatar");
+      if (discordAvatar) {
+        discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data.discord_user.avatar}.png?size=4096`;
+      }
 
       const statusCircle = document.getElementById("statusCircle");
       switch (e.data.discord_status) {
@@ -56,14 +59,20 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
     }
 
     if (e.data.listening_to_spotify) {
-      trackName.innerText = `${e.data.spotify.song}`;
+      trackName.innerText = e.data.spotify.song;
       trackArtist.innerText = e.data.spotify.artist.replace(/;/g, ",");
-      document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+      const trackImg = document.getElementById("trackImg");
+      if (trackImg) {
+        trackImg.src = e.data.spotify.album_art_url;
+      }
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
     } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
-      document.getElementById("trackImg").src = "music.png";
+      const trackImg = document.getElementById("trackImg");
+      if (trackImg) {
+        trackImg.src = "music.png";
+      }
     }
 
     if (e.data.activities.length > 0) {
@@ -71,23 +80,41 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       if (gameActivity) {
         rpcName.innerText = gameActivity.name;
         rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
-        document.getElementById("rpcIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
-        if (gameActivity.assets.small_image) {
-          document.getElementById("rpcSmallIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
-        } else {
-          document.getElementById("rpcSmallIcon").src = `./template/transparent.png`;
+        const rpcIcon = document.getElementById("rpcIcon");
+        if (rpcIcon) {
+          rpcIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        }
+        const rpcSmallIcon = document.getElementById("rpcSmallIcon");
+        if (rpcSmallIcon) {
+          if (gameActivity.assets.small_image) {
+            rpcSmallIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
+          } else {
+            rpcSmallIcon.src = `./template/transparent.png`;
+          }
         }
       } else {
         rpcName.innerText = "None";
         rpcDetails.innerText = "I'm not currently playing anything";
-        document.getElementById("rpcIcon").src = `game.png`;
-        document.getElementById("rpcSmallIcon").src = `gamer.png`;
+        const rpcIcon = document.getElementById("rpcIcon");
+        if (rpcIcon) {
+          rpcIcon.src = `game.png`;
+        }
+        const rpcSmallIcon = document.getElementById("rpcSmallIcon");
+        if (rpcSmallIcon) {
+          rpcSmallIcon.src = `gamer.png`;
+        }
       }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
-      document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById("rpcSmallIcon").src = `gamer.png`;
+      const rpcIcon = document.getElementById("rpcIcon");
+      if (rpcIcon) {
+        rpcIcon.src = `gamer.png`;
+      }
+      const rpcSmallIcon = document.getElementById("rpcSmallIcon");
+      if (rpcSmallIcon) {
+        rpcSmallIcon.src = `gamer.png`;
+      }
     }
   })
   .catch((error) => {
@@ -118,30 +145,51 @@ webSocket.addEventListener("message", (event) => {
     if (data.d.spotify) {
       trackName.innerText = data.d.spotify.song;
       trackArtist.innerText = data.d.spotify.artist.replace(/;/g, ",");
-      document.getElementById("trackImg").src = data.d.spotify.album_art_url;
+      const trackImg = document.getElementById("trackImg");
+      if (trackImg) {
+        trackImg.src = data.d.spotify.album_art_url;
+      }
       trackLink.href = `https://open.spotify.com/track/${data.d.spotify.track_id}`;
     } else if (data.d.activities.length > 0) {
       const gameActivity = data.d.activities.find(activity => activity.type === 0);
       if (gameActivity) {
         rpcName.innerText = gameActivity.name;
         rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
-        document.getElementById("rpcIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
-        if (gameActivity.assets.small_image) {
-          document.getElementById("rpcSmallIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
-        } else {
-          document.getElementById("rpcSmallIcon").src = `./template/transparent.png`;
+        const rpcIcon = document.getElementById("rpcIcon");
+        if (rpcIcon) {
+          rpcIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        }
+        const rpcSmallIcon = document.getElementById("rpcSmallIcon");
+        if (rpcSmallIcon) {
+          if (gameActivity.assets.small_image) {
+            rpcSmallIcon.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
+          } else {
+            rpcSmallIcon.src = `./template/transparent.png`;
+          }
         }
       } else {
         rpcName.innerText = "None";
         rpcDetails.innerText = "I'm not currently playing anything";
-        document.getElementById("rpcIcon").src = `gamer.png`;
-        document.getElementById("rpcSmallIcon").src = `gamer.png`;
+        const rpcIcon = document.getElementById("rpcIcon");
+        if (rpcIcon) {
+          rpcIcon.src = `gamer.png`;
+        }
+        const rpcSmallIcon = document.getElementById("rpcSmallIcon");
+        if (rpcSmallIcon) {
+          rpcSmallIcon.src = `gamer.png`;
+        }
       }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
-      document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById("rpcSmallIcon").src = `gamer.png`;
+      const rpcIcon = document.getElementById("rpcIcon");
+      if (rpcIcon) {
+        rpcIcon.src = `gamer.png`;
+      }
+      const rpcSmallIcon = document.getElementById("rpcSmallIcon");
+      if (rpcSmallIcon) {
+        rpcSmallIcon.src = `gamer.png`;
+      }
     }
   }
 });
@@ -170,7 +218,9 @@ window.onload = function() {
   const birthDate = "01.23.2006";
   const age = calculateAge(birthDate);
   const ageElement = document.getElementById("age");
-  ageElement.textContent = age;
+  if (ageElement) {
+    ageElement.textContent = age;
+  }
 
   // Countdown timer for auto-refresh
   function startCountdown(duration, element) {
@@ -182,7 +232,9 @@ window.onload = function() {
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
 
-      element.textContent = minutes + ":" + seconds;
+      if (element) {
+        element.textContent = minutes + ":" + seconds;
+      }
 
       if (--timer < 0) {
         timer = duration;
