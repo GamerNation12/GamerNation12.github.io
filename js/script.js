@@ -14,28 +14,34 @@ let webSocket = new WebSocket("wss://api.lanyard.rest/socket");
 let discordID = '759433582107426816';
 
 fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
-  .then((response) => response.json())
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
   .then((e) => {
-    console.log(e);  // Log the entire response to check its structure
+    console.log(e); // Log the entire response to check its structure
 
-    if (e.data["discord_user"]) {
+    if (e.data.discord_user) {
       discordName.innerText = `@${e.data.discord_user.username}`;
       avatarLink.href = `https://discord.com/users/${discordID}`;
-      document.getElementById(
-        "discordAvatar"
-      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
-      if (e.data.discord_status == "online") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#23a55a";
-      } else if (e.data.discord_status == "idle") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#f0b232";
-      } else if (e.data.discord_status == "dnd") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#f23f43";
-      } else if (e.data.discord_status == "offline") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#80848e";
+      document.getElementById("discordAvatar").src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data.discord_user.avatar}.png?size=4096`;
+
+      const statusCircle = document.getElementById("statusCircle");
+      switch (e.data.discord_status) {
+        case 'online':
+          statusCircle.style.backgroundColor = "#23a55a";
+          break;
+        case 'idle':
+          statusCircle.style.backgroundColor = "#f0b232";
+          break;
+        case 'dnd':
+          statusCircle.style.backgroundColor = "#f23f43";
+          break;
+        case 'offline':
+          statusCircle.style.backgroundColor = "#80848e";
+          break;
       }
     }
 
@@ -49,11 +55,9 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       discordMotd.innerText = "No status message";
     }
 
-    if (e.data["listening_to_spotify"]) {
+    if (e.data.listening_to_spotify) {
       trackName.innerText = `${e.data.spotify.song}`;
-      let artists = e.data.spotify.artist;
-      let artistFinal = artists.replaceAll(";", ",");
-      trackArtist.innerText = artistFinal;
+      trackArtist.innerText = e.data.spotify.artist.replace(/;/g, ",");
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
     } else {
@@ -62,70 +66,58 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       document.getElementById("trackImg").src = "music.png";
     }
 
-    if (e.data["activities"].length > 0) {
-      const gameActivity = e.data["activities"].find(activity => activity.type === 0);
+    if (e.data.activities.length > 0) {
+      const gameActivity = e.data.activities.find(activity => activity.type === 0);
       if (gameActivity) {
         rpcName.innerText = gameActivity.name;
         rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
-        document.getElementById(
-          "rpcIcon"
-        ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        document.getElementById("rpcIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
         if (gameActivity.assets.small_image) {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
+          document.getElementById("rpcSmallIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
         } else {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `./template/transparent.png`;
+          document.getElementById("rpcSmallIcon").src = `./template/transparent.png`;
         }
       } else {
         rpcName.innerText = "None";
         rpcDetails.innerText = "I'm not currently playing anything";
         document.getElementById("rpcIcon").src = `game.png`;
-        document.getElementById(
-          "rpcSmallIcon"
-        ).src = `gamer.png`;
+        document.getElementById("rpcSmallIcon").src = `gamer.png`;
       }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
       document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById(
-        "rpcSmallIcon"
-      ).src = `gamer.png`;
+      document.getElementById("rpcSmallIcon").src = `gamer.png`;
     }
+  })
+  .catch((error) => {
+    console.error('There was a problem with the fetch operation:', error);
   });
 
 webSocket.addEventListener("message", (event) => {
-  data = JSON.parse(event.data);
+  let data = JSON.parse(event.data);
 
-  if (event.data == '{"op":1,"d":{"heartbeat_interval":30000}}') {
-    webSocket.send(
-      JSON.stringify({
-        op: 2,
-        d: {
-          subscribe_to_id: discordID,
-        },
-      })
-    );
+  if (event.data === '{"op":1,"d":{"heartbeat_interval":30000}}') {
+    webSocket.send(JSON.stringify({
+      op: 2,
+      d: {
+        subscribe_to_id: discordID,
+      },
+    }));
     setInterval(() => {
-      webSocket.send(
-        JSON.stringify({
-          op: 3,
-          d: {
-            heartbeat_interval: 30000,
-          },
-        })
-      );
+      webSocket.send(JSON.stringify({
+        op: 3,
+        d: {
+          heartbeat_interval: 30000,
+        },
+      }));
     }, 30000);
   }
-  if (data.t == "PRESENCE_UPDATE") {
+
+  if (data.t === "PRESENCE_UPDATE") {
     if (data.d.spotify) {
       trackName.innerText = data.d.spotify.song;
-      let artists = data.d.spotify.artist;
-      let artistFinal = artists.replaceAll(";", ",");
-      trackArtist.innerText = artistFinal;
+      trackArtist.innerText = data.d.spotify.artist.replace(/;/g, ",");
       document.getElementById("trackImg").src = data.d.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${data.d.spotify.track_id}`;
     } else if (data.d.activities.length > 0) {
@@ -133,47 +125,37 @@ webSocket.addEventListener("message", (event) => {
       if (gameActivity) {
         rpcName.innerText = gameActivity.name;
         rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
-        document.getElementById(
-          "rpcIcon"
-        ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        document.getElementById("rpcIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
         if (gameActivity.assets.small_image) {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
+          document.getElementById("rpcSmallIcon").src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
         } else {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `./template/transparent.png`;
+          document.getElementById("rpcSmallIcon").src = `./template/transparent.png`;
         }
       } else {
         rpcName.innerText = "None";
         rpcDetails.innerText = "I'm not currently playing anything";
         document.getElementById("rpcIcon").src = `gamer.png`;
-        document.getElementById(
-          "rpcSmallIcon"
-        ).src = `gamer.png`;
+        document.getElementById("rpcSmallIcon").src = `gamer.png`;
       }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
       document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById(
-        "rpcSmallIcon"
-      ).src = `gamer.png`;
+      document.getElementById("rpcSmallIcon").src = `gamer.png`;
     }
   }
 });
 
 function calculateAge(birthDate) {
-  var today = new Date();
-  var parts = birthDate.split(".");
-  var birthDay = parseInt(parts[0], 10);
-  var birthMonth = parseInt(parts[1], 10);
-  var birthYear = parseInt(parts[2], 10);
+  const today = new Date();
+  const parts = birthDate.split(".");
+  const birthDay = parseInt(parts[0], 10);
+  const birthMonth = parseInt(parts[1], 10);
+  const birthYear = parseInt(parts[2], 10);
 
-  var ageYears = today.getFullYear() - birthYear;
-  var ageMonths = today.getMonth() + 1 - birthMonth;
-  var ageDays = today.getDate() - birthDay;
+  let ageYears = today.getFullYear() - birthYear;
+  const ageMonths = today.getMonth() + 1 - birthMonth;
+  const ageDays = today.getDate() - birthDay;
 
   if (ageMonths < 0 || (ageMonths === 0 && ageDays < 0)) {
     ageYears--;
@@ -184,10 +166,10 @@ function calculateAge(birthDate) {
 
 window.onload = function() {
   // Existing onload code...
-  
-  var birthDate = "01.23.2006";
-  var age = calculateAge(birthDate);
-  var ageElement = document.getElementById("age");
+
+  const birthDate = "01.23.2006";
+  const age = calculateAge(birthDate);
+  const ageElement = document.getElementById("age");
   ageElement.textContent = age;
 
   // Countdown timer for auto-refresh
@@ -208,7 +190,7 @@ window.onload = function() {
     }, 1000);
   }
 
-  var countdownElement = document.getElementById("timer");
-  var countdownDuration = 60 * 3; // 3 minutes countdown
+  const countdownElement = document.getElementById("timer");
+  const countdownDuration = 60 * 3; // 3 minutes countdown
   startCountdown(countdownDuration, countdownElement);
 };
