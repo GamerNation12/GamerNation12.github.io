@@ -36,6 +36,17 @@ body {
   visibility: hidden;
   opacity: 0;
 }
+.countdown {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  z-index: 1000; 
+}
 
 .spotifyPanel {
   transition: 0.3s;
