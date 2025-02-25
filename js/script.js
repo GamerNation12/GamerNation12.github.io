@@ -192,14 +192,11 @@ function calculateAge(birthDate) {
 }
 
 window.onload = function() {
-  // Existing onload code...
-  
   var birthDate = "01.23.2006";
   var age = calculateAge(birthDate);
   var ageElement = document.getElementById("age");
   ageElement.textContent = age;
 
-  // Countdown timer for auto-refresh
   function startCountdown(duration, element) {
     let timer = duration, minutes, seconds;
     setInterval(function () {
