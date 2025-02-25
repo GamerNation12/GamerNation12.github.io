@@ -148,10 +148,10 @@ webSocket.addEventListener("message", (event) => {
       } else {
         rpcName.innerText = "None";
         rpcDetails.innerText = "I'm not currently playing anything";
-        document.getElementById("rpcIcon").src = `gamer.png`;
+        document.getElementById("rpcIcon").src = `game.png`;
         document.getElementById(
           "rpcSmallIcon"
-        ).src = `gamer.png`;
+        ).src = `game.png`;
       }
     } else {
       rpcName.innerText = "None";
@@ -183,8 +183,32 @@ function calculateAge(birthDate) {
 }
 
 window.onload = function() {
+  // Existing onload code...
+  
   var birthDate = "01.23.2006";
   var age = calculateAge(birthDate);
   var ageElement = document.getElementById("age");
   ageElement.textContent = age;
+
+  // Countdown timer for auto-refresh
+  function startCountdown(duration, element) {
+    let timer = duration, minutes, seconds;
+    setInterval(function () {
+      minutes = parseInt(timer / 60, 10);
+      seconds = parseInt(timer % 60, 10);
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      element.textContent = minutes + ":" + seconds;
+
+      if (--timer < 0) {
+        timer = duration;
+      }
+    }, 1000);
+  }
+
+  var countdownElement = document.getElementById("timer");
+  var countdownDuration = 60 * 3; // 3 minutes countdown
+  startCountdown(countdownDuration, countdownElement);
 };
