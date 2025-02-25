@@ -1,3 +1,5 @@
+window.onload = function() {
+  console.log("Window loaded");
 let trackName = document.getElementById("trackName");
 let trackArtist = document.getElementById("trackArtist");
 let trackLink = document.getElementById("trackLink");
