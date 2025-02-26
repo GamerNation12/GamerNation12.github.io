@@ -10,9 +10,6 @@ let avatarLink = document.getElementById("avatarLink");
 let rpcName = document.getElementById("rpcName");
 let rpcDetails = document.getElementById("rpcDetails");
 
-let watchingName = document.getElementById("watchingName");
-let watchingDetails = document.getElementById("watchingDetails");
-
 let discordID = '759433582107426816';
 
 // Fetch data from Lanyard API for other panels
@@ -97,30 +94,6 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       document.getElementById(
         "rpcSmallIcon"
       ).src = `gamer.png`;
-    }
-  });
-
-// Fetch data from PreMiD API for watching panel
-fetch(`https://api.premid.app/v3/user/${discordID}`)
-  .then((response) => response.json())
-  .then((e) => {
-    console.log(e);  // Log the entire response to check its structure
-
-    if (e.activities.length > 0) {
-      const watchingActivity = e.activities.find(activity => activity.type === 3); // type 3 indicates watching
-      if (watchingActivity) {
-        watchingName.innerText = watchingActivity.name;
-        watchingDetails.innerText = watchingActivity.details || 'Watching something';
-        document.getElementById("watchingIcon").src = `https://cdn.discordapp.com/app-assets/${watchingActivity.application_id}/${watchingActivity.assets.large_image}.png`;
-      } else {
-        watchingName.innerText = "None";
-        watchingDetails.innerText = "I'm not currently watching anything";
-        document.getElementById("watchingIcon").src = `watching.png`;
-      }
-    } else {
-      watchingName.innerText = "None";
-      watchingDetails.innerText = "I'm not currently watching anything";
-      document.getElementById("watchingIcon").src = `watching.png`;
     }
   });
 
