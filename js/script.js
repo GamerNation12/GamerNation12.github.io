@@ -15,7 +15,7 @@ let watchingDetails = document.getElementById("watchingDetails");
 
 let discordID = '759433582107426816';
 
-fetch(`https://api.premid.app/v2/user/${discordID}`)
+fetch(`https://api.premid.app/v3/user/${discordID}`)
   .then((response) => response.json())
   .then((e) => {
     console.log(e);  // Log the entire response to check its structure
