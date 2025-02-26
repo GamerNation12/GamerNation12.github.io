@@ -78,6 +78,22 @@
 
     // Start the countdown timer
     startCountdown(180);
+
+    // Function to start the countdown and refresh the page
+    function startCountdown(seconds) {
+      const countdownElement = document.getElementById('refreshCountdown');
+      let remainingTime = seconds;
+
+      const interval = setInterval(() => {
+        countdownElement.textContent = `Page refreshes in ${remainingTime} seconds`;
+        remainingTime--;
+
+        if (remainingTime < 0) {
+          clearInterval(interval);
+          location.reload();
+        }
+      }, 1000);
+    }
   </script>
 </body>
 
