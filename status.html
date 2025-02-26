@@ -62,6 +62,9 @@
     </div>
   </div>
 
+  <!-- Add the countdown element -->
+  <div id="refreshCountdown" class="countdown"></div>
+
   <script src="js/script.js"></script>
   <script>
     const gradients = [
@@ -72,6 +75,9 @@
     const chosenGradient = gradients[Math.floor(Math.random() * gradients.length)];
     const nameNeksio = document.getElementById("nameNeksio");
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
+
+    // Start the countdown timer
+    startCountdown(180);
   </script>
 </body>
 
