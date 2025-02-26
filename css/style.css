@@ -40,7 +40,7 @@ body {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(15, 15, 18, 0.8); /* Slightly transparent */
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -48,7 +48,7 @@ body {
   z-index: 1000; 
 }
 
-.spotifyPanel {
+.spotifyPanel, .watchingPanel {
   transition: 0.3s;
   animation-name: init;
   animation-duration: 1s;
@@ -72,7 +72,7 @@ body {
   }
 }
 
-.trackImg {
+.trackImg, .watchingIcon {
   transition: 0.3s;
   margin-right: 15px;
   float: left;
@@ -82,12 +82,12 @@ body {
   cursor: pointer;
 }
 
-.trackName {
+.trackName, .watchingName {
   color: #fff;
   margin-top: 5px;
 }
 
-.trackArtist {
+.trackArtist, .watchingDetails {
   margin-top: -13px;
   font-size: 12.5px;
   color: #747474;
