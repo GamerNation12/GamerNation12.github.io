@@ -13,60 +13,59 @@ let rpcDetails = document.getElementById("rpcDetails");
 let watchingName = document.getElementById("watchingName");
 let watchingDetails = document.getElementById("watchingDetails");
 
-let webSocket = new WebSocket("wss://api.lanyard.rest/socket");
 let discordID = '759433582107426816';
 
-fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
+fetch(`https://api.premid.app/v2/user/${discordID}`)
   .then((response) => response.json())
   .then((e) => {
     console.log(e);  // Log the entire response to check its structure
 
-    if (e.data["discord_user"]) {
-      discordName.innerText = `@${e.data.discord_user.username}`;
+    if (e.user) {
+      discordName.innerText = `@${e.user.username}`;
       avatarLink.href = `https://discord.com/users/${discordID}`;
       document.getElementById(
         "discordAvatar"
-      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
-      if (e.data.discord_status == "online") {
+      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.user.avatar}.png?size=4096`;
+      if (e.user.status == "online") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#23a55a";
-      } else if (e.data.discord_status == "idle") {
+      } else if (e.user.status == "idle") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#f0b232";
-      } else if (e.data.discord_status == "dnd") {
+      } else if (e.user.status == "dnd") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#f23f43";
-      } else if (e.data.discord_status == "offline") {
+      } else if (e.user.status == "offline") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#80848e";
       }
     }
 
     // Set custom or regular status message
-    const customStatus = e.data.activities.find(activity => activity.type === 4); // type 4 indicates custom status
+    const customStatus = e.activities.find(activity => activity.type === 4); // type 4 indicates custom status
     if (customStatus && customStatus.state) {
       discordMotd.innerText = customStatus.state;
-    } else if (e.data.discord_user.bio) {
-      discordMotd.innerText = e.data.discord_user.bio;
+    } else if (e.user.bio) {
+      discordMotd.innerText = e.user.bio;
     } else {
       discordMotd.innerText = "No status message";
     }
 
-    if (e.data["listening_to_spotify"]) {
-      trackName.innerText = `${e.data.spotify.song}`;
-      let artists = e.data.spotify.artist;
+    if (e.spotify) {
+      trackName.innerText = `${e.spotify.song}`;
+      let artists = e.spotify.artist;
       let artistFinal = artists.replaceAll(";", ",");
       trackArtist.innerText = artistFinal;
-      document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-      trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+      document.getElementById("trackImg").src = e.spotify.album_art_url;
+      trackLink.href = `https://open.spotify.com/track/${e.spotify.track_id}`;
     } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
       document.getElementById("trackImg").src = "music.png";
     }
 
-    if (e.data["activities"].length > 0) {
-      const gameActivity = e.data["activities"].find(activity => activity.type === 0);
+    if (e.activities.length > 0) {
+      const gameActivity = e.activities.find(activity => activity.type === 0);
       if (gameActivity) {
         rpcName.innerText = gameActivity.name;
         rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
@@ -91,7 +90,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         ).src = `gamer.png`;
       }
 
-      const watchingActivity = e.data["activities"].find(activity => activity.type === 3); // type 3 indicates watching
+      const watchingActivity = e.activities.find(activity => activity.type === 3); // type 3 indicates watching
       if (watchingActivity) {
         watchingName.innerText = watchingActivity.name;
         watchingDetails.innerText = watchingActivity.details || 'Watching something';
@@ -114,88 +113,6 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       document.getElementById("watchingIcon").src = `watching.png`;
     }
   });
-
-webSocket.addEventListener("message", (event) => {
-  data = JSON.parse(event.data);
-
-  if (event.data == '{"op":1,"d":{"heartbeat_interval":30000}}') {
-    webSocket.send(
-      JSON.stringify({
-        op: 2,
-        d: {
-          subscribe_to_id: discordID,
-        },
-      })
-    );
-    setInterval(() => {
-      webSocket.send(
-        JSON.stringify({
-          op: 3,
-          d: {
-            heartbeat_interval: 30000,
-          },
-        })
-      );
-    }, 30000);
-  }
-  if (data.t == "PRESENCE_UPDATE") {
-    if (data.d.spotify) {
-      trackName.innerText = data.d.spotify.song;
-      let artists = data.d.spotify.artist;
-      let artistFinal = artists.replaceAll(";", ",");
-      trackArtist.innerText = artistFinal;
-      document.getElementById("trackImg").src = data.d.spotify.album_art_url;
-      trackLink.href = `https://open.spotify.com/track/${data.d.spotify.track_id}`;
-    } else if (data.d.activities.length > 0) {
-      const gameActivity = data.d.activities.find(activity => activity.type === 0);
-      if (gameActivity) {
-        rpcName.innerText = gameActivity.name;
-        rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
-        document.getElementById(
-          "rpcIcon"
-        ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
-        if (gameActivity.assets.small_image) {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
-        } else {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `./template/transparent.png`;
-        }
-      } else {
-        rpcName.innerText = "None";
-        rpcDetails.innerText = "I'm not currently playing anything";
-        document.getElementById("rpcIcon").src = `gamer.png`;
-        document.getElementById(
-          "rpcSmallIcon"
-        ).src = `gamer.png`;
-      }
-
-      const watchingActivity = data.d.activities.find(activity => activity.type === 3); // type 3 indicates watching
-      if (watchingActivity) {
-        watchingName.innerText = watchingActivity.name;
-        watchingDetails.innerText = watchingActivity.details || 'Watching something';
-        document.getElementById("watchingIcon").src = `https://cdn.discordapp.com/app-assets/${watchingActivity.application_id}/${watchingActivity.assets.large_image}.png`;
-      } else {
-        watchingName.innerText = "None";
-        watchingDetails.innerText = "I'm not currently watching anything";
-        document.getElementById("watchingIcon").src = `watching.png`;
-      }
-    } else {
-      rpcName.innerText = "None";
-      rpcDetails.innerText = "I'm not currently playing anything";
-      document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById(
-        "rpcSmallIcon"
-      ).src = `gamer.png`;
-
-      watchingName.innerText = "None";
-      watchingDetails.innerText = "I'm not currently watching anything";
-      document.getElementById("watchingIcon").src = `watching.png`;
-    }
-  }
-});
 
 function calculateAge(birthDate) {
   var today = new Date();
