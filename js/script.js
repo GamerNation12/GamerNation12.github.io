@@ -10,6 +10,9 @@ let avatarLink = document.getElementById("avatarLink");
 let rpcName = document.getElementById("rpcName");
 let rpcDetails = document.getElementById("rpcDetails");
 
+let watchingName = document.getElementById("watchingName");
+let watchingDetails = document.getElementById("watchingDetails");
+
 let webSocket = new WebSocket("wss://api.lanyard.rest/socket");
 let discordID = '759433582107426816';
 
@@ -87,6 +90,15 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
           "rpcSmallIcon"
         ).src = `gamer.png`;
       }
+
+      const watchingActivity = e.data["activities"].find(activity => activity.type === 3); // type 3 indicates watching
+      if (watchingActivity) {
+        watchingName.innerText = watchingActivity.name;
+        watchingDetails.innerText = watchingActivity.details || 'Watching something';
+      } else {
+        watchingName.innerText = "None";
+        watchingDetails.innerText = "I'm not currently watching anything";
+      }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
@@ -94,6 +106,9 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       document.getElementById(
         "rpcSmallIcon"
       ).src = `gamer.png`;
+
+      watchingName.innerText = "None";
+      watchingDetails.innerText = "I'm not currently watching anything";
     }
   });
 
@@ -153,6 +168,15 @@ webSocket.addEventListener("message", (event) => {
           "rpcSmallIcon"
         ).src = `gamer.png`;
       }
+
+      const watchingActivity = data.d.activities.find(activity => activity.type === 3); // type 3 indicates watching
+      if (watchingActivity) {
+        watchingName.innerText = watchingActivity.name;
+        watchingDetails.innerText = watchingActivity.details || 'Watching something';
+      } else {
+        watchingName.innerText = "None";
+        watchingDetails.innerText = "I'm not currently watching anything";
+      }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
@@ -160,6 +184,9 @@ webSocket.addEventListener("message", (event) => {
       document.getElementById(
         "rpcSmallIcon"
       ).src = `gamer.png`;
+
+      watchingName.innerText = "None";
+      watchingDetails.innerText = "I'm not currently watching anything";
     }
   }
 });
