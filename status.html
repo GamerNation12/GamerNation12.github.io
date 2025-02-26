@@ -87,7 +87,7 @@
       const interval = setInterval(() => {
         const mins = Math.floor(remainingTime / 60);
         const secs = remainingTime % 60;
-        countdownElement.textContent = `Auto-Refreshing in ${mins} minutes and ${secs} seconds`;
+        countdownElement.textContent = `Auto-Refreshing: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
         remainingTime--;
 
         if (remainingTime < 0) {
