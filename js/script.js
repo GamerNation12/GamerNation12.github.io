@@ -95,9 +95,11 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       if (watchingActivity) {
         watchingName.innerText = watchingActivity.name;
         watchingDetails.innerText = watchingActivity.details || 'Watching something';
+        document.getElementById("watchingIcon").src = `https://cdn.discordapp.com/app-assets/${watchingActivity.application_id}/${watchingActivity.assets.large_image}.png`;
       } else {
         watchingName.innerText = "None";
         watchingDetails.innerText = "I'm not currently watching anything";
+        document.getElementById("watchingIcon").src = `watching.png`;
       }
     } else {
       rpcName.innerText = "None";
@@ -109,6 +111,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
 
       watchingName.innerText = "None";
       watchingDetails.innerText = "I'm not currently watching anything";
+      document.getElementById("watchingIcon").src = `watching.png`;
     }
   });
 
@@ -173,9 +176,11 @@ webSocket.addEventListener("message", (event) => {
       if (watchingActivity) {
         watchingName.innerText = watchingActivity.name;
         watchingDetails.innerText = watchingActivity.details || 'Watching something';
+        document.getElementById("watchingIcon").src = `https://cdn.discordapp.com/app-assets/${watchingActivity.application_id}/${watchingActivity.assets.large_image}.png`;
       } else {
         watchingName.innerText = "None";
         watchingDetails.innerText = "I'm not currently watching anything";
+        document.getElementById("watchingIcon").src = `watching.png`;
       }
     } else {
       rpcName.innerText = "None";
@@ -187,6 +192,7 @@ webSocket.addEventListener("message", (event) => {
 
       watchingName.innerText = "None";
       watchingDetails.innerText = "I'm not currently watching anything";
+      document.getElementById("watchingIcon").src = `watching.png`;
     }
   }
 });
