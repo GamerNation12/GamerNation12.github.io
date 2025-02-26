@@ -77,15 +77,17 @@
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
 
     // Start the countdown timer
-    startCountdown(180);
+    startCountdown(3); // 3 minutes
 
     // Function to start the countdown and refresh the page
-    function startCountdown(seconds) {
+    function startCountdown(minutes) {
       const countdownElement = document.getElementById('refreshCountdown');
-      let remainingTime = seconds;
+      let remainingTime = minutes * 60;
 
       const interval = setInterval(() => {
-        countdownElement.textContent = `Page refreshes in ${remainingTime} seconds`;
+        const mins = Math.floor(remainingTime / 60);
+        const secs = remainingTime % 60;
+        countdownElement.textContent = `Auto-Refreshing in ${mins} minutes and ${secs} seconds`;
         remainingTime--;
 
         if (remainingTime < 0) {
