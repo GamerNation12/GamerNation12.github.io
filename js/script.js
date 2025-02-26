@@ -15,57 +15,58 @@ let watchingDetails = document.getElementById("watchingDetails");
 
 let discordID = '759433582107426816';
 
-fetch(`https://api.premid.app/v3/user/${discordID}`)
+// Fetch data from Lanyard API for other panels
+fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
   .then((response) => response.json())
   .then((e) => {
     console.log(e);  // Log the entire response to check its structure
 
-    if (e.user) {
-      discordName.innerText = `@${e.user.username}`;
+    if (e.data["discord_user"]) {
+      discordName.innerText = `@${e.data.discord_user.username}`;
       avatarLink.href = `https://discord.com/users/${discordID}`;
       document.getElementById(
         "discordAvatar"
-      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.user.avatar}.png?size=4096`;
-      if (e.user.status == "online") {
+      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
+      if (e.data.discord_status == "online") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#23a55a";
-      } else if (e.user.status == "idle") {
+      } else if (e.data.discord_status == "idle") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#f0b232";
-      } else if (e.user.status == "dnd") {
+      } else if (e.data.discord_status == "dnd") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#f23f43";
-      } else if (e.user.status == "offline") {
+      } else if (e.data.discord_status == "offline") {
         document.getElementById("statusCircle").style.backgroundColor =
           "#80848e";
       }
     }
 
     // Set custom or regular status message
-    const customStatus = e.activities.find(activity => activity.type === 4); // type 4 indicates custom status
+    const customStatus = e.data.activities.find(activity => activity.type === 4); // type 4 indicates custom status
     if (customStatus && customStatus.state) {
       discordMotd.innerText = customStatus.state;
-    } else if (e.user.bio) {
-      discordMotd.innerText = e.user.bio;
+    } else if (e.data.discord_user.bio) {
+      discordMotd.innerText = e.data.discord_user.bio;
     } else {
       discordMotd.innerText = "No status message";
     }
 
-    if (e.spotify) {
-      trackName.innerText = `${e.spotify.song}`;
-      let artists = e.spotify.artist;
+    if (e.data["listening_to_spotify"]) {
+      trackName.innerText = `${e.data.spotify.song}`;
+      let artists = e.data.spotify.artist;
       let artistFinal = artists.replaceAll(";", ",");
       trackArtist.innerText = artistFinal;
-      document.getElementById("trackImg").src = e.spotify.album_art_url;
-      trackLink.href = `https://open.spotify.com/track/${e.spotify.track_id}`;
+      document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+      trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
     } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
       document.getElementById("trackImg").src = "music.png";
     }
 
-    if (e.activities.length > 0) {
-      const gameActivity = e.activities.find(activity => activity.type === 0);
+    if (e.data["activities"].length > 0) {
+      const gameActivity = e.data["activities"].find(activity => activity.type === 0);
       if (gameActivity) {
         rpcName.innerText = gameActivity.name;
         rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
@@ -89,7 +90,23 @@ fetch(`https://api.premid.app/v3/user/${discordID}`)
           "rpcSmallIcon"
         ).src = `gamer.png`;
       }
+    } else {
+      rpcName.innerText = "None";
+      rpcDetails.innerText = "I'm not currently playing anything";
+      document.getElementById("rpcIcon").src = `gamer.png`;
+      document.getElementById(
+        "rpcSmallIcon"
+      ).src = `gamer.png`;
+    }
+  });
 
+// Fetch data from PreMiD API for watching panel
+fetch(`https://api.premid.app/v3/user/${discordID}`)
+  .then((response) => response.json())
+  .then((e) => {
+    console.log(e);  // Log the entire response to check its structure
+
+    if (e.activities.length > 0) {
       const watchingActivity = e.activities.find(activity => activity.type === 3); // type 3 indicates watching
       if (watchingActivity) {
         watchingName.innerText = watchingActivity.name;
@@ -101,13 +118,6 @@ fetch(`https://api.premid.app/v3/user/${discordID}`)
         document.getElementById("watchingIcon").src = `watching.png`;
       }
     } else {
-      rpcName.innerText = "None";
-      rpcDetails.innerText = "I'm not currently playing anything";
-      document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById(
-        "rpcSmallIcon"
-      ).src = `gamer.png`;
-
       watchingName.innerText = "None";
       watchingDetails.innerText = "I'm not currently watching anything";
       document.getElementById("watchingIcon").src = `watching.png`;
