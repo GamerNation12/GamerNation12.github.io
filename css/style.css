@@ -58,18 +58,8 @@ body {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
   border: 1.5px solid hsla(0, 0%, 76%, 0.02);
   width: 400px;
-  height: 75px;
-}
-
-@keyframes init {
-  0% {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0%);
-  }
+  height: 100px; /* Increased height to accommodate progress bar */
+  position: relative; /* Added for progress bar positioning */
 }
 
 .trackImg {
@@ -91,6 +81,16 @@ body {
   margin-top: -13px;
   font-size: 12.5px;
   color: #747474;
+}
+
+.trackProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 5px;
+  background-color: #1db954;
+  width: 0%;
+  transition: width 0.5s ease;
 }
 
 .discordPanel {

@@ -1,6 +1,7 @@
 let trackName = document.getElementById("trackName");
 let trackArtist = document.getElementById("trackArtist");
 let trackLink = document.getElementById("trackLink");
+let trackProgress = document.getElementById("trackProgress");
 
 let dscName = document.getElementById("nameNeksio");
 let discordName = document.getElementById("discordName");
@@ -56,10 +57,23 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       trackArtist.innerText = artistFinal;
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+
+      // Update progress bar
+      const duration = e.data.spotify.duration_ms;
+      const elapsed = e.data.spotify.timestamps.start;
+      const progress = ((Date.now() - elapsed) / duration) * 100;
+      trackProgress.style.width = `${progress}%`;
+
+      // Update progress bar every second
+      setInterval(() => {
+        const newProgress = ((Date.now() - elapsed) / duration) * 100;
+        trackProgress.style.width = `${newProgress}%`;
+      }, 1000);
     } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
       document.getElementById("trackImg").src = "music.png";
+      trackProgress.style.width = "0%";
     }
 
     if (e.data["activities"].length > 0) {
