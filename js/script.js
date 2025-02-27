@@ -60,15 +60,23 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
 
       // Update progress bar
       const duration = e.data.spotify.duration_ms;
-      const elapsed = e.data.spotify.timestamps.start;
-      const progress = ((Date.now() - elapsed) / duration) * 100;
-      trackProgress.style.width = `${progress}%`;
+      const startTime = e.data.spotify.timestamps.start;
+      const endTime = e.data.spotify.timestamps.end;
 
-      // Update progress bar every second
-      setInterval(() => {
-        const newProgress = ((Date.now() - elapsed) / duration) * 100;
-        trackProgress.style.width = `${newProgress}%`;
-      }, 1000);
+      function updateProgressBar() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+        const progress = (elapsed / duration) * 100;
+        trackProgress.style.width = `${progress}%`;
+
+        if (currentTime < endTime) {
+          requestAnimationFrame(updateProgressBar);
+        } else {
+          trackProgress.style.width = "100%";
+        }
+      }
+
+      updateProgressBar();
     } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
