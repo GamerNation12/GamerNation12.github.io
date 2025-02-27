@@ -58,12 +58,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
 
-      /* filepath: /c:/Users/minec/OneDrive/Documents/GitHub/GamerNation12/js/script.js */
-// Inside the spotify condition
-if (e.data["listening_to_spotify"]) {
-  // ...existing code...
-  
-  // Update progress bar
+      // Update progress bar
   const duration = e.data.spotify.timestamps.end - e.data.spotify.timestamps.start;
   const startTime = e.data.spotify.timestamps.start;
   const endTime = e.data.spotify.timestamps.end;
