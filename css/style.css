@@ -84,9 +84,7 @@ body {
 }
 
 .trackProgress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: relative;
   height: 5px;
   background-color: #ffffff; /* Changed to white */
   width: 0%;
