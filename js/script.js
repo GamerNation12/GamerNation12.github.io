@@ -128,7 +128,7 @@ window.onload = function() {
   document.body.appendChild(countdownElement);
 
   // Start the countdown timer
-  startCountdown(180);
+  startCountdown(60);
 };
 
 function startCountdown(duration) {
