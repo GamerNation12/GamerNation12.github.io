@@ -58,23 +58,26 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
 
-      // Update progress bar
-      const duration = e.data.spotify.duration_ms;
-      const startTime = e.data.spotify.timestamps.start;
-      const endTime = e.data.spotify.timestamps.end;
+      /* filepath: /c:/Users/minec/OneDrive/Documents/GitHub/GamerNation12/js/script.js */
+// Inside the spotify condition
+if (e.data["listening_to_spotify"]) {
+  // ...existing code...
+  
+  // Update progress bar
+  const duration = e.data.spotify.timestamps.end - e.data.spotify.timestamps.start;
+  const startTime = e.data.spotify.timestamps.start;
+  const endTime = e.data.spotify.timestamps.end;
 
-      function updateProgressBar() {
-        const currentTime = Date.now();
-        const elapsed = currentTime - startTime;
-        const progress = (elapsed / duration) * 100;
-        trackProgress.style.width = `${progress}%`;
+  function updateProgressBar() {
+    const currentTime = Date.now();
+    const elapsed = currentTime - startTime;
+    const progress = Math.min((elapsed / duration) * 100, 100);
+    trackProgress.style.width = `${progress}%`;
 
-        if (currentTime < endTime) {
-          requestAnimationFrame(updateProgressBar);
-        } else {
-          trackProgress.style.width = "100%";
-        }
-      }
+    if (currentTime < endTime) {
+      requestAnimationFrame(updateProgressBar);
+    }
+  }
 
       updateProgressBar();
     } else {
