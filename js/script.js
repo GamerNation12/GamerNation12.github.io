@@ -51,6 +51,15 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
     }
 
     if (e.data["listening_to_spotify"]) {
+      trackName.innerText = `${e.data.spotify.song}`;
+      let artists = e.data.spotify.artist;
+      let artistFinal = artists.replaceAll(";", ",");
+      trackArtist.innerText = artistFinal;
+      document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+      // This will update the track link for the progress bar anchor.
+      trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+      
+      // Timestamp conversion (if necessary)
       const rawStart = e.data.spotify.timestamps.start;
       const rawEnd = e.data.spotify.timestamps.end;
       const startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
@@ -63,7 +72,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
       }
       
-      // Update the progress bar every 250ms for smoother animation
+      // Update progress bar every 250ms
       const updateInterval = setInterval(() => {
         const currentTime = Date.now();
         if (currentTime >= endTime) {
@@ -81,6 +90,17 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
           }
         }
       }, 250);
+    } else {
+      // Fallback for when not listening to Spotify
+      trackName.innerText = "None";
+      trackArtist.innerText = "I'm not currently listening to anything";
+      document.getElementById("trackImg").src = "music.png";
+      trackProgress.style.width = "0%";
+      if (document.getElementById('timeElapsed')) {
+        document.getElementById('timeElapsed').textContent = "0:00";
+        document.getElementById('timeDuration').textContent = "0:00";
+      }
+    }
 
     if (e.data["activities"].length > 0) {
       const gameActivity = e.data["activities"].find(activity => activity.type === 0);
