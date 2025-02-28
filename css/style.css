@@ -92,6 +92,21 @@ body {
   width: 0%;
   transition: width 0.5s linear;
   border-radius: 0 0 10px 10px;
+  cursor: default;
+}
+
+.trackProgress:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .discordPanel {
