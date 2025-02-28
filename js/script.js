@@ -57,7 +57,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       trackArtist.innerText = artistFinal;
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-
+    
       // Update progress bar
       const duration = e.data.spotify.timestamps.end - e.data.spotify.timestamps.start;
       const startTime = e.data.spotify.timestamps.start;
@@ -69,26 +69,45 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
       }
     
+      let progressInterval;
       function updateProgressBar() {
         const currentTime = Date.now();
         const elapsed = currentTime - startTime;
         const progress = Math.min((elapsed / duration) * 100, 100);
         
         trackProgress.style.width = `${progress}%`;
-        document.getElementById('timeElapsed').textContent = formatTime(elapsed);
-        document.getElementById('timeDuration').textContent = formatTime(duration);
-      
+        
+        if (document.getElementById('timeElapsed')) {
+          document.getElementById('timeElapsed').textContent = formatTime(elapsed);
+          document.getElementById('timeDuration').textContent = formatTime(duration);
+        }
+        
         if (currentTime < endTime) {
           requestAnimationFrame(updateProgressBar);
+        } else {
+          trackProgress.style.width = "100%";
+          if (progressInterval) clearInterval(progressInterval);
         }
       }
-
+    
+      // Clear any existing interval
+      if (progressInterval) clearInterval(progressInterval);
+      
+      // Start progress update
       updateProgressBar();
+      // Update every second as backup
+      progressInterval = setInterval(() => {
+        updateProgressBar();
+      }, 1000);
     } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
       document.getElementById("trackImg").src = "music.png";
       trackProgress.style.width = "0%";
+      if (document.getElementById('timeElapsed')) {
+        document.getElementById('timeElapsed').textContent = "0:00";
+        document.getElementById('timeDuration').textContent = "0:00";
+      }
     }
 
     if (e.data["activities"].length > 0) {
