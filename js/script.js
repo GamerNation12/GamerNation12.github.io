@@ -13,35 +13,33 @@ let rpcDetails = document.getElementById("rpcDetails");
 
 let discordID = '759433582107426816';
 
+let startTime, endTime, duration; // Will be assigned later
+
 // Fetch data from Lanyard API for other panels
 fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
   .then((response) => response.json())
   .then((e) => {
-    console.log(e);  // Log the entire response to check its structure
-
+    console.log(e);  // Log entire response
+    
+    // Update Discord info
     if (e.data["discord_user"]) {
       discordName.innerText = `@${e.data.discord_user.username}`;
       avatarLink.href = `https://discord.com/users/${discordID}`;
-      document.getElementById(
-        "discordAvatar"
-      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
+      document.getElementById("discordAvatar").src = 
+        `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
       if (e.data.discord_status == "online") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#23a55a";
+        document.getElementById("statusCircle").style.backgroundColor = "#23a55a";
       } else if (e.data.discord_status == "idle") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#f0b232";
+        document.getElementById("statusCircle").style.backgroundColor = "#f0b232";
       } else if (e.data.discord_status == "dnd") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#f23f43";
+        document.getElementById("statusCircle").style.backgroundColor = "#f23f43";
       } else if (e.data.discord_status == "offline") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#80848e";
+        document.getElementById("statusCircle").style.backgroundColor = "#80848e";
       }
     }
-
+    
     // Set custom or regular status message
-    const customStatus = e.data.activities.find(activity => activity.type === 4); // type 4 indicates custom status
+    const customStatus = e.data.activities.find(activity => activity.type === 4);
     if (customStatus && customStatus.state) {
       discordMotd.innerText = customStatus.state;
     } else if (e.data.discord_user.bio) {
@@ -49,22 +47,23 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
     } else {
       discordMotd.innerText = "No status message";
     }
+    
+    // Function to fetch updated Spotify data (Re-fetch more frequently to catch rewinds)
     function updateSpotifyData() {
       fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         .then(response => response.json())
         .then((e) => {
           if (e.data["listening_to_spotify"]) {
-            // update track info and link as before
+            // Update track info and link
             trackName.innerText = `${e.data.spotify.song}`;
             let artists = e.data.spotify.artist;
             trackArtist.innerText = artists.replaceAll(";", ",");
             document.getElementById("trackImg").src = e.data.spotify.album_art_url;
             trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-      
-            // update timestamps
+            
+            // Update timestamps
             const rawStart = e.data.spotify.timestamps.start;
             const rawEnd = e.data.spotify.timestamps.end;
-            // convert if necessary
             startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
             endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
             duration = endTime - startTime;
@@ -72,27 +71,32 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         });
     }
     
-    // Re-fetch Spotify data every 10 seconds
-    setInterval(updateSpotifyData, 10000);
+    // Re-fetch Spotify data every 5 seconds (to catch rewinds/seek)
+    setInterval(updateSpotifyData, 5000);
+    
+    // If currently listening to Spotify, update the progress bar
     if (e.data["listening_to_spotify"]) {
       trackName.innerText = `${e.data.spotify.song}`;
       let artists = e.data.spotify.artist;
       let artistFinal = artists.replaceAll(";", ",");
       trackArtist.innerText = artistFinal;
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-      // This will update the track link for the progress bar anchor.
+      // Update the track link (the progress bar will be clickable)
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
       
-      // Timestamp conversion (if necessary)
+      // Timestamp conversion
       const rawStart = e.data.spotify.timestamps.start;
       const rawEnd = e.data.spotify.timestamps.end;
-      const startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
-      const endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
-      const duration = endTime - startTime;
+      const startTimeLocal = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+      const endTimeLocal = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
+      // Assign to our outer scope variables so updateSpotifyData can update them too.
+      startTime = startTimeLocal;
+      endTime = endTimeLocal;
+      duration = endTime - startTime;
       
       function formatTime(ms) {
         const seconds = Math.floor((ms / 1000) % 60);
-        const minutes = Math.floor((ms / 1000 / 60) % 60);
+        const minutes = Math.floor(ms / 1000 / 60);
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
       }
       
@@ -106,6 +110,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         } else {
           const elapsed = currentTime - startTime;
           const progress = Math.min((elapsed / duration) * 100, 100);
+          // Update the width to animate the progress bar
           trackProgress.style.width = `${progress}%`;
           
           if (document.getElementById('timeElapsed')) {
@@ -115,7 +120,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         }
       }, 250);
     } else {
-      // Fallback for when not listening to Spotify
+      // Fallback when not listening to Spotify
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
       document.getElementById("trackImg").src = "music.png";
@@ -125,39 +130,32 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         document.getElementById('timeDuration').textContent = "0:00";
       }
     }
-
+    
+    // RPC (Rich Presence) handling
     if (e.data["activities"].length > 0) {
       const gameActivity = e.data["activities"].find(activity => activity.type === 0);
       if (gameActivity) {
         rpcName.innerText = gameActivity.name;
         rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
-        document.getElementById(
-          "rpcIcon"
-        ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        document.getElementById("rpcIcon").src = 
+          `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
         if (gameActivity.assets.small_image) {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
+          document.getElementById("rpcSmallIcon").src = 
+            `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
         } else {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `./template/transparent.png`;
+          document.getElementById("rpcSmallIcon").src = `./template/transparent.png`;
         }
       } else {
         rpcName.innerText = "None";
         rpcDetails.innerText = "I'm not currently playing anything";
         document.getElementById("rpcIcon").src = `game.png`;
-        document.getElementById(
-          "rpcSmallIcon"
-        ).src = `gamer.png`;
+        document.getElementById("rpcSmallIcon").src = `gamer.png`;
       }
     } else {
       rpcName.innerText = "None";
       rpcDetails.innerText = "I'm not currently playing anything";
       document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById(
-        "rpcSmallIcon"
-      ).src = `gamer.png`;
+      document.getElementById("rpcSmallIcon").src = `gamer.png`;
     }
   });
 
@@ -167,15 +165,12 @@ function calculateAge(birthDate) {
   var birthDay = parseInt(parts[0], 10);
   var birthMonth = parseInt(parts[1], 10);
   var birthYear = parseInt(parts[2], 10);
-
   var ageYears = today.getFullYear() - birthYear;
   var ageMonths = today.getMonth() + 1 - birthMonth;
   var ageDays = today.getDate() - birthDay;
-
   if (ageMonths < 0 || (ageMonths === 0 && ageDays < 0)) {
     ageYears--;
   }
-
   return ageYears;
 }
 
