@@ -70,36 +70,41 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       }
     
       let progressInterval;
-      function updateProgressBar() {
-        const currentTime = Date.now();
-        const elapsed = currentTime - startTime;
-        const progress = Math.min((elapsed / duration) * 100, 100);
-        
-        trackProgress.style.width = `${progress}%`;
-        
-        if (document.getElementById('timeElapsed')) {
-          document.getElementById('timeElapsed').textContent = formatTime(elapsed);
-          document.getElementById('timeDuration').textContent = formatTime(duration);
-        }
-        
-        if (currentTime < endTime) {
-          requestAnimationFrame(updateProgressBar);
-        } else {
-          trackProgress.style.width = "100%";
-          if (progressInterval) clearInterval(progressInterval);
-        }
-      }
+  function updateProgressBar() {
+    const currentTime = Date.now();
+    const elapsed = currentTime - startTime;
+    const progress = Math.min((elapsed / duration) * 100, 100);
     
-      // Clear any existing interval
-      if (progressInterval) clearInterval(progressInterval);
+    requestAnimationFrame(() => {
+      trackProgress.style.width = `${progress}%`;
       
-      // Start progress update
-      updateProgressBar();
-      // Update every second as backup
-      progressInterval = setInterval(() => {
-        updateProgressBar();
-      }, 1000);
+      if (document.getElementById('timeElapsed')) {
+        document.getElementById('timeElapsed').textContent = formatTime(elapsed);
+        document.getElementById('timeDuration').textContent = formatTime(duration);
+      }
+    });
+    
+    if (currentTime < endTime) {
+      requestAnimationFrame(updateProgressBar);
     } else {
+      trackProgress.style.width = "100%";
+      if (progressInterval) clearInterval(progressInterval);
+    }
+  }
+
+  // Clear any existing interval
+  if (progressInterval) clearInterval(progressInterval);
+  
+  // Start progress update
+  updateProgressBar();
+  
+  // Backup interval for smoother updates
+  progressInterval = setInterval(() => {
+    if (!document.hidden) {
+      updateProgressBar();
+    }
+  }, 100);
+} else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
       document.getElementById("trackImg").src = "music.png";
