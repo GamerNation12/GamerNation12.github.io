@@ -49,7 +49,31 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
     } else {
       discordMotd.innerText = "No status message";
     }
-
+    function updateSpotifyData() {
+      fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
+        .then(response => response.json())
+        .then((e) => {
+          if (e.data["listening_to_spotify"]) {
+            // update track info and link as before
+            trackName.innerText = `${e.data.spotify.song}`;
+            let artists = e.data.spotify.artist;
+            trackArtist.innerText = artists.replaceAll(";", ",");
+            document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+            trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+      
+            // update timestamps
+            const rawStart = e.data.spotify.timestamps.start;
+            const rawEnd = e.data.spotify.timestamps.end;
+            // convert if necessary
+            startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+            endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
+            duration = endTime - startTime;
+          }
+        });
+    }
+    
+    // Re-fetch Spotify data every 10 seconds
+    setInterval(updateSpotifyData, 10000);
     if (e.data["listening_to_spotify"]) {
       trackName.innerText = `${e.data.spotify.song}`;
       let artists = e.data.spotify.artist;
