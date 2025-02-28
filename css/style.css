@@ -83,6 +83,8 @@ body {
   color: #747474;
 }
 
+/* ...existing styles above... */
+
 .progressContainer {
   position: absolute;
   bottom: 0;
@@ -95,12 +97,13 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Updated progress bar styles with smoother animation */
 .trackProgress {
   flex-grow: 1;
   height: 4px;
   background-color: #1db954;
   width: 0%;
-  transition: width 0.5s ease;  /* Smooth transition */
+  transition: width 1s ease-out;  /* Increased transition duration for smoother animation */
   margin: 0 10px;
 }
 
@@ -110,6 +113,8 @@ body {
   min-width: 35px;
   text-align: center;
 }
+
+/* ...existing styles below... */
 
 .discordPanel {
   transition: 0.3s;
