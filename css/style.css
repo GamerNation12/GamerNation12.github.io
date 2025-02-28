@@ -99,8 +99,8 @@ body {
   flex-grow: 1;
   height: 4px;
   background-color: #1db954;
-  width: 0;
-  transition: width 0.1s linear;
+  width: 0%;
+  transition: width 0.5s ease;  /* Increased transition duration for smoother animation */
   margin: 0 10px;
 }
 
