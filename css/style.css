@@ -83,34 +83,31 @@ body {
   color: #747474;
 }
 
-.trackProgress {
+.progressContainer {
   position: absolute;
   bottom: 0;
-  left: 40px; /* Make space for the time display */
-  right: 40px; /* Make space for the time display */
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  height: 20px;
+}
+
+.trackProgress {
+  flex-grow: 1;
   height: 4px;
   background-color: #1db954; /* Spotify green */
   width: 0%;
   transition: width 0.5s linear;
-  border-radius: 0 0 10px 10px;
-  cursor: default;
+  margin: 0 10px;
 }
 
 .timeDisplay {
-  position: absolute;
-  bottom: 0;
-  font-size: 10px;
+  font-size: 11px;
   color: #747474;
-  padding: 0 5px;
-  line-height: 4px; /* Match progress bar height */
-}
-
-.timeElapsed {
-  left: 5px;
-}
-
-.timeDuration {
-  right: 5px;
+  min-width: 35px;
+  text-align: center;
 }
 
 .discordPanel {
