@@ -69,9 +69,6 @@
     </div>
   </div>
 
-  <!-- Add the countdown element -->
-  <div id="refreshCountdown" class="countdown"></div>
-
   <script src="js/script.js"></script>
   <script>
     const gradients = [
@@ -82,27 +79,7 @@
     const chosenGradient = gradients[Math.floor(Math.random() * gradients.length)];
     const nameNeksio = document.getElementById("nameNeksio");
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
-
-    // Start the countdown timer
-    startCountdown(1); // 1 minute
-
-    // Function to start the countdown and refresh the page
-    function startCountdown(minutes) {
-      const countdownElement = document.getElementById('refreshCountdown');
-      let remainingTime = minutes * 60;
-
-      const interval = setInterval(() => {
-        const mins = Math.floor(remainingTime / 60);
-        const secs = remainingTime % 60;
-        countdownElement.textContent = `Auto-Refreshing: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        remainingTime--;
-
-        if (remainingTime < 0) {
-          clearInterval(interval);
-          location.reload();
-        }
-      }, 1000);
-    }
+    
   </script>
 </body>
 
