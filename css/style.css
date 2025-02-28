@@ -98,18 +98,15 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-/* The progress bar itself with a smooth width transition. */
 .trackProgress {
   flex-grow: 1;
   height: 4px;
   background-color: #1db954;  /* Spotify green */
   width: 0%;
-  /* Use a 1-second transition with ease-out. Adjust duration as needed. */
-  transition: width 1s ease-out;
+  transition: width 0.5s ease-out;  /* Smooth 0.5-second transition */
   margin: 0 10px;
 }
 
-/* Time labels on both sides of the progress bar. */
 .timeDisplay {
   font-size: 11px;
   color: #747474;
