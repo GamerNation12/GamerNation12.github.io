@@ -73,11 +73,11 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         const currentTime = Date.now();
         const elapsed = currentTime - startTime;
         const progress = Math.min((elapsed / duration) * 100, 100);
-        const timeRemaining = Math.max(endTime - currentTime, 0);
         
         trackProgress.style.width = `${progress}%`;
-        trackProgress.setAttribute('title', `${formatTime(elapsed)} / ${formatTime(duration)}`);
-    
+        document.getElementById('timeElapsed').textContent = formatTime(elapsed);
+        document.getElementById('timeDuration').textContent = formatTime(duration);
+      
         if (currentTime < endTime) {
           requestAnimationFrame(updateProgressBar);
         }

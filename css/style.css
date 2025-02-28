@@ -86,7 +86,8 @@ body {
 .trackProgress {
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 40px; /* Make space for the time display */
+  right: 40px; /* Make space for the time display */
   height: 4px;
   background-color: #1db954; /* Spotify green */
   width: 0%;
@@ -95,18 +96,21 @@ body {
   cursor: default;
 }
 
-.trackProgress:hover::after {
-  content: attr(title);
+.timeDisplay {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
+  bottom: 0;
+  font-size: 10px;
+  color: #747474;
+  padding: 0 5px;
+  line-height: 4px; /* Match progress bar height */
+}
+
+.timeElapsed {
+  left: 5px;
+}
+
+.timeDuration {
+  right: 5px;
 }
 
 .discordPanel {
