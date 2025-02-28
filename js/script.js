@@ -52,54 +52,46 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
 
     if (e.data["listening_to_spotify"]) {
       trackName.innerText = `${e.data.spotify.song}`;
-      let artists = e.data.spotify.artist;
-      let artistFinal = artists.replaceAll(";", ",");
-      trackArtist.innerText = artistFinal;
-      document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-      trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-      
-      // Convert timestamps if needed.
-      // If the timestamps are in seconds, multiply by 1000 to get milliseconds.
-      const rawStart = e.data.spotify.timestamps.start;
-      const rawEnd = e.data.spotify.timestamps.end;
-      const startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
-      const endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
-      const duration = endTime - startTime;
-      
-      function formatTime(ms) {
-        const seconds = Math.floor((ms / 1000) % 60);
-        const minutes = Math.floor((ms / 1000 / 60) % 60);
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-      }
-      
-      // Update the progress bar every 500ms
-      const updateInterval = setInterval(() => {
-        const currentTime = Date.now();
-        if (currentTime >= endTime) {
-          trackProgress.style.width = "100%";
-          clearInterval(updateInterval);
-          location.reload();  // Refresh when song ends
-        } else {
-          const elapsed = currentTime - startTime;
-          const progress = Math.min((elapsed / duration) * 100, 100);
-          // This change will animate smoothly thanks to CSS transition
-          trackProgress.style.width = `${progress}%`;
-          if (document.getElementById('timeElapsed')) {
-            document.getElementById('timeElapsed').textContent = formatTime(elapsed);
-            document.getElementById('timeDuration').textContent = formatTime(duration);
-          }
-        }
-      }, 500);
-    } else {
-      trackName.innerText = "None";
-      trackArtist.innerText = "I'm not currently listening to anything";
-      document.getElementById("trackImg").src = "music.png";
-      trackProgress.style.width = "0%";
-      if (document.getElementById('timeElapsed')) {
-        document.getElementById('timeElapsed').textContent = "0:00";
-        document.getElementById('timeDuration').textContent = "0:00";
-      }
+let artists = e.data.spotify.artist;
+let artistFinal = artists.replaceAll(";", ",");
+trackArtist.innerText = artistFinal;
+document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+
+// Convert timestamps if necessary (if they're in seconds, multiply by 1000)
+const rawStart = e.data.spotify.timestamps.start;
+const rawEnd = e.data.spotify.timestamps.end;
+const startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+const endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
+const duration = endTime - startTime;
+
+function formatTime(ms) {
+  const seconds = Math.floor((ms / 1000) % 60);
+  const minutes = Math.floor((ms / 1000 / 60) % 60);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Update the progress bar every 500ms
+const updateInterval = setInterval(() => {
+  const currentTime = Date.now();
+  if (currentTime >= endTime) {
+    // Once song is over, set width to 100% then refresh the page.
+    trackProgress.style.width = "100%";
+    clearInterval(updateInterval);
+    location.reload();  // Refresh when song completes.
+  } else {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min((elapsed / duration) * 100, 100);
+    // Setting the width will trigger the CSS transition.
+    trackProgress.style.width = `${progress}%`;
+    
+    // Update time displays (if they exist)
+    if (document.getElementById('timeElapsed')) {
+      document.getElementById('timeElapsed').textContent = formatTime(elapsed);
+      document.getElementById('timeDuration').textContent = formatTime(duration);
     }
+  }
+}, 500);
 
     if (e.data["activities"].length > 0) {
       const gameActivity = e.data["activities"].find(activity => activity.type === 0);
