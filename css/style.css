@@ -95,12 +95,14 @@ body {
 }
 
 .trackProgress {
-  flex-grow: 1;
+  position: absolute;
+  bottom: 0;
+  left: 0;
   height: 4px;
-  background-color: #1db954; /* Spotify green */
+  background-color: #1db954;
   width: 0%;
   transition: width 0.5s linear;
-  margin: 0 10px;
+  border-radius: 0 0 10px 10px;
 }
 
 .timeDisplay {
