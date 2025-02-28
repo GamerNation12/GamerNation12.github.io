@@ -58,10 +58,13 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
       
-      // Update progress bar and auto-refresh when song ends
-      const duration = e.data.spotify.timestamps.end - e.data.spotify.timestamps.start;
-      const startTime = e.data.spotify.timestamps.start;
-      const endTime = e.data.spotify.timestamps.end;
+      // Convert timestamps if needed.
+      // If the timestamps are in seconds, multiply by 1000 to get milliseconds.
+      const rawStart = e.data.spotify.timestamps.start;
+      const rawEnd = e.data.spotify.timestamps.end;
+      const startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+      const endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
+      const duration = endTime - startTime;
       
       function formatTime(ms) {
         const seconds = Math.floor((ms / 1000) % 60);
@@ -69,7 +72,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
       }
       
-      // Use a backup interval updated every 500ms to let the CSS transition animate
+      // Update the progress bar every 500ms
       const updateInterval = setInterval(() => {
         const currentTime = Date.now();
         if (currentTime >= endTime) {
@@ -79,6 +82,7 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         } else {
           const elapsed = currentTime - startTime;
           const progress = Math.min((elapsed / duration) * 100, 100);
+          // This change will animate smoothly thanks to CSS transition
           trackProgress.style.width = `${progress}%`;
           if (document.getElementById('timeElapsed')) {
             document.getElementById('timeElapsed').textContent = formatTime(elapsed);
