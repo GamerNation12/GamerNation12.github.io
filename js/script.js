@@ -70,27 +70,29 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       }
     
       let progressInterval;
-  function updateProgressBar() {
-    const currentTime = Date.now();
-    const elapsed = currentTime - startTime;
-    const progress = Math.min((elapsed / duration) * 100, 100);
-    
-    requestAnimationFrame(() => {
-      trackProgress.style.width = `${progress}%`;
-      
-      if (document.getElementById('timeElapsed')) {
-        document.getElementById('timeElapsed').textContent = formatTime(elapsed);
-        document.getElementById('timeDuration').textContent = formatTime(duration);
+      function updateProgressBar() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+        const progress = Math.min((elapsed / duration) * 100, 100);
+        
+        requestAnimationFrame(() => {
+          trackProgress.style.width = `${progress}%`;
+          
+          if (document.getElementById('timeElapsed')) {
+            document.getElementById('timeElapsed').textContent = formatTime(elapsed);
+            document.getElementById('timeDuration').textContent = formatTime(duration);
+          }
+        });
+        
+        if (currentTime < endTime) {
+          requestAnimationFrame(updateProgressBar);
+        } else {
+          trackProgress.style.width = "100%";
+          if (progressInterval) clearInterval(progressInterval);
+          // Refresh page when song ends
+          location.reload();
+        }
       }
-    });
-    
-    if (currentTime < endTime) {
-      requestAnimationFrame(updateProgressBar);
-    } else {
-      trackProgress.style.width = "100%";
-      if (progressInterval) clearInterval(progressInterval);
-    }
-  }
 
   // Clear any existing interval
   if (progressInterval) clearInterval(progressInterval);
@@ -172,33 +174,7 @@ window.onload = function() {
   var birthDate = "27.7.232323";
   var age = calculateAge(birthDate);
   var ageElement = document.getElementById("age");
-  ageElement.textContent = age;
-
-  // Create the countdown element
-  var countdownElement = document.createElement('div');
-  countdownElement.id = 'refreshCountdown';
-  countdownElement.className = 'countdown';
-  document.body.appendChild(countdownElement);
-
-  // Start the countdown timer
-  startCountdown(60); // 1 minute
+  if (ageElement) {
+    ageElement.textContent = age;
+  }
 };
-
-function startCountdown(duration) {
-  var timer = duration, minutes, seconds;
-  var countdownElement = document.getElementById('refreshCountdown');
-  var countdownInterval = setInterval(function () {
-    minutes = parseInt(timer / 60, 10);
-    seconds = parseInt(timer % 60, 10);
-
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-
-    countdownElement.textContent = minutes + ":" + seconds;
-
-    if (--timer < 0) {
-      clearInterval(countdownInterval);
-      location.reload();
-    }
-  }, 1000);
-}
