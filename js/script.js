@@ -59,20 +59,29 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
 
       // Update progress bar
-  const duration = e.data.spotify.timestamps.end - e.data.spotify.timestamps.start;
-  const startTime = e.data.spotify.timestamps.start;
-  const endTime = e.data.spotify.timestamps.end;
-
-  function updateProgressBar() {
-    const currentTime = Date.now();
-    const elapsed = currentTime - startTime;
-    const progress = Math.min((elapsed / duration) * 100, 100);
-    trackProgress.style.width = `${progress}%`;
-
-    if (currentTime < endTime) {
-      requestAnimationFrame(updateProgressBar);
-    }
-  }
+      const duration = e.data.spotify.timestamps.end - e.data.spotify.timestamps.start;
+      const startTime = e.data.spotify.timestamps.start;
+      const endTime = e.data.spotify.timestamps.end;
+    
+      function formatTime(ms) {
+        const seconds = Math.floor((ms / 1000) % 60);
+        const minutes = Math.floor((ms / 1000 / 60) % 60);
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      }
+    
+      function updateProgressBar() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+        const progress = Math.min((elapsed / duration) * 100, 100);
+        const timeRemaining = Math.max(endTime - currentTime, 0);
+        
+        trackProgress.style.width = `${progress}%`;
+        trackProgress.setAttribute('title', `${formatTime(elapsed)} / ${formatTime(duration)}`);
+    
+        if (currentTime < endTime) {
+          requestAnimationFrame(updateProgressBar);
+        }
+      }
 
       updateProgressBar();
     } else {
