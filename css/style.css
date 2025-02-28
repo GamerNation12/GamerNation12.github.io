@@ -100,7 +100,7 @@ body {
   height: 4px;
   background-color: #1db954;
   width: 0%;
-  transition: width 0.5s ease;  /* Increased transition duration for smoother animation */
+  transition: width 0.5s ease;  /* Smooth transition */
   margin: 0 10px;
 }
 

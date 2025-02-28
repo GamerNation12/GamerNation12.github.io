@@ -69,39 +69,23 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
       }
       
-      let progressInterval;
-      function updateProgressBar() {
+      // Use a backup interval updated every 500ms to let the CSS transition animate
+      const updateInterval = setInterval(() => {
         const currentTime = Date.now();
-        const elapsed = currentTime - startTime;
-        const progress = Math.min((elapsed / duration) * 100, 100);
-        
-        // Set progress and display time updates
-        trackProgress.style.width = `${progress}%`;
-        if (document.getElementById('timeElapsed')) {
-          document.getElementById('timeElapsed').textContent = formatTime(elapsed);
-          document.getElementById('timeDuration').textContent = formatTime(duration);
-        }
-        
-        // Auto-refresh when song ends
-        if (currentTime < endTime) {
-          requestAnimationFrame(updateProgressBar);
-        } else {
+        if (currentTime >= endTime) {
           trackProgress.style.width = "100%";
-          if (progressInterval) clearInterval(progressInterval);
-          // Refresh page when song ends
-          location.reload();
+          clearInterval(updateInterval);
+          location.reload();  // Refresh when song ends
+        } else {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min((elapsed / duration) * 100, 100);
+          trackProgress.style.width = `${progress}%`;
+          if (document.getElementById('timeElapsed')) {
+            document.getElementById('timeElapsed').textContent = formatTime(elapsed);
+            document.getElementById('timeDuration').textContent = formatTime(duration);
+          }
         }
-      }
-      
-      if (progressInterval) clearInterval(progressInterval);
-      updateProgressBar();
-      
-      // Optional backup interval for smoother updates
-      progressInterval = setInterval(() => {    
-        if (!document.hidden) {
-          updateProgressBar();
-        }
-      }, 100);
+      }, 500);
     } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
