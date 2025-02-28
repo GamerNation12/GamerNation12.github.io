@@ -57,33 +57,32 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       trackArtist.innerText = artistFinal;
       document.getElementById("trackImg").src = e.data.spotify.album_art_url;
       trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-    
-      // Update progress bar
+      
+      // Update progress bar and auto-refresh when song ends
       const duration = e.data.spotify.timestamps.end - e.data.spotify.timestamps.start;
       const startTime = e.data.spotify.timestamps.start;
       const endTime = e.data.spotify.timestamps.end;
-    
+      
       function formatTime(ms) {
         const seconds = Math.floor((ms / 1000) % 60);
         const minutes = Math.floor((ms / 1000 / 60) % 60);
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
       }
-    
+      
       let progressInterval;
       function updateProgressBar() {
         const currentTime = Date.now();
         const elapsed = currentTime - startTime;
         const progress = Math.min((elapsed / duration) * 100, 100);
         
-        requestAnimationFrame(() => {
-          trackProgress.style.width = `${progress}%`;
-          
-          if (document.getElementById('timeElapsed')) {
-            document.getElementById('timeElapsed').textContent = formatTime(elapsed);
-            document.getElementById('timeDuration').textContent = formatTime(duration);
-          }
-        });
+        // Set progress and display time updates
+        trackProgress.style.width = `${progress}%`;
+        if (document.getElementById('timeElapsed')) {
+          document.getElementById('timeElapsed').textContent = formatTime(elapsed);
+          document.getElementById('timeDuration').textContent = formatTime(duration);
+        }
         
+        // Auto-refresh when song ends
         if (currentTime < endTime) {
           requestAnimationFrame(updateProgressBar);
         } else {
@@ -93,20 +92,17 @@ fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
           location.reload();
         }
       }
-
-  // Clear any existing interval
-  if (progressInterval) clearInterval(progressInterval);
-  
-  // Start progress update
-  updateProgressBar();
-  
-  // Backup interval for smoother updates
-  progressInterval = setInterval(() => {
-    if (!document.hidden) {
+      
+      if (progressInterval) clearInterval(progressInterval);
       updateProgressBar();
-    }
-  }, 100);
-} else {
+      
+      // Optional backup interval for smoother updates
+      progressInterval = setInterval(() => {    
+        if (!document.hidden) {
+          updateProgressBar();
+        }
+      }, 100);
+    } else {
       trackName.innerText = "None";
       trackArtist.innerText = "I'm not currently listening to anything";
       document.getElementById("trackImg").src = "music.png";
