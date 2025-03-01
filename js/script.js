@@ -10,17 +10,17 @@ document.addEventListener("DOMContentLoaded", function() {
   const avatarLink = document.getElementById("avatarLink");
   const discordAvatar = document.getElementById("discordAvatar");
   const statusCircle = document.getElementById("statusCircle");
-  
+
   const discordID = '759433582107426816';
   let startTime, endTime, duration; // For Spotify
-  
+
   // Format time (if you're using time displays)
   function formatTime(ms) {
     const seconds = Math.floor((ms / 1000) % 60);
     const minutes = Math.floor(ms / 1000 / 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
-  
+
   // Fetch data from Lanyard API (for Discord and Spotify info)
   function updateData() {
     fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
       .then((data) => {
         console.log("Lanyard response:", data);
         const e = data; // using shorthand
-        
+
         // Update Discord info
         if (e.data && e.data["discord_user"]) {
           discordName.innerText = `@${e.data.discord_user.username}`;
@@ -48,14 +48,14 @@ document.addEventListener("DOMContentLoaded", function() {
             ? customStatus.state 
             : e.data.discord_user.bio || "No status message";
         }
-      
+
         // Update Spotify info if listening
         if (e.data && e.data["listening_to_spotify"]) {
           trackName.innerText = e.data.spotify.song;
           trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
           document.getElementById("trackImg").src = e.data.spotify.album_art_url;
           trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-        
+
           // Update timestamps and calculate duration
           const rawStart = e.data.spotify.timestamps.start;
           const rawEnd = e.data.spotify.timestamps.end;
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Error fetching data:", error);
       });
   } // end updateData
-  
+
   // Smooth progress update using requestAnimationFrame:
   function updateProgress() {
     if (startTime && endTime && duration) {
@@ -83,13 +83,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     requestAnimationFrame(updateProgress);
   }
-  
+
   // Initial fetch and continual updates
   updateData();
   setInterval(updateData, 1000); // Refresh data every second
   requestAnimationFrame(updateProgress);
-  
-  // Age calculation (if used elsewhere)
+
+  // Age calculation function
   function calculateAge(birthDate) {
     const today = new Date();
     const parts = birthDate.split(".");
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     return ageYears;
   }
-  
+
   // Update age on window load
   window.onload = function() {
     const birthDate = "27.7.232323";
@@ -114,3 +114,4 @@ document.addEventListener("DOMContentLoaded", function() {
       ageElement.textContent = age;
     }
   };
+}); // end DOMContentLoaded
