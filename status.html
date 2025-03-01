@@ -61,9 +61,6 @@
           </a>
           <div class="timeDisplay timeDuration" id="timeDuration">0:00</div>
         </div>
-        <div class="progress-container">
-          <div class="progress-bar" id="progressBar">0%</div>
-        </div>
       </div>
       <div class="gap"></div>
       <div id="rpcPanel" class="panel rpcPanel">
@@ -88,15 +85,7 @@
     const nameNeksio = document.getElementById("nameNeksio");
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
 
-    // JavaScript to update the progress bar
-    function updateProgressBar(percentage) {
-      const progressBar = document.getElementById('progressBar');
-      progressBar.style.width = percentage + '%';
-      progressBar.textContent = percentage + '%';
-    }
-
-    // Example usage
-    updateProgressBar(70); // Update to 70%
+    // Removed JavaScript to update the progress bar
   </script>
 </body>
 </html>
