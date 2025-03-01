@@ -1,6 +1,5 @@
-// Use DOMContentLoaded to ensure elements are available
 document.addEventListener("DOMContentLoaded", function() {
-  // Element declarations (make sure these IDs exist in your HTML)
+  // Element declarations (ensure these IDs exist in your HTML)
   const trackName = document.getElementById("trackName");
   const trackArtist = document.getElementById("trackArtist");
   const trackLink = document.getElementById("trackLink");
@@ -106,12 +105,12 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // Update age on window load
-  window.onload = function() {
+  window.addEventListener('load', function() {
     const birthDate = "27.7.232323";
     const age = calculateAge(birthDate);
     const ageElement = document.getElementById("age");
     if (ageElement) {
       ageElement.textContent = age;
     }
-  };
-}); // end DOMContentLoaded
+  });
+});
