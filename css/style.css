@@ -83,6 +83,11 @@ body {
   color: #747474;
 }
 
+@keyframes progressAnimation {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
 /* Spotify-like progress container */
 .progressContainer {
   position: absolute;
@@ -100,7 +105,7 @@ body {
   height: 100%;
   background-color: #1DB954;  /* Spotify green */
   width: 0%;
-  /* No transition here since we’re using requestAnimationFrame for smooth updates */
+  animation: progressAnimation 30s linear infinite; /* Adjust duration as needed */
 }
 
 .timeDisplay {
