@@ -74,11 +74,14 @@ document.addEventListener("DOMContentLoaded", function() {
       const currentTime = Date.now();
       if (currentTime >= endTime) {
         trackProgress.style.width = "100%";
+        document.getElementById('timeElapsed').textContent = formatTime(duration);
       } else {
         const elapsed = currentTime - startTime;
         const progress = Math.min((elapsed / duration) * 100, 100);
         trackProgress.style.width = `${progress}%`;
+        document.getElementById('timeElapsed').textContent = formatTime(elapsed);
       }
+      document.getElementById('timeDuration').textContent = formatTime(duration);
     }
     requestAnimationFrame(updateProgress);
   }
