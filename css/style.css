@@ -94,7 +94,7 @@ body {
   bottom: 10px; /* adjust spacing as needed */
   left: 0;
   right: 0;
-  height: 4px;  /* slimmer than before */
+  height: 2px;  /* thinner than before */
   background-color: rgba(255, 255, 255, 0.1); /* subtle dark track */
   border-radius: 25px; /* Make the container round */
   overflow: hidden;
@@ -109,11 +109,22 @@ body {
   border-radius: 25px; /* Make the progress bar round */
 }
 
+/* Time display for current time and total duration */
 .timeDisplay {
   font-size: 11px;
   color: #747474;
   min-width: 35px;
   text-align: center;
+  position: absolute;
+  bottom: 0;
+}
+
+.currentTime {
+  left: 10px;
+}
+
+.totalTime {
+  right: 10px;
 }
 
 .progress-container {
