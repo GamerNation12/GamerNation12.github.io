@@ -113,4 +113,38 @@ document.addEventListener("DOMContentLoaded", function() {
       ageElement.textContent = age;
     }
   });
+
+  const gradients = [
+    "#004ef7, #0084ff",
+    "#ff8400, #ffc900",
+    "#660acf, #ac00cf",
+  ];
+  const chosenGradient = gradients[Math.floor(Math.random() * gradients.length)];
+  const nameNeksio = document.getElementById("nameNeksio");
+  nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
+
+  // JavaScript to update the progress bar linked with Spotify
+  async function updateSpotifyProgress() {
+    try {
+      const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+        headers: {
+          'Authorization': 'Bearer YOUR_SPOTIFY_ACCESS_TOKEN'
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const progress = data.progress_ms;
+        const duration = data.item.duration_ms;
+        const progressPercent = (progress / duration) * 100;
+
+        document.getElementById('timeElapsed').textContent = new Date(progress).toISOString().substr(14, 5);
+        document.getElementById('timeDuration').textContent = new Date(duration).toISOString().substr(14, 5);
+        document.getElementById('trackProgress').style.width = `${progressPercent}%`;
+      }
+    } catch (error) {
+      console.error('Error fetching Spotify data:', error);
+    }
+  }
+
+  setInterval(updateSpotifyProgress, 1000);
 });
