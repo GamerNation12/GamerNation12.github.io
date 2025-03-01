@@ -86,25 +86,23 @@ body {
 /* ...existing styles above... */
 
 /* Progress container positioned at the bottom of its parent. */
+/* Spotify-like progress container */
 .progressContainer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  height: 20px;
-  background-color: rgba(0, 0, 0, 0.3);
+  position: relative;  /* relative so the progress sits inside */
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);  /* subtle background similar to Spotify */
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
+/* Spotify-like progress bar */
 .trackProgress {
-  flex-grow: 1;
-  height: 4px;
+  height: 100%;
   background-color: #1db954;  /* Spotify green */
   width: 0%;
-  transition: width 0.5s ease-out;  /* Smooth 0.5-second transition */
-  margin: 0 10px;
+  border-radius: 2px;
+  transition: width 0.25s linear;  /* fast and linear for a smooth, responsive feel */
 }
 
 .timeDisplay {
