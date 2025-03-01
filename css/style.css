@@ -88,11 +88,14 @@ body {
 /* Progress container positioned at the bottom of its parent. */
 /* Spotify-like progress container */
 /* YouTube-like progress container */
+/* YouTube-like progress container */
 .progressContainer {
-  position: relative;
-  width: 100%;
-  height: 5px;  /* Slightly thicker than before */
-  background-color: rgba(255, 255, 255, 0.2); /* Light grey background */
+  position: absolute;
+  bottom: 10px; /* adjust spacing from the bottom as needed */
+  left: 0;
+  right: 0;
+  height: 5px;  /* thickness of the progress bar */
+  background-color: rgba(255, 255, 255, 0.2); /* Light grey track */
   border-radius: 2px;
   overflow: hidden;
 }
@@ -102,7 +105,7 @@ body {
   height: 100%;
   background-color: #ff0000;  /* YouTube red */
   width: 0%;
-  transition: width 0.25s linear;  /* Smooth responsive update */
+  transition: width 0.25s linear;  /* smooth update */
 }
 
 .timeDisplay {
