@@ -86,11 +86,9 @@ document.addEventListener("DOMContentLoaded", function() {
   
   // Initial fetch and continual updates
   updateData();
-  // Also refresh data every second (adjust if needed)
-  setInterval(updateData, 1000);
+  setInterval(updateData, 1000); // Refresh data every second
   requestAnimationFrame(updateProgress);
-});
-
+  
   // Age calculation (if used elsewhere)
   function calculateAge(birthDate) {
     const today = new Date();
@@ -106,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     return ageYears;
   }
-
+  
   // Update age on window load
   window.onload = function() {
     const birthDate = "27.7.232323";
