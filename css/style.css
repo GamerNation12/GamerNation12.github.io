@@ -89,18 +89,18 @@ body {
   bottom: 10px; /* adjust spacing as needed */
   left: 0;
   right: 0;
-  height: 5px;  /* thickness of the progress bar */
-  background-color: rgba(255, 255, 255, 0.2); /* light grey track */
-  border-radius: 2px;
+  height: 4px;  /* slimmer than before */
+  background-color: rgba(255, 255, 255, 0.1); /* subtle dark track */
+  border-radius: 3px;
   overflow: hidden;
 }
 
 /* Spotify-like progress bar */
 .trackProgress {
   height: 100%;
-  background-color: #1db954;  /* Spotify green */
+  background-color: #1DB954;  /* Spotify green */
   width: 0%;
-  /* Remove CSS transition so the JS animation updates smoothly */
+  /* No transition here since we’re using requestAnimationFrame for smooth updates */
 }
 
 .timeDisplay {
