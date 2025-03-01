@@ -85,34 +85,28 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   } // end updateData
 
-  // Update progress bar every 250ms (Spotify progress only)
-  setInterval(function() {
-    if (startTime && endTime && duration) {
-      const currentTime = Date.now();
-      if (currentTime >= endTime) {
-        trackProgress.style.width = "100%";
-        // Optionally force a data refresh when song ends
-        updateData();
-      } else {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min((elapsed / duration) * 100, 100);
-        trackProgress.style.width = `${progress}%`;
-
-        if (timeElapsedElem) {
-          timeElapsedElem.textContent = formatTime(elapsed);
-        }
-        if (timeDurationElem) {
-          timeDurationElem.textContent = formatTime(duration);
-        }
-      }
+  // After updating Spotify data, start the smooth animation:
+function updateProgress() {
+  if (startTime && endTime && duration) {
+    const currentTime = Date.now();
+    if (currentTime >= endTime) {
+      trackProgress.style.width = "100%";
+      // Optionally, re-fetch or reset if the song ends.
+    } else {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min((elapsed / duration) * 100, 100);
+      trackProgress.style.width = `${progress}%`;
+      requestAnimationFrame(updateProgress);
     }
-  }, 250);
+  } else {
+    // If timestamps aren't set yet, check again on next frame.
+    requestAnimationFrame(updateProgress);
+  }
+}
 
-  // Re-fetch all data every 1000ms for improved responsiveness
-  setInterval(updateData, 1000);
-  
-  // Initial fetch
-  updateData();
+// Call updateProgress once you have your initial Spotify data:
+updateData();
+requestAnimationFrame(updateProgress);
 
   // Age calculation (if used elsewhere)
   function calculateAge(birthDate) {
