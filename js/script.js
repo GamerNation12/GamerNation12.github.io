@@ -114,4 +114,3 @@ document.addEventListener("DOMContentLoaded", function() {
       ageElement.textContent = age;
     }
   };
-});
