@@ -1,38 +1,39 @@
 document.addEventListener("DOMContentLoaded", function() {
   // Element declarations (ensure these IDs exist in your HTML)
-  const trackName = document.getElementById("trackName");
-  const trackArtist = document.getElementById("trackArtist");
-  const trackLink = document.getElementById("trackLink");
-  const trackProgress = document.getElementById("trackProgress");
-  const discordName = document.getElementById("discordName");
-  const discordMotd = document.getElementById("discordMotd");
-  const avatarLink = document.getElementById("avatarLink");
-  const discordAvatar = document.getElementById("discordAvatar");
+  const trackName    = document.getElementById("trackName");
+  const trackArtist  = document.getElementById("trackArtist");
+  const trackLink    = document.getElementById("trackLink");
+  const trackProgress= document.getElementById("trackProgress");
+  const discordName  = document.getElementById("discordName");
+  const discordMotd  = document.getElementById("discordMotd");
+  const avatarLink   = document.getElementById("avatarLink");
+  const discordAvatar= document.getElementById("discordAvatar");
   const statusCircle = document.getElementById("statusCircle");
-
+  
   // Elements for time display:
-  const timeElapsed = document.getElementById("timeElapsed");
+  const timeElapsed  = document.getElementById("timeElapsed");
   const timeDuration = document.getElementById("timeDuration");
 
   const discordID = '759433582107426816';
-  let startTime, endTime, duration; // For Lanyard Spotify timestamps
+  // These variables will be set when Lanyard returns Spotify data
+  let startTime, endTime, duration;
 
-  // Format time (mm:ss)
+  // Helper: Format milliseconds into mm:ss
   function formatTime(ms) {
     const seconds = Math.floor((ms / 1000) % 60);
     const minutes = Math.floor(ms / 1000 / 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
-  // Fetch data from Lanyard API (for Discord and Spotify metadata)
+  // Fetch data from Lanyard API (includes Discord info and Spotify metadata)
   function updateData() {
     fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         console.log("Lanyard response:", data);
-        const e = data; // using shorthand
+        const e = data;
 
-        // Update Discord info
+        // Update Discord info if available
         if (e.data && e.data["discord_user"]) {
           discordName.innerText = `@${e.data.discord_user.username}`;
           avatarLink.href = `https://discord.com/users/${discordID}`;
@@ -41,72 +42,73 @@ document.addEventListener("DOMContentLoaded", function() {
           }
           if (statusCircle) {
             let status = e.data.discord_status;
-            statusCircle.style.backgroundColor =
+            statusCircle.style.backgroundColor = 
               status === "online" ? "#23a55a" :
-              status === "idle" ? "#f0b232" :
-              status === "dnd" ? "#f23f43" : "#80848e";
+              status === "idle"   ? "#f0b232" :
+              status === "dnd"    ? "#f23f43" : "#80848e";
           }
           const customStatus = (e.data.activities || []).find(activity => activity.type === 4);
           discordMotd.innerText = customStatus && customStatus.state
             ? customStatus.state
             : e.data.discord_user.bio || "No status message";
         }
-
-        // Update Spotify metadata if listening (used for song info & progress)
+        
+        // If listening to Spotify, update song info and set timestamps
         if (e.data && e.data["listening_to_spotify"] && e.data.spotify && e.data.spotify.timestamps) {
-          trackName.innerText = e.data.spotify.song;
+          // Update song information
+          trackName.innerText   = e.data.spotify.song;
           trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
           document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-          trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+          trackLink.href        = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
 
-          // Save timestamps for progress calculation:
+          // Retrieve and convert timestamps
           const rawStart = e.data.spotify.timestamps.start;
-          const rawEnd = e.data.spotify.timestamps.end;
-          // Convert to milliseconds if necessary
+          const rawEnd   = e.data.spotify.timestamps.end;
+          // If timestamps appear to be in seconds, multiply by 1000 to convert to milliseconds
           startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
-          endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
-          duration = endTime - startTime;
+          endTime   = rawEnd   < 1e11 ? rawEnd   * 1000 : rawEnd;
+          duration  = endTime - startTime;
           console.log("Spotify Timestamps:", { startTime, endTime, duration });
         } else {
-          // Reset progress if not listening
+          // If not listening to Spotify, clear timestamps and reset the progress bar
           startTime = endTime = duration = null;
           trackProgress.style.width = "0%";
-          if (timeElapsed) timeElapsed.textContent = "0:00";
+          if (timeElapsed)  timeElapsed.textContent = "0:00";
           if (timeDuration) timeDuration.textContent = "0:00";
           console.log("Not listening to Spotify.");
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching Lanyard data:", error);
       });
   }
 
-  // Animate the progress bar using Lanyard's Spotify timestamps
+  // Animate progress bar using Lanyard's Spotify timestamps
   function animateLanyardProgress() {
     if (startTime && endTime && duration) {
       const currentTime = Date.now();
       let elapsed = currentTime - startTime;
-      if (elapsed > duration) {
-        elapsed = duration;
-      }
+      // Cap elapsed at total duration
+      if (elapsed > duration) elapsed = duration;
       const progressPercent = (elapsed / duration) * 100;
       trackProgress.style.width = `${progressPercent}%`;
-      if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
+      if (timeElapsed)  timeElapsed.textContent  = formatTime(elapsed);
       if (timeDuration) timeDuration.textContent = formatTime(duration);
     } else {
-      // Clear the progress bar if no valid timestamps
+      // If no valid Spotify data, reset progress to 0
       trackProgress.style.width = "0%";
-      if (timeElapsed) timeElapsed.textContent = "0:00";
+      if (timeElapsed)  timeElapsed.textContent  = "0:00";
       if (timeDuration) timeDuration.textContent = "0:00";
     }
     requestAnimationFrame(animateLanyardProgress);
   }
 
-  // Initialize: Fetch metadata and update progress periodically using Lanyard
+  // Initialize: Fetch Lanyard metadata every second and animate the progress bar
   updateData();
-  setInterval(updateData, 1000); // Refresh Lanyard metadata every second
+  setInterval(updateData, 1000);
   requestAnimationFrame(animateLanyardProgress);
 
+  // --- Additional Code ---
   // Age calculation function (for additional functionality)
   function calculateAge(birthDate) {
     const today = new Date();
@@ -123,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
     return ageYears;
   }
 
-  // Update age on window load
+  // Update the age on window load
   window.addEventListener('load', function() {
     const birthDate = "27.7.232323";
     const age = calculateAge(birthDate);
@@ -133,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // Gradient for nameNeksio background
+  // Gradient for nameNeksio background (optional styling)
   const gradients = [
     "#004ef7, #0084ff",
     "#ff8400, #ffc900",
