@@ -168,11 +168,3 @@ document.addEventListener("DOMContentLoaded", function() {
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
   }
 });
-fetch('nav.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('navbar-placeholder').innerHTML = html;
-      })
-      .catch(error => {
-        console.error('Error loading nav:', error);
-      });
