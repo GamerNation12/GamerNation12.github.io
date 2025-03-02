@@ -147,3 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
   }
 });
+
+
+
+//MINE
