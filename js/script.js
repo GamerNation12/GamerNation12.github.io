@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // Update Spotify metadata if listening (used for song info & progress)
-        if (e.data && e.data["listening_to_spotify"]) {
+        if (e.data && e.data["listening_to_spotify"] && e.data.spotify && e.data.spotify.timestamps) {
           trackName.innerText = e.data.spotify.song;
           trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
           document.getElementById("trackImg").src = e.data.spotify.album_art_url;
@@ -62,15 +62,18 @@ document.addEventListener("DOMContentLoaded", function() {
           // Save timestamps for progress calculation:
           const rawStart = e.data.spotify.timestamps.start;
           const rawEnd = e.data.spotify.timestamps.end;
-          startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;  // Convert to ms if needed
+          // Convert to milliseconds if necessary
+          startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
           endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
           duration = endTime - startTime;
+          console.log("Spotify Timestamps:", { startTime, endTime, duration });
         } else {
           // Reset progress if not listening
           startTime = endTime = duration = null;
           trackProgress.style.width = "0%";
           if (timeElapsed) timeElapsed.textContent = "0:00";
           if (timeDuration) timeDuration.textContent = "0:00";
+          console.log("Not listening to Spotify.");
         }
       })
       .catch((error) => {
@@ -90,6 +93,11 @@ document.addEventListener("DOMContentLoaded", function() {
       trackProgress.style.width = `${progressPercent}%`;
       if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
       if (timeDuration) timeDuration.textContent = formatTime(duration);
+    } else {
+      // Clear the progress bar if no valid timestamps
+      trackProgress.style.width = "0%";
+      if (timeElapsed) timeElapsed.textContent = "0:00";
+      if (timeDuration) timeDuration.textContent = "0:00";
     }
     requestAnimationFrame(animateLanyardProgress);
   }
@@ -137,4 +145,3 @@ document.addEventListener("DOMContentLoaded", function() {
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
   }
 });
-//hello
