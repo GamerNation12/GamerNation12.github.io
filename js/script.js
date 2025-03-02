@@ -93,46 +93,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Animate the progress bar based on either Spotify song duration or a fallback pulsing effect.
   // Also link the progress percentage to the control bar value.
-  function animateProgress() {
-    let progressPercent;
-    if (startTime && endTime && duration) {
-      // Spotify is active – update progress based on song duration
+function animateProgress() {
+  if (startTime && endTime && duration) {
+      // Calculate exact position in song
       const currentTime = Date.now();
-      let elapsed = currentTime - startTime;
-      if (elapsed > duration) {
-        elapsed = duration; // Cap at duration if song has ended
-      }
-      progressPercent = (elapsed / duration) * 100;
+      const elapsed = Math.min(currentTime - startTime, duration);
+      const progressPercent = (elapsed / duration) * 100;
+        
+      // Update time displays
       if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
       if (timeDuration) timeDuration.textContent = formatTime(duration);
-
-      // Use Discord status color for the progress bar
-      if (statusCircle) {
-        let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
-        trackProgress.style.backgroundColor = statusColor;
+        
+      // Update progress bar width
+      trackProgress.style.width = `${progressPercent}%`;
+        
+      // Update control bar if it exists
+      if (controlBar) {
+          controlBar.value = progressPercent;
       }
-    } else {
-      // Not listening to Spotify – use a pulsing animation based on a sine function
-      progressPercent = Math.abs(Math.sin(Date.now() / 1000)) * 100;
-      // Set fallback background color from Discord status
-      let statusColor = "#80848e";
+        
+      // Use status color for progress
       if (statusCircle) {
-        statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+          trackProgress.style.backgroundColor = window.getComputedStyle(statusCircle).backgroundColor;
       }
-      trackProgress.style.backgroundColor = statusColor;
+  } else {
+      // Clear displays when no song is playing
       if (timeElapsed) timeElapsed.textContent = "";
       if (timeDuration) timeDuration.textContent = "";
-    }
-
-    // Update control bar value (if present) to reflect computed progress
-    if (controlBar) {
-      controlBar.value = progressPercent;
-    }
-    // Update visual progress bar width
-    trackProgress.style.width = `${progressPercent}%`;
-    requestAnimationFrame(animateProgress);
+      trackProgress.style.width = "0%";
   }
-
+    
+  requestAnimationFrame(animateProgress);
+}
   // Initialize: Fetch Lanyard metadata every second and start the animation loop
   updateData();
   setInterval(updateData, 1000);
