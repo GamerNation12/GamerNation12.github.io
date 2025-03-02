@@ -188,3 +188,16 @@ setInterval(checkForDeployment, 60000);
 
 // Initial check on page load
 checkForDeployment();
+
+function checkSongEnd() {
+    if (startTime && endTime) {
+        const currentTime = Date.now();
+        if (currentTime >= endTime) {
+            window.location.reload();
+        }
+    }
+    requestAnimationFrame(checkSongEnd);
+}
+
+// Start checking for song end
+requestAnimationFrame(checkSongEnd);
