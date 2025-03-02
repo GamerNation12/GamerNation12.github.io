@@ -166,3 +166,25 @@ function animateProgress() {
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
   }
 });
+
+function checkForDeployment() {
+    fetch('https://api.github.com/repos/GamerNation12/GamerNation12.github.io/actions/workflows/static.yml/runs')
+        .then(response => response.json())
+        .then(data => {
+            const latestRun = data.workflow_runs[0];
+            const lastCheckTime = localStorage.getItem('lastDeploymentTime');
+            
+            if (lastCheckTime && latestRun.updated_at > lastCheckTime) {
+                localStorage.setItem('lastDeploymentTime', latestRun.updated_at);
+                window.location.reload();
+            } else if (!lastCheckTime) {
+                localStorage.setItem('lastDeploymentTime', latestRun.updated_at);
+            }
+        });
+}
+
+// Check every minute for new deployments
+setInterval(checkForDeployment, 60000);
+
+// Initial check on page load
+checkForDeployment();
