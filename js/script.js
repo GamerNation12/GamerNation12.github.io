@@ -124,13 +124,22 @@ function animateProgress() {
     }
     
     requestAnimationFrame(animateProgress);
-}}  // Initialize: Fetch Lanyard metadata every second and start the animation loop
-  updateData();
-  setInterval(updateData, 1000);
-  requestAnimationFrame(animateProgress);
+// Initialize: Fetch Lanyard metadata and start the animation loop
+updateData();
+requestAnimationFrame(animateProgress);
+requestAnimationFrame(checkSongEnd);
 
-  // --- Additional Code (for age and styling) ---
-  function calculateAge(birthDate) {
+function checkSongEnd() {
+  if (startTime && endTime) {
+    const currentTime = Date.now();
+    if (currentTime >= endTime) {
+      window.location.reload();
+    }
+  }
+  requestAnimationFrame(checkSongEnd);
+}
+
+// --- Additional Code (for age and styling) ---  function calculateAge(birthDate) {
     const today = new Date();
     const parts = birthDate.split(".");
     const birthDay = parseInt(parts[0], 10);
