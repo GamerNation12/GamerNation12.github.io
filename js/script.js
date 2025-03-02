@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function() {
   const avatarLink = document.getElementById("avatarLink");
   const discordAvatar = document.getElementById("discordAvatar");
   const statusCircle = document.getElementById("statusCircle");
-  
+
   // Elements for time display:
   const timeElapsed = document.getElementById("timeElapsed");
   const timeDuration = document.getElementById("timeDuration");
-  
+
   const discordID = '759433582107426816';
-  let startTime, endTime, duration; // For Lanyard Spotify timestamps (if needed)
+  let startTime, endTime, duration; // For Lanyard Spotify timestamps
 
   // Format time (mm:ss)
   function formatTime(ms) {
@@ -52,19 +52,25 @@ document.addEventListener("DOMContentLoaded", function() {
             : e.data.discord_user.bio || "No status message";
         }
 
-        // Update Spotify metadata if listening (used for song info)
+        // Update Spotify metadata if listening (used for song info & progress)
         if (e.data && e.data["listening_to_spotify"]) {
           trackName.innerText = e.data.spotify.song;
           trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
           document.getElementById("trackImg").src = e.data.spotify.album_art_url;
           trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
 
-          // Optionally save timestamps if you want fallback progress updates:
+          // Save timestamps for progress calculation:
           const rawStart = e.data.spotify.timestamps.start;
           const rawEnd = e.data.spotify.timestamps.end;
-          startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+          startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;  // Convert to ms if needed
           endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
           duration = endTime - startTime;
+        } else {
+          // Reset progress if not listening
+          startTime = endTime = duration = null;
+          trackProgress.style.width = "0%";
+          if (timeElapsed) timeElapsed.textContent = "0:00";
+          if (timeDuration) timeDuration.textContent = "0:00";
         }
       })
       .catch((error) => {
@@ -72,44 +78,28 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   }
 
-  // New function: Update progress bar using Spotify's official API
-  async function updateSpotifyProgress() {
-    try {
-      const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-        headers: {
-          'Authorization': 'Bearer c85d03754fc14f4b929c678f7df9fa20'
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        if (data && data.item) {
-          const progress = data.progress_ms;
-          const dur = data.item.duration_ms;
-          const progressPercent = (progress / dur) * 100;
-
-          trackProgress.style.width = `${progressPercent}%`;
-          if (timeElapsed) timeElapsed.textContent = formatTime(progress);
-          if (timeDuration) timeDuration.textContent = formatTime(dur);
-        }
-      } else {
-        // If the track is not playing, reset the progress bar
-        trackProgress.style.width = "0%";
-        if (timeElapsed) timeElapsed.textContent = "0:00";
-        if (timeDuration) timeDuration.textContent = "0:00";
+  // Animate the progress bar using Lanyard's Spotify timestamps
+  function animateLanyardProgress() {
+    if (startTime && endTime && duration) {
+      const currentTime = Date.now();
+      let elapsed = currentTime - startTime;
+      if (elapsed > duration) {
+        elapsed = duration;
       }
-    } catch (error) {
-      console.error("Error fetching Spotify progress:", error);
+      const progressPercent = (elapsed / duration) * 100;
+      trackProgress.style.width = `${progressPercent}%`;
+      if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
+      if (timeDuration) timeDuration.textContent = formatTime(duration);
     }
+    requestAnimationFrame(animateLanyardProgress);
   }
 
-  // Initialize: Fetch metadata and update progress periodically
+  // Initialize: Fetch metadata and update progress periodically using Lanyard
   updateData();
-  setInterval(updateData, 1000); // Refresh metadata every second
+  setInterval(updateData, 1000); // Refresh Lanyard metadata every second
+  requestAnimationFrame(animateLanyardProgress);
 
-  // Update Spotify progress every second using the official API
-  setInterval(updateSpotifyProgress, 1000);
-
-  // Age calculation function
+  // Age calculation function (for additional functionality)
   function calculateAge(birthDate) {
     const today = new Date();
     const parts = birthDate.split(".");
