@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   mobileMenu.addEventListener('click', function() {
     navbarMenu.classList.toggle('active');
   });
-});
+
   // Element declarations (ensure these IDs exist in your HTML)
   const trackName     = document.getElementById("trackName");
   const trackArtist   = document.getElementById("trackArtist");
