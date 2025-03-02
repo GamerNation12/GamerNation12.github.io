@@ -124,25 +124,26 @@ function animateProgress() {
     }
     
     requestAnimationFrame(animateProgress);
-// Initialize: Fetch Lanyard metadata and start the animation loop
-updateData();
-requestAnimationFrame(animateProgress);
+}}  // Initialize: Fetch Lanyard metadata every second and start the animation loop
+  updateData();
+  setInterval(updateData, 1000);
+  requestAnimationFrame(animateProgress);
 
-// --- Additional Code (for age and styling) ---
-function calculateAge(birthDate) {
-  const today = new Date();
-  const parts = birthDate.split(".");
-  const birthDay = parseInt(parts[0], 10);
-  const birthMonth = parseInt(parts[1], 10);
-  const birthYear = parseInt(parts[2], 10);
-  let ageYears = today.getFullYear() - birthYear;
-  const ageMonths = today.getMonth() + 1 - birthMonth;
-  const ageDays = today.getDate() - birthDay;
-  if (ageMonths < 0 || (ageMonths === 0 && ageDays < 0)) {
-    ageYears--;
+  // --- Additional Code (for age and styling) ---
+  function calculateAge(birthDate) {
+    const today = new Date();
+    const parts = birthDate.split(".");
+    const birthDay = parseInt(parts[0], 10);
+    const birthMonth = parseInt(parts[1], 10);
+    const birthYear = parseInt(parts[2], 10);
+    let ageYears = today.getFullYear() - birthYear;
+    const ageMonths = today.getMonth() + 1 - birthMonth;
+    const ageDays = today.getDate() - birthDay;
+    if (ageMonths < 0 || (ageMonths === 0 && ageDays < 0)) {
+      ageYears--;
+    }
+    return ageYears;
   }
-  return ageYears;
-}
 
   window.addEventListener('load', function() {
     const birthDate = "27.7.232323";
@@ -165,39 +166,3 @@ function calculateAge(birthDate) {
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
   }
 });
-
-function checkForDeployment() {
-    fetch('https://api.github.com/repos/GamerNation12/GamerNation12.github.io/actions/workflows/static.yml/runs')
-        .then(response => response.json())
-        .then(data => {
-            const latestRun = data.workflow_runs[0];
-            const lastCheckTime = localStorage.getItem('lastDeploymentTime');
-            
-            if (lastCheckTime && latestRun.updated_at > lastCheckTime) {
-                localStorage.setItem('lastDeploymentTime', latestRun.updated_at);
-                window.location.reload();
-            } else if (!lastCheckTime) {
-                localStorage.setItem('lastDeploymentTime', latestRun.updated_at);
-            }
-        });
-}
-
-// Check every minute for new deployments
-setInterval(checkForDeployment, 60000);
-
-// Initial check on page load
-checkForDeployment();
-
-// Initialize: Fetch initial data and start monitoring song end
-updateData();
-requestAnimationFrame(checkSongEnd);
-
-function checkSongEnd() {
-    if (startTime && endTime) {
-        const currentTime = Date.now();
-        if (currentTime >= endTime) {
-            window.location.reload();
-        }
-    }
-    requestAnimationFrame(checkSongEnd);
-}
