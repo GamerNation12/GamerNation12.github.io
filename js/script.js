@@ -199,5 +199,6 @@ function checkSongEnd() {
     requestAnimationFrame(checkSongEnd);
 }
 
-// Start checking for song end
+// Initialize data and start checking for song end
+updateData();
 requestAnimationFrame(checkSongEnd);
