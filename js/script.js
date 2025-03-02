@@ -92,45 +92,41 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 function animateProgress() {
     if (startTime && endTime && duration) {
-        // Get exact current position from Spotify data
-        fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.data && data.data.spotify) {
-                    const currentTime = Date.now();
-                    const elapsed = currentTime - data.data.spotify.timestamps.start;
-                    const progressPercent = Math.min((elapsed / duration) * 100, 100);
-                    
-                    // Update progress elements
-                    trackProgress.style.width = `${progressPercent}%`;
-                    if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
-                    if (timeDuration) timeDuration.textContent = formatTime(duration);
-                    
-                    // Set progress color from Discord status
-                    if (statusCircle) {
-                        let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
-                        trackProgress.style.backgroundColor = statusColor;
-                    }
-                    
-                    // Update control bar
-                    if (controlBar) {
-                        controlBar.value = progressPercent;
-                    }
-                }
-            });
+        const currentTime = Date.now();
+        const elapsed = Math.min(currentTime - startTime, duration);
+        const progressPercent = (elapsed / duration) * 100;
+
+        console.log('Current time:', new Date(currentTime).toISOString());
+        console.log('Start time:', new Date(startTime).toISOString());
+        console.log('End time:', new Date(endTime).toISOString());
+        console.log('Progress:', progressPercent + '%');
+
+        trackProgress.style.width = `${progressPercent}%`;
+        
+        if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
+        if (timeDuration) timeDuration.textContent = formatTime(duration);
+        
+        if (statusCircle) {
+            let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+            trackProgress.style.backgroundColor = statusColor;
+        }
+        
+        if (controlBar) {
+            controlBar.value = progressPercent;
+        }
     } else {
         trackProgress.style.width = "0%";
         if (timeElapsed) timeElapsed.textContent = "";
         if (timeDuration) timeDuration.textContent = "";
     }
     
-    setTimeout(() => requestAnimationFrame(animateProgress), 1000);
+    requestAnimationFrame(animateProgress);
 }
-}  // Initialize: Fetch Lanyard metadata every second and start the animation loop
-  updateData();
-  setInterval(updateData, 1000);
-  requestAnimationFrame(animateProgress);
 
+// Initialize: Fetch Lanyard metadata every second and start the animation loop
+updateData();
+setInterval(updateData, 1000);
+requestAnimationFrame(animateProgress);
   // --- Additional Code (for age and styling) ---
   function calculateAge(birthDate) {
     const today = new Date();
