@@ -89,6 +89,46 @@ body {
   color: #ff8400;
 }
 
+/* Mobile menu styles */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.navbar-toggle span {
+  height: 3px;
+  width: 25px;
+  background-color: #fff;
+  margin: 4px 0;
+  transition: 0.4s;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar-menu.active {
+    display: flex;
+  }
+
+  .navbar-item {
+    margin: 0;
+  }
+
+  .navbar-link {
+    padding: 14px;
+    text-align: center;
+  }
+
+  .navbar-toggle {
+    display: flex;
+  }
+}
+
 .countdown {
   position: fixed;
   bottom: 20px;

@@ -1,4 +1,11 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenu = document.getElementById('mobile-menu');
+  const navbarMenu = document.querySelector('.navbar-menu');
+
+  mobileMenu.addEventListener('click', function() {
+    navbarMenu.classList.toggle('active');
+  });
+});
   // Element declarations (ensure these IDs exist in your HTML)
   const trackName     = document.getElementById("trackName");
   const trackArtist   = document.getElementById("trackArtist");
