@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // Elements for time display:
   const timeElapsed   = document.getElementById("timeElapsed");
   const timeDuration  = document.getElementById("timeDuration");
+  
+  // New: control bar element to reflect (or control) progress
+  const controlBar = document.getElementById("controlBar");
 
   const discordID     = '759433582107426816';
   // These variables will be set when Lanyard returns Spotify data
@@ -31,8 +34,8 @@ document.addEventListener("DOMContentLoaded", function() {
       .then(response => response.json())
       .then(data => {
         console.log("Lanyard response:", data);
-        const e = data; // using shorthand
-
+        const e = data; // shorthand
+        
         // Update Discord info if available
         if (e.data && e.data["discord_user"]) {
           discordName.innerText = `@${e.data.discord_user.username}`;
@@ -42,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function() {
           }
           if (statusCircle) {
             let status = e.data.discord_status;
-            // Set the statusCircle background color based on status:
             statusCircle.style.backgroundColor =
               status === "online" ? "#23a55a" :
               status === "idle"   ? "#f0b232" :
@@ -63,18 +65,17 @@ document.addEventListener("DOMContentLoaded", function() {
           document.getElementById("trackImg").src = e.data.spotify.album_art_url;
           trackLink.href        = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
 
-          // Retrieve and convert timestamps:
+          // Retrieve and convert timestamps
           const rawStart = e.data.spotify.timestamps.start;
           const rawEnd   = e.data.spotify.timestamps.end;
-          // Convert from seconds to milliseconds if needed
+          // Convert from seconds to milliseconds if necessary
           startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
           endTime   = rawEnd   < 1e11 ? rawEnd   * 1000 : rawEnd;
           duration  = endTime - startTime;
           console.log("Spotify Timestamps:", { startTime, endTime, duration });
         } else {
-          // If not listening to Spotify, clear timestamps (so we can use Discord status for animation)
+          // If not listening to Spotify, clear timestamps
           startTime = endTime = duration = null;
-          // Reset progress bar width (it will be handled by the fallback animation)
           console.log("Not listening to Spotify.");
         }
       })
@@ -83,10 +84,10 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   }
 
-  // Animate the progress bar:
-  // When Spotify data is available, the bar fills based on elapsed time.
-  // Otherwise, the bar pulses using the Discord status color.
+  // Animate the progress bar based on either Spotify song duration or a fallback pulsing effect.
+  // Also link the progress percentage to the control bar value.
   function animateProgress() {
+    let progressPercent;
     if (startTime && endTime && duration) {
       // Spotify is active – update progress based on song duration
       const currentTime = Date.now();
@@ -94,30 +95,34 @@ document.addEventListener("DOMContentLoaded", function() {
       if (elapsed > duration) {
         elapsed = duration; // Cap at duration if song has ended
       }
-      const progressPercent = (elapsed / duration) * 100;
-      trackProgress.style.width = `${progressPercent}%`;
+      progressPercent = (elapsed / duration) * 100;
       if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
       if (timeDuration) timeDuration.textContent = formatTime(duration);
-      // Also use theme color from Discord status (if desired)
+
+      // Use Discord status color for the progress bar
       if (statusCircle) {
         let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
         trackProgress.style.backgroundColor = statusColor;
       }
     } else {
-      // Not listening to Spotify – use Discord status to drive a pulsing animation.
-      // Compute a sine-based pulse (cycles between 0 and 100% width)
-      const pulse = Math.abs(Math.sin(Date.now() / 1000)) * 100;
-      trackProgress.style.width = `${pulse}%`;
-      // Use the Discord status color for the progress bar
+      // Not listening to Spotify – use a pulsing animation based on a sine function
+      progressPercent = Math.abs(Math.sin(Date.now() / 1000)) * 100;
+      // Set fallback background color from Discord status
       let statusColor = "#80848e";
       if (statusCircle) {
         statusColor = window.getComputedStyle(statusCircle).backgroundColor;
       }
       trackProgress.style.backgroundColor = statusColor;
-      // Optionally, clear the time displays
       if (timeElapsed) timeElapsed.textContent = "";
       if (timeDuration) timeDuration.textContent = "";
     }
+
+    // Update control bar value (if present) to reflect computed progress
+    if (controlBar) {
+      controlBar.value = progressPercent;
+    }
+    // Update visual progress bar width
+    trackProgress.style.width = `${progressPercent}%`;
     requestAnimationFrame(animateProgress);
   }
 
@@ -151,6 +156,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+  // Optional styling: set a gradient background for the name element
   const gradients = [
     "#004ef7, #0084ff",
     "#ff8400, #ffc900",
