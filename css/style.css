@@ -187,19 +187,19 @@ body {
   bottom: 10px; /* adjust spacing as needed */
   left: 0;
   right: 0;
-  height: 4px;  /* thicker than before */
+  height: 6px;  /* thicker than before */
   background-color: rgba(255, 255, 255, 0.1); /* subtle dark track */
-  border-radius: 2px; /* Make the container slightly round */
+  border-radius: 3px; /* Make the container slightly round */
   overflow: hidden;
 }
 
 /* Spotify-like progress bar */
 .trackProgress {
   height: 100%;
-  background-color: #1DB954;  /* Spotify green */
+  background: linear-gradient(90deg, #ff8400, #ffc900);  /* Gradient color */
   width: 0%;
   animation: progressAnimation 30s linear infinite; /* Adjust duration as needed */
-  border-radius: 2px; /* Make the progress bar slightly round */
+  border-radius: 3px; /* Make the progress bar slightly round */
 }
 
 /* Time display for current time and total duration */
@@ -220,23 +220,9 @@ body {
   right: 10px;
 }
 
-.progress-container {
-  width: 100%;
-  background-color: #f3f3f3;
-  border-radius: 25px;
-  overflow: hidden;
-  box-shadow: 0 3px 3px -5px #000, 0 2px 5px #000;
-}
-
-.progress-bar {
-  height: 30px;
-  width: 0;
-  background-color: #4caf50;
-  text-align: center;
-  line-height: 30px;
-  color: white;
-  border-radius: 25px;
-  transition: width 0.5s ease-in-out;
+@keyframes progressAnimation {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
 
 .discordPanel {
