@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
           }
           if (statusCircle) {
             let status = e.data.discord_status;
+            // Set the statusCircle background color based on status:
             statusCircle.style.backgroundColor =
               status === "online" ? "#23a55a" :
               status === "idle"   ? "#f0b232" :
@@ -54,7 +55,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         
         // Update Spotify metadata if listening (used for song info & progress)
-        if (e.data && e.data["listening_to_spotify"] && e.data.spotify && e.data.spotify.timestamps) {
+        if (e.data && e.data["listening_to_spotify"] &&
+            e.data.spotify && e.data.spotify.timestamps) {
           // Set the song's details
           trackName.innerText   = e.data.spotify.song;
           trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
@@ -70,11 +72,9 @@ document.addEventListener("DOMContentLoaded", function() {
           duration  = endTime - startTime;
           console.log("Spotify Timestamps:", { startTime, endTime, duration });
         } else {
-          // If not listening to Spotify, clear timestamps and reset the progress bar
+          // If not listening to Spotify, clear timestamps (so we can use Discord status for animation)
           startTime = endTime = duration = null;
-          trackProgress.style.width = "0%";
-          if (timeElapsed) timeElapsed.textContent = "0:00";
-          if (timeDuration) timeDuration.textContent = "0:00";
+          // Reset progress bar width (it will be handled by the fallback animation)
           console.log("Not listening to Spotify.");
         }
       })
@@ -83,36 +83,48 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   }
 
-  // Animate the progress bar using Lanyard's Spotify timestamps,
-  // linking the animation to the song's total duration.
-  function animateLanyardProgress() {
+  // Animate the progress bar:
+  // When Spotify data is available, the bar fills based on elapsed time.
+  // Otherwise, the bar pulses using the Discord status color.
+  function animateProgress() {
     if (startTime && endTime && duration) {
+      // Spotify is active – update progress based on song duration
       const currentTime = Date.now();
-      // Calculate the elapsed time since the song started
       let elapsed = currentTime - startTime;
-      // If elapsed time exceeds the song's duration, cap it at duration
       if (elapsed > duration) {
-        elapsed = duration;
+        elapsed = duration; // Cap at duration if song has ended
       }
-      // Calculate the progress percentage linked to song duration
       const progressPercent = (elapsed / duration) * 100;
       trackProgress.style.width = `${progressPercent}%`;
       if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
       if (timeDuration) timeDuration.textContent = formatTime(duration);
+      // Also use theme color from Discord status (if desired)
+      if (statusCircle) {
+        let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+        trackProgress.style.backgroundColor = statusColor;
+      }
     } else {
-      // Reset progress if no valid Spotify data is available
-      trackProgress.style.width = "0%";
-      if (timeElapsed) timeElapsed.textContent = "0:00";
-      if (timeDuration) timeDuration.textContent = "0:00";
+      // Not listening to Spotify – use Discord status to drive a pulsing animation.
+      // Compute a sine-based pulse (cycles between 0 and 100% width)
+      const pulse = Math.abs(Math.sin(Date.now() / 1000)) * 100;
+      trackProgress.style.width = `${pulse}%`;
+      // Use the Discord status color for the progress bar
+      let statusColor = "#80848e";
+      if (statusCircle) {
+        statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+      }
+      trackProgress.style.backgroundColor = statusColor;
+      // Optionally, clear the time displays
+      if (timeElapsed) timeElapsed.textContent = "";
+      if (timeDuration) timeDuration.textContent = "";
     }
-    // Continue the animation loop
-    requestAnimationFrame(animateLanyardProgress);
+    requestAnimationFrame(animateProgress);
   }
 
-  // Initialize: Fetch Lanyard metadata every second and animate the progress bar
+  // Initialize: Fetch Lanyard metadata every second and start the animation loop
   updateData();
   setInterval(updateData, 1000);
-  requestAnimationFrame(animateLanyardProgress);
+  requestAnimationFrame(animateProgress);
 
   // --- Additional Code (for age and styling) ---
   function calculateAge(birthDate) {
