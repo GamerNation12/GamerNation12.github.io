@@ -90,38 +90,42 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Error fetching Lanyard data:", error);
       });
   }
-
 function animateProgress() {
-  if (startTime && endTime && duration) {
-      // Get current position from Lanyard data
-      const currentTime = Date.now();
-      const elapsed = currentTime - startTime;
-      const progressPercent = Math.min((elapsed / duration) * 100, 100);
-        
-      // Update visual elements
-      trackProgress.style.width = `${progressPercent}%`;
-        
-      if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
-      if (timeDuration) timeDuration.textContent = formatTime(duration);
-        
-      // Set progress bar color based on Discord status
-      if (statusCircle) {
-          let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
-          trackProgress.style.backgroundColor = statusColor;
-      }
-        
-      // Update control bar value if present
-      if (controlBar) {
-          controlBar.value = progressPercent;
-      }
-  } else {
-      // Reset displays when no song playing
-      trackProgress.style.width = "0%";
-      if (timeElapsed) timeElapsed.textContent = "";
-      if (timeDuration) timeDuration.textContent = "";
-  }
+    if (startTime && endTime && duration) {
+        // Get exact current position from Spotify data
+        fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.data && data.data.spotify) {
+                    const currentTime = Date.now();
+                    const elapsed = currentTime - data.data.spotify.timestamps.start;
+                    const progressPercent = Math.min((elapsed / duration) * 100, 100);
+                    
+                    // Update progress elements
+                    trackProgress.style.width = `${progressPercent}%`;
+                    if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
+                    if (timeDuration) timeDuration.textContent = formatTime(duration);
+                    
+                    // Set progress color from Discord status
+                    if (statusCircle) {
+                        let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+                        trackProgress.style.backgroundColor = statusColor;
+                    }
+                    
+                    // Update control bar
+                    if (controlBar) {
+                        controlBar.value = progressPercent;
+                    }
+                }
+            });
+    } else {
+        trackProgress.style.width = "0%";
+        if (timeElapsed) timeElapsed.textContent = "";
+        if (timeDuration) timeDuration.textContent = "";
+    }
     
-  requestAnimationFrame(animateProgress);
+    setTimeout(() => requestAnimationFrame(animateProgress), 1000);
+}
 }  // Initialize: Fetch Lanyard metadata every second and start the animation loop
   updateData();
   setInterval(updateData, 1000);
