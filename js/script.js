@@ -91,41 +91,38 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
-  // Animate the progress bar based on either Spotify song duration or a fallback pulsing effect.
-  // Also link the progress percentage to the control bar value.
 function animateProgress() {
   if (startTime && endTime && duration) {
-      // Calculate exact position in song
+      // Get current position from Lanyard data
       const currentTime = Date.now();
-      const elapsed = Math.min(currentTime - startTime, duration);
-      const progressPercent = (elapsed / duration) * 100;
+      const elapsed = currentTime - startTime;
+      const progressPercent = Math.min((elapsed / duration) * 100, 100);
         
-      // Update time displays
+      // Update visual elements
+      trackProgress.style.width = `${progressPercent}%`;
+        
       if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
       if (timeDuration) timeDuration.textContent = formatTime(duration);
         
-      // Update progress bar width
-      trackProgress.style.width = `${progressPercent}%`;
+      // Set progress bar color based on Discord status
+      if (statusCircle) {
+          let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+          trackProgress.style.backgroundColor = statusColor;
+      }
         
-      // Update control bar if it exists
+      // Update control bar value if present
       if (controlBar) {
           controlBar.value = progressPercent;
       }
-        
-      // Use status color for progress
-      if (statusCircle) {
-          trackProgress.style.backgroundColor = window.getComputedStyle(statusCircle).backgroundColor;
-      }
   } else {
-      // Clear displays when no song is playing
+      // Reset displays when no song playing
+      trackProgress.style.width = "0%";
       if (timeElapsed) timeElapsed.textContent = "";
       if (timeDuration) timeDuration.textContent = "";
-      trackProgress.style.width = "0%";
   }
     
   requestAnimationFrame(animateProgress);
-}
-  // Initialize: Fetch Lanyard metadata every second and start the animation loop
+}  // Initialize: Fetch Lanyard metadata every second and start the animation loop
   updateData();
   setInterval(updateData, 1000);
   requestAnimationFrame(animateProgress);
