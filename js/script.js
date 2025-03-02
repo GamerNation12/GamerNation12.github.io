@@ -189,6 +189,10 @@ setInterval(checkForDeployment, 60000);
 // Initial check on page load
 checkForDeployment();
 
+// Initialize: Fetch initial data and start monitoring song end
+updateData();
+requestAnimationFrame(checkSongEnd);
+
 function checkSongEnd() {
     if (startTime && endTime) {
         const currentTime = Date.now();
@@ -198,7 +202,3 @@ function checkSongEnd() {
     }
     requestAnimationFrame(checkSongEnd);
 }
-
-// Initialize data and start checking for song end
-updateData();
-requestAnimationFrame(checkSongEnd);
