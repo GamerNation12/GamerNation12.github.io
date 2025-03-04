@@ -211,7 +211,10 @@ body {
     background-color: #1DB954;  /* Spotify green fill */
     border-radius: 2px;
     transition: width 0.1s linear;
+
 .track-progress-container {
+
+
   position: absolute;
   bottom: 15px;
   left: 105px;
@@ -239,6 +242,8 @@ body {
   font-size: 12px;
   color: #747474;
   margin-top: 4px;
+
+
 }
 
 .currentTime {
@@ -246,13 +251,17 @@ left: 10px;
 }
 
 .totalTime {
+
 right: 10px;
 }
 
 @keyframes progressAnimation {
+
+
 0% { width: 0%; }
 100% { width: 100%; }
 }
+
 .discordPanel {
   transition: 0.3s;
   animation-name: init;
