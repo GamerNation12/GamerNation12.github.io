@@ -187,7 +187,7 @@ body {
   background-color: rgba(255, 255, 255, 0.1); /* subtle dark track */
   border-radius: 3px; /* Make the container slightly round */
   overflow: hidden;
-} /* Added missing closing bracket */
+}
 
 .track-progress-container {
   position: absolute;
@@ -231,20 +231,6 @@ body {
   width: 400px;
   position: relative;
   height: 130px;
-}
-
-.track-progress-container {
-      position: absolute;
-      bottom: 15px;
-      left: 105px;  /* Start after the album cover */
-      width: 260px;
-}
-
-.time-display {
-      text-align: center;
-      font-size: 12px;
-      color: #747474;
-      margin-top: 4px;
 }
 
 .discordAvatar {
