@@ -10,6 +10,22 @@ document.addEventListener('DOMContentLoaded', function() {
       return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
+  function updateSpotifyStatus(isPlaying, trackName, trackArtist, trackImg) {
+    const trackNameElement = document.getElementById('trackName');
+    const trackArtistElement = document.getElementById('trackArtist');
+    const trackImgElement = document.getElementById('trackImg');
+
+    if (isPlaying) {
+      trackNameElement.textContent = trackName;
+      trackArtistElement.textContent = trackArtist;
+      trackImgElement.src = trackImg;
+    } else {
+      trackNameElement.textContent = 'Nothing';
+      trackArtistElement.textContent = "I'm not currently listening to anything";
+      trackImgElement.src = 'music.png';
+    }
+  }
+
   function updateData() {
       fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
           .then(response => response.json())
@@ -47,8 +63,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
                   endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
                   duration = endTime - startTime;
+
+                  updateSpotifyStatus(true, e.data.spotify.song, e.data.spotify.artist.replaceAll(";", ","), e.data.spotify.album_art_url);
               } else {
                   startTime = endTime = duration = null;
+                  updateSpotifyStatus(false);
               }
           })
           .catch(error => {
