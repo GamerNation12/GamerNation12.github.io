@@ -189,23 +189,6 @@ body {
   overflow: hidden;
 }
 
-.progressContainer::before,
-.progressContainer::after {
-  content: "0:00"; /* Default time display */
-  font-size: 12px;
-  color: #fff; /* Change color to white for better visibility */
-  position: absolute;
-  bottom: -20px; /* Adjust position as needed */
-}
-
-.progressContainer::before {
-  left: 0;
-}
-
-.progressContainer::after {
-  right: 0;
-}
-
 .track-progress-container {
   position: absolute;
   bottom: 15px;
