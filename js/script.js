@@ -80,37 +80,31 @@ function updateData() {
       .catch(error => {
           console.error("Error fetching Lanyard data:", error);
       });
-}function animateProgress() {
+function animateProgress() {
     if (startTime && endTime && duration) {
         const currentTime = Date.now();
-        const elapsed = Math.min(currentTime - startTime, duration);
-        const progressPercent = (elapsed / duration) * 100;
+        const elapsed = currentTime - startTime;
+        const progressPercent = Math.min(Math.max((elapsed / duration) * 100, 0), 100);
 
         trackProgress.style.width = `${progressPercent}%`;
+        timeElapsed.textContent = formatTime(elapsed);
+        timeDuration.textContent = formatTime(duration);
         
-        if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
-        if (timeDuration) timeDuration.textContent = formatTime(duration);
-        
-        if (statusCircle) {
-            let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
-            trackProgress.style.backgroundColor = statusColor;
-        }
-        
-        if (controlBar) {
-            controlBar.value = progressPercent;
+        if (elapsed < duration) {
+            requestAnimationFrame(animateProgress);
         }
     } else {
         trackProgress.style.width = "0%";
-        if (timeElapsed) timeElapsed.textContent = "";
-        if (timeDuration) timeDuration.textContent = "";
+        timeElapsed.textContent = "0:00";
+        timeDuration.textContent = "0:00";
+        requestAnimationFrame(animateProgress);
     }
-    
-    requestAnimationFrame(animateProgress);
-}}// Initialize: Fetch Lanyard metadata every second and start the animation loop
+}
+
+// Initialize: Fetch Lanyard metadata every second and start the animation loop
 updateData();
 setInterval(updateData, 1000);
-requestAnimationFrame(animateProgress);
-  // --- Additional Code (for age and styling) ---
+requestAnimationFrame(animateProgress);  // --- Additional Code (for age and styling) ---
   function calculateAge(birthDate) {
     const today = new Date();
     const parts = birthDate.split(".");
