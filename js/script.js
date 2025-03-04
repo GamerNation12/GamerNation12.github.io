@@ -73,42 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
       requestAnimationFrame(animateProgress);
   }
 
-// Initial fetch
-updateData();
-
-// Fetch every second
-setInterval(() => {
-    fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
-        .then(response => response.json())
-        .then(data => {
-            const e = data;
-            
-            // Check Spotify status and update immediately
-            if (!e.data || !e.data["listening_to_spotify"]) {
-                trackName.innerText = "Not Playing";
-                trackArtist.innerText = "No Artist";
-                document.getElementById("trackImg").src = "";
-                trackLink.href = "#";
-                startTime = endTime = duration = null;
-                trackProgress.style.width = "0%";
-                timeElapsed.textContent = "0:00";
-                timeDuration.textContent = "0:00";
-                return;
-            }
-            
-            // Update Spotify data if playing
-            if (e.data.spotify && e.data.spotify.timestamps) {
-                trackName.innerText = e.data.spotify.song;
-                trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
-                document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-                trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-
-                const rawStart = e.data.spotify.timestamps.start;
-                const rawEnd = e.data.spotify.timestamps.end;
-                startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
-                endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
-                duration = endTime - startTime;
-            }
-        })
-}, 1000);
-  requestAnimationFrame(animateProgress);});
+  updateData();
+  setInterval(updateData, 1000);
+  requestAnimationFrame(animateProgress);
+});

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     trackProgress.style.width = `${progress}%`;
   }
 
-  // Example function to simulate progress update
   function simulateProgress() {
     let progress = 0;
     setInterval(() => {
