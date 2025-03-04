@@ -72,17 +72,13 @@ body {
 }
 
 .navbar-link {
-  color: #fff;
   text-decoration: none;
-  padding: 14px 20px;
-  display: block;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  color: gray;
 }
 
 .navbar-link:hover {
-  background-color: #575757;
-  border-radius: 4px;
-  color: #ff8400;
+  text-decoration: underline;
+  color: gray;
 }
 
 .navbar-logo:hover {
