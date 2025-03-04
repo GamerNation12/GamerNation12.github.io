@@ -83,28 +83,30 @@ function updateData() {
 }function animateProgress() {
     if (startTime && endTime && duration) {
         const currentTime = Date.now();
-        const elapsed = currentTime - startTime;
-        const progressPercent = Math.min(Math.max((elapsed / duration) * 100, 0), 100);
+        const elapsed = Math.min(currentTime - startTime, duration);
+        const progressPercent = (elapsed / duration) * 100;
 
-        // Update visual progress
         trackProgress.style.width = `${progressPercent}%`;
         
-        // Update time displays
         if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
         if (timeDuration) timeDuration.textContent = formatTime(duration);
         
-        // Continue animation if song hasn't ended
-        if (elapsed < duration) {
-            requestAnimationFrame(animateProgress);
+        if (statusCircle) {
+            let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+            trackProgress.style.backgroundColor = statusColor;
+        }
+        
+        if (controlBar) {
+            controlBar.value = progressPercent;
         }
     } else {
-        // Reset progress when no song is playing
         trackProgress.style.width = "0%";
-        if (timeElapsed) timeElapsed.textContent = "0:00";
-        if (timeDuration) timeDuration.textContent = "0:00";
-        requestAnimationFrame(animateProgress);
+        if (timeElapsed) timeElapsed.textContent = "";
+        if (timeDuration) timeDuration.textContent = "";
     }
-}// Initialize: Fetch Lanyard metadata every second and start the animation loop
+    
+    requestAnimationFrame(animateProgress);
+}}// Initialize: Fetch Lanyard metadata every second and start the animation loop
 updateData();
 setInterval(updateData, 1000);
 requestAnimationFrame(animateProgress);
