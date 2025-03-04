@@ -147,7 +147,7 @@ body {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
   border: 1.5px solid hsla(0, 0%, 76%, 0.02);
   width: 400px;
-  height: 120px; /* Increased height to accommodate time display */
+  height: 140px; /* Increased height to accommodate time display */
   position: relative; /* Added for progress bar positioning */
 }
 
@@ -187,6 +187,23 @@ body {
   background-color: rgba(255, 255, 255, 0.1); /* subtle dark track */
   border-radius: 3px; /* Make the container slightly round */
   overflow: hidden;
+}
+
+.progressContainer::before,
+.progressContainer::after {
+  content: "0:00"; /* Default time display */
+  font-size: 12px;
+  color: #fff; /* Change color to white for better visibility */
+  position: absolute;
+  bottom: -20px; /* Adjust position as needed */
+}
+
+.progressContainer::before {
+  left: 0;
+}
+
+.progressContainer::after {
+  right: 0;
 }
 
 .track-progress-container {
