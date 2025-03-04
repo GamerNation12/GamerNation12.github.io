@@ -64,33 +64,32 @@
       <div class="panel">
         <div class="listening">
           <div class="listening-title">
-            <i class="fa-brands fa-spotify"></i>
-            LISTENING TO SPOTIFY
+            <i class="fab fa-spotify"></i>
+            SPOTIFY
           </div>
           <div class="listening-content">
             <img id="trackImg" src="" alt="Album Art" class="listening-img">
             <div class="listening-info">
-              <div class="track-row">
-                <a id="trackLink" href="" target="_blank" class="track-name">
-                  <span id="trackName">Not Playing</span>
-                </a>
-              </div>
-              <div class="artist-row">
-                <span class="by">by</span>
-                <span id="trackArtist" class="artist-name">No Artist</span>
-              </div>
+              <a id="trackLink" href="" target="_blank" class="track-name">
+                <span id="trackName">Not Playing</span>
+              </a>
+              <span class="by">by</span>
+              <span id="trackArtist" class="artist-name">No Artist</span>
+              <!-- Progress bar elements -->
               <div class="track-progress-container">
                 <div id="trackProgress" class="track-progress"></div>
                 <div class="time-display">
                   <span id="timeElapsed">0:00</span>
-                  <span class="time-separator">/</span>
+                  <span>/</span>
                   <span id="timeDuration">0:00</span>
                 </div>
+                <input id="controlBar" type="range" min="0" max="100" value="0">
               </div>
             </div>
           </div>
         </div>
-      </div>      <div class="gap"></div>
+      </div>
+      <div class="gap"></div>
       <div id="rpcPanel" class="panel rpcPanel">
         <i class="game fa-solid fa-gamepad"></i>
         <img class="rpcIcon" id="rpcIcon" src="game.png">
