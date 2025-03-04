@@ -187,19 +187,20 @@ body {
   background-color: rgba(255, 255, 255, 0.1); /* subtle dark track */
   border-radius: 3px; /* Make the container slightly round */
   overflow: hidden;
-}
+} /* Added missing closing bracket */
+
 .track-progress-container {
-  width: 80%;
-  height: 4px;
-  background-color: #00aa08;
-  border-radius: 2px;
-  position: relative;
-  overflow: hidden;
   position: absolute;
   bottom: 15px;
   left: 105px;
   width: 260px;
+  height: 4px;
+  background-color: #4f4f4f;
+  border-radius: 2px;
+  margin: 8px auto 0;
+  overflow: hidden;
 }
+
 .track-progress {
   height: 100%;
   background-color: #1DB954;
@@ -208,17 +209,7 @@ body {
   top: 0;
   left: 0;
   transition: width 1s linear;
-  z-index: 2; /* This ensures the green progress bar stays on top */
-}
-
-.track-progress {
-  height: 2px;
-  background-color: gray;
-  width: 100%;
-}
-.track-progress-container {
-  margin: 8px auto 0;
-  width: 280px;
+  z-index: 2;
 }
 
 .time-display {
@@ -226,17 +217,6 @@ body {
   font-size: 12px;
   color: #747474;
   margin-top: 4px;
-}.currentTime {
-  left: 10px;
-}
-
-.totalTime {
-  right: 10px;
-}
-
-@keyframes progressAnimation {
-  0% { width: 0%; }
-  100% { width: 100%; }
 }
 
 .discordPanel {
@@ -252,6 +232,7 @@ body {
   position: relative;
   height: 130px;
 }
+
 .track-progress-container {
       position: absolute;
       bottom: 15px;
