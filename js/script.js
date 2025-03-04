@@ -73,7 +73,52 @@ document.addEventListener('DOMContentLoaded', function() {
       requestAnimationFrame(animateProgress);
   }
 
-  // Initialize everything
-  updateData();
-  setInterval(updateData, 1000);
+// Initial fetch
+updateData();
+
+// Fetch every second
+setInterval(() => {
+    fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
+        .then(response => response.json())
+        .then(data => {
+            const e = data;
+            
+            // Update Discord user info
+            if (e.data && e.data["discord_user"]) {
+                discordName.innerText = `@${e.data.discord_user.username}`;
+                avatarLink.href = `https://discord.com/users/${discordID}`;
+                if (discordAvatar) {
+                    discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
+                }
+                if (statusCircle) {
+                    let status = e.data.discord_status;
+                    statusCircle.style.backgroundColor =
+                        status === "online" ? "#23a55a" :
+                        status === "idle"   ? "#f0b232" :
+                        status === "dnd"    ? "#f23f43" : "#80848e";
+                }
+                const customStatus = (e.data.activities || []).find(activity => activity.type === 4);
+                discordMotd.innerText = customStatus && customStatus.state
+                    ? customStatus.state
+                    : e.data.discord_user.bio || "No status message";
+            }
+            
+            // Update Spotify data
+            if (e.data && e.data["listening_to_spotify"] &&
+                e.data.spotify && e.data.spotify.timestamps) {
+                trackName.innerText = e.data.spotify.song;
+                trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
+                document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+                trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+
+                const rawStart = e.data.spotify.timestamps.start;
+                const rawEnd = e.data.spotify.timestamps.end;
+                startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+                endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
+                duration = endTime - startTime;
+            } else {
+                startTime = endTime = duration = null;
+            }
+        })
+}, 1000);
   requestAnimationFrame(animateProgress);});
