@@ -215,8 +215,10 @@ body {
 .time-display {
   text-align: center;
   font-size: 12px;
-  color: #747474;
+  color: #fff; /* Change color to white for better visibility */
   margin-bottom: 5px; /* Space between time display and progress bar */
+  position: relative; /* Ensure it is positioned correctly */
+  z-index: 3; /* Ensure it is above the progress bar */
 }
 
 .discordPanel {
