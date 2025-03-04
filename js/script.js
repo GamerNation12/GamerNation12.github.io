@@ -93,36 +93,39 @@ document.addEventListener('DOMContentLoaded', function() {
 function animateProgress() {
     if (startTime && endTime && duration) {
         const currentTime = Date.now();
-        const elapsed = Math.min(currentTime - startTime, duration);
-        const progressPercent = (elapsed / duration) * 100;
+        const elapsed = currentTime - startTime;
+        const progressPercent = Math.min(Math.max((elapsed / duration) * 100, 0), 100);
 
-        console.log('Current time:', new Date(currentTime).toISOString());
-        console.log('Start time:', new Date(startTime).toISOString());
-        console.log('End time:', new Date(endTime).toISOString());
-        console.log('Progress:', progressPercent + '%');
-
+        // Update visual progress elements
         trackProgress.style.width = `${progressPercent}%`;
         
+        // Update time displays
         if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
         if (timeDuration) timeDuration.textContent = formatTime(duration);
         
+        // Sync progress bar color with status
         if (statusCircle) {
-            let statusColor = window.getComputedStyle(statusCircle).backgroundColor;
+            const statusColor = window.getComputedStyle(statusCircle).backgroundColor;
             trackProgress.style.backgroundColor = statusColor;
         }
         
+        // Update control bar if it exists
         if (controlBar) {
             controlBar.value = progressPercent;
         }
-    } else {
-        trackProgress.style.width = "0%";
-        if (timeElapsed) timeElapsed.textContent = "";
-        if (timeDuration) timeDuration.textContent = "";
-    }
-    
-    requestAnimationFrame(animateProgress);
-}
 
+        // Continue animation if song hasn't ended
+        if (elapsed < duration) {
+            requestAnimationFrame(animateProgress);
+        }
+    } else {
+        // Reset progress when no song is playing
+        trackProgress.style.width = "0%";
+        if (timeElapsed) timeElapsed.textContent = "0:00";
+        if (timeDuration) timeDuration.textContent = "0:00";
+        requestAnimationFrame(animateProgress);
+    }
+}
 // Initialize: Fetch Lanyard metadata every second and start the animation loop
 updateData();
 setInterval(updateData, 1000);
