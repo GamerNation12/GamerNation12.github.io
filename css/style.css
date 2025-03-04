@@ -199,19 +199,23 @@ body {
 }
 
 .track-progress {
-  height: 4px;
-  background-color: #1DB954;
-  border-radius: 2px;
-  transition: width 0.1s linear;
+height: 4px;
+background-color: #1DB954;
+border-radius: 2px;
+transition: width 0.1s linear;
+}
+
+.track-progress-container {
+  margin: 8px auto 0;
+  width: 280px;
 }
 
 .time-display {
+  text-align: center;
   font-size: 12px;
   color: #747474;
   margin-top: 4px;
-}
-
-.currentTime {
+}.currentTime {
   left: 10px;
 }
 
