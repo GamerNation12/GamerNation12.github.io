@@ -16,26 +16,26 @@
   <meta content="Check out my status!" property="og:url">
   <meta name="theme-color" content="#ff8400">
   <style>
-    .track-progress-container {
-      background-color: gray;
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
     }
-  </style>
-</head>
-
-<body>
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="#" class="navbar-logo">GamerNation</a>
-      <div class="navbar-toggle" id="mobile-menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <ul class="navbar-menu">
-        <li class="navbar-item"><a href="./" class="navbar-link">Home</a></li>
-        <li class="navbar-item"><a href="status" class="navbar-link">Status</a></li>
-        <li class="navbar-item"><a href="#about" class="navbar-link">About</a></li>
-        <li class="navbar-item"><a href="#contact" class="navbar-link">Contact</a></li>
+    .navbar {
+      width: 100%;
+      background-color: #333;
+      overflow: hidden;
+    }
+    .navbar-container {
+      max-width: 800px;
+      margin: auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-menu {
+      list-style: none;
       </ul>
     </div>
   </nav>
