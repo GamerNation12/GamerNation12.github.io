@@ -471,3 +471,30 @@ a:link { text-decoration: none; }
   -moz-box-shadow: 1px 1px 3px #333;
   box-shadow: 1px 1px 3px #333;
 }
+
+.listening {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+}
+
+.listening-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.listening-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+}
+
+.track-details {
+    flex: 1;
+}
+
+.track-progress-container {
+    margin-top: 8px;
+}
