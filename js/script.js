@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const discordID = '759433582107426816';
   let startTime, endTime, duration;
 
+  const trackProgress = document.getElementById('trackProgress');
+  const timeElapsed = document.getElementById('timeElapsed');
+  const timeDuration = document.getElementById('timeDuration');
+
   function formatTime(ms) {
       const seconds = Math.floor((ms / 1000) % 60);
       const minutes = Math.floor(ms / 1000 / 60);
