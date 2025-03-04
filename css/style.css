@@ -199,24 +199,12 @@ body {
 }
 
 .track-progress {
-
-
-
-
-    height: 4px;
-    background-color: #4f4f4f;  /* Gray background */
-    border-radius: 2px;
-    position: relative;
-    width: 100%;
+height: 4px;
+background-color: #1DB954;
+border-radius: 2px;
+transition: width 0.1s linear;
 }
 
-#trackProgress {
-    position: absolute;
-    height: 100%;
-    background-color: #1DB954;  /* Spotify green fill */
-    border-radius: 2px;
-    transition: width 0.1s linear;
-}
 .track-progress-container {
   margin: 8px auto 0;
   width: 280px;
