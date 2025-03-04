@@ -209,10 +209,9 @@ body {
 }
 
 .track-progress {
-height: 4px;
-background-color: #1DB954;
-border-radius: 2px;
-transition: width 0.1s linear;
+height: 2px;
+background-color: gray;
+width: 100%;
 }
 
 .track-progress-container {
