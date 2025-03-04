@@ -490,56 +490,23 @@ a:link { text-decoration: none; }
   gap: 8px;
 }
 
+.listening-title {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .listening-title i {
   color: #1DB954;
-  font-size: 14px;
 }
 
 .listening-content {
   display: flex;
-  gap: 16px;
-}
-
-.listening-img {
-  width: 60px;
-  height: 60px;
-  border-radius: 4px;
-}
-
-.listening-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.track-row {
-  margin-top: 4px;
-}
-
-.track-name {
-  color: #f3f4f5;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.track-name:hover {
-  text-decoration: underline;
-}
-
-.artist-row {
-  display: flex;
-  gap: 4px;
-}
-
-.by {
-  color: #949ba4;
-  font-size: 12px;
-}
-
-.artist-name {
-  color: #949ba4;
-  font-size: 12px;
+  gap: 15px;
 }
 
 .track-progress-container {
@@ -556,12 +523,8 @@ a:link { text-decoration: none; }
 
 .time-display {
   font-size: 12px;
-  color: #949ba4;
+  color: #747474;
   margin-top: 4px;
-}
-
-.time-separator {
-  margin: 0 4px;
 }
 
 #controlBar {
