@@ -82,7 +82,7 @@ setInterval(() => {
         .then(response => response.json())
         .then(data => {
             const e = data;
-              
+            
             // Update Spotify data
             if (e.data && e.data["listening_to_spotify"] &&
                 e.data.spotify && e.data.spotify.timestamps) {
@@ -97,6 +97,11 @@ setInterval(() => {
                 endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
                 duration = endTime - startTime;
             } else {
+                // Reset everything when not playing
+                trackName.innerText = "Not Playing";
+                trackArtist.innerText = "No Artist";
+                document.getElementById("trackImg").src = ""; // Or default image
+                trackLink.href = "#";
                 startTime = endTime = duration = null;
             }
         })
