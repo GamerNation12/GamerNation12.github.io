@@ -36,61 +36,51 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Fetch data from Lanyard API (includes Discord info and Spotify metadata)
-  function updateData() {
-    fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
+function updateData() {
+  fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
       .then(response => response.json())
       .then(data => {
-        console.log("Lanyard response:", data);
-        const e = data; // shorthand
-        
-        // Update Discord info if available
-        if (e.data && e.data["discord_user"]) {
-          discordName.innerText = `@${e.data.discord_user.username}`;
-          avatarLink.href = `https://discord.com/users/${discordID}`;
-          if (discordAvatar) {
-            discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
+          const e = data;
+            
+          if (e.data && e.data["discord_user"]) {
+              discordName.innerText = `@${e.data.discord_user.username}`;
+              avatarLink.href = `https://discord.com/users/${discordID}`;
+              if (discordAvatar) {
+                  discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
+              }
+              if (statusCircle) {
+                  let status = e.data.discord_status;
+                  statusCircle.style.backgroundColor =
+                      status === "online" ? "#23a55a" :
+                      status === "idle"   ? "#f0b232" :
+                      status === "dnd"    ? "#f23f43" : "#80848e";
+              }
+              const customStatus = (e.data.activities || []).find(activity => activity.type === 4);
+              discordMotd.innerText = customStatus && customStatus.state
+                  ? customStatus.state
+                  : e.data.discord_user.bio || "No status message";
           }
-          if (statusCircle) {
-            let status = e.data.discord_status;
-            statusCircle.style.backgroundColor =
-              status === "online" ? "#23a55a" :
-              status === "idle"   ? "#f0b232" :
-              status === "dnd"    ? "#f23f43" : "#80848e";
-          }
-          const customStatus = (e.data.activities || []).find(activity => activity.type === 4);
-          discordMotd.innerText = customStatus && customStatus.state
-            ? customStatus.state
-            : e.data.discord_user.bio || "No status message";
-        }
-        
-        // Update Spotify metadata if listening (used for song info & progress)
-        if (e.data && e.data["listening_to_spotify"] &&
-            e.data.spotify && e.data.spotify.timestamps) {
-          // Set the song's details
-          trackName.innerText   = e.data.spotify.song;
-          trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
-          document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-          trackLink.href        = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+            
+          if (e.data && e.data["listening_to_spotify"] &&
+              e.data.spotify && e.data.spotify.timestamps) {
+              trackName.innerText   = e.data.spotify.song;
+              trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
+              document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+              trackLink.href        = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
 
-          // Retrieve and convert timestamps
-          const rawStart = e.data.spotify.timestamps.start;
-          const rawEnd   = e.data.spotify.timestamps.end;
-          // Convert from seconds to milliseconds if necessary
-          startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
-          endTime   = rawEnd   < 1e11 ? rawEnd   * 1000 : rawEnd;
-          duration  = endTime - startTime;
-          console.log("Spotify Timestamps:", { startTime, endTime, duration });
-        } else {
-          // If not listening to Spotify, clear timestamps
-          startTime = endTime = duration = null;
-          console.log("Not listening to Spotify.");
-        }
+              const rawStart = e.data.spotify.timestamps.start;
+              const rawEnd   = e.data.spotify.timestamps.end;
+              startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+              endTime   = rawEnd   < 1e11 ? rawEnd   * 1000 : rawEnd;
+              duration  = endTime - startTime;
+          } else {
+              startTime = endTime = duration = null;
+          }
       })
       .catch(error => {
-        console.error("Error fetching Lanyard data:", error);
+          console.error("Error fetching Lanyard data:", error);
       });
-  }
-function animateProgress() {
+}function animateProgress() {
     if (startTime && endTime && duration) {
         const currentTime = Date.now();
         const elapsed = currentTime - startTime;
