@@ -147,7 +147,7 @@ body {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
   border: 1.5px solid hsla(0, 0%, 76%, 0.02);
   width: 400px;
-  height: 100px; /* Increased height to accommodate progress bar */
+  height: 120px; /* Increased height to accommodate time display */
   position: relative; /* Added for progress bar positioning */
 }
 
@@ -216,7 +216,7 @@ body {
   text-align: center;
   font-size: 12px;
   color: #747474;
-  margin-top: 4px;
+  margin-bottom: 5px; /* Space between time display and progress bar */
 }
 
 .discordPanel {
