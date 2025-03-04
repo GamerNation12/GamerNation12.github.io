@@ -73,7 +73,32 @@ document.addEventListener('DOMContentLoaded', function() {
       requestAnimationFrame(animateProgress);
   }
 
-  // Initialize everything
-  updateData();
-  setInterval(updateData, 1000);
+// Initial fetch
+updateData();
+
+// Fetch every second
+setInterval(() => {
+    fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
+        .then(response => response.json())
+        .then(data => {
+            const e = data;
+              
+            // Update Spotify data
+            if (e.data && e.data["listening_to_spotify"] &&
+                e.data.spotify && e.data.spotify.timestamps) {
+                trackName.innerText = e.data.spotify.song;
+                trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
+                document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+                trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+
+                const rawStart = e.data.spotify.timestamps.start;
+                const rawEnd = e.data.spotify.timestamps.end;
+                startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
+                endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
+                duration = endTime - startTime;
+            } else {
+                startTime = endTime = duration = null;
+            }
+        })
+}, 1000);
   requestAnimationFrame(animateProgress);});
