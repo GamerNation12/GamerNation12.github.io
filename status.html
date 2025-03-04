@@ -61,26 +61,15 @@
         </ul>
       </div>
       <div class="gap"></div>
-    <div class="discordPanel">
-  <div class="listening-title">
-      <i class="fa-brands fa-spotify"></i>
-      LISTENING TO SPOTIFY
-  </div>
-  <div class="listening-content">
-      <div class="track-info">
-          <img id="trackImg" src="" alt="Album Art" class="rpcIcon">
-          <div class="listening-info">
-              <div class="rpcName">
-                  <a id="trackLink" href="" target="_blank">
-                      <span id="trackName">Not Playing</span>
-                  </a>
-              </div>
-              <div class="rpcDetails">
-                  <span class="by">by</span>
-                  <span id="trackArtist">No Artist</span>
-              </div>
-          </div>
-      </div>
+      <div class="panel spotifyPanel">
+        <i class="spotify fa-brands fa-spotify"></i>
+        <a id="trackLink" target="_blank" href="gamernation12.github.io/status">
+          <img class="trackImg" id="trackImg" src="music.png">
+        </a>
+        <p class="trackName" id="trackName">Nothing</p>
+        <p class="trackArtist" id="trackArtist">
+          I'm not currently listening anything
+        </p>
       <div class="track-progress-container">
           <div id="trackProgress" class="track-progress"></div>
           <div class="time-display">
@@ -89,8 +78,7 @@
               <span id="timeDuration">0:00</span>
           </div>
       </div>
-  </div>
-</div>
+      </div>
       <div class="gap"></div>
       <div id="rpcPanel" class="panel rpcPanel">
         <i class="game fa-solid fa-gamepad"></i>
