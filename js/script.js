@@ -8,12 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
   const timeElapsed = document.getElementById('timeElapsed');
   const timeDuration = document.getElementById('timeDuration');
 
-  function formatTime(ms) {
-      const seconds = Math.floor((ms / 1000) % 60);
-      const minutes = Math.floor(ms / 1000 / 60);
-      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  }
-
+    function formatTime(ms) {
+        if (!ms) return "0:00";
+    
+        const seconds = Math.floor((ms / 1000) % 60);
+        const minutes = Math.floor((ms / 1000) / 60);
+    
+        // Ensure positive values and proper formatting
+        const positiveSeconds = Math.abs(seconds);
+        const positiveMinutes = Math.abs(minutes);
+    
+        return `${positiveMinutes}:${positiveSeconds.toString().padStart(2, '0')}`;
+    }
   function updateSpotifyStatus(isPlaying, trackName, trackArtist, trackImg) {
     const trackNameElement = document.getElementById('trackName');
     const trackArtistElement = document.getElementById('trackArtist');
