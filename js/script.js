@@ -76,5 +76,4 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize everything
   updateData();
   setInterval(updateData, 1000);
-  requestAnimationFrame(animateProgress);
-});
+  requestAnimationFrame(animateProgress);});
