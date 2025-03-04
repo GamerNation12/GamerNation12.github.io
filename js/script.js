@@ -96,24 +96,13 @@ function animateProgress() {
         const elapsed = currentTime - startTime;
         const progressPercent = Math.min(Math.max((elapsed / duration) * 100, 0), 100);
 
-        // Update visual progress elements
+        // Update visual progress
         trackProgress.style.width = `${progressPercent}%`;
         
         // Update time displays
         if (timeElapsed) timeElapsed.textContent = formatTime(elapsed);
         if (timeDuration) timeDuration.textContent = formatTime(duration);
         
-        // Sync progress bar color with status
-        if (statusCircle) {
-            const statusColor = window.getComputedStyle(statusCircle).backgroundColor;
-            trackProgress.style.backgroundColor = statusColor;
-        }
-        
-        // Update control bar if it exists
-        if (controlBar) {
-            controlBar.value = progressPercent;
-        }
-
         // Continue animation if song hasn't ended
         if (elapsed < duration) {
             requestAnimationFrame(animateProgress);
@@ -125,8 +114,7 @@ function animateProgress() {
         if (timeDuration) timeDuration.textContent = "0:00";
         requestAnimationFrame(animateProgress);
     }
-}
-// Initialize: Fetch Lanyard metadata every second and start the animation loop
+}// Initialize: Fetch Lanyard metadata every second and start the animation loop
 updateData();
 setInterval(updateData, 1000);
 requestAnimationFrame(animateProgress);
