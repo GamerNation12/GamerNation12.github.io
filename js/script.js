@@ -191,30 +191,30 @@ window.onload = function() {
 
 // Function to fetch and update all data
 async function updateAllData() {
-    try {
-        const lanyard = await fetch('https://api.lanyard.rest/v1/users/759433582107426816');
-        const data = await lanyard.json();
-        
-        // Update Discord status
-        document.getElementById('discordName').textContent = data.data.discord_user.username;
-        document.getElementById('discordMotd').textContent = data.data.discord_status;
-        document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${data.data.discord_user.id}/${data.data.discord_user.avatar}`;
-        
-        // Update Spotify
-        if (data.data.spotify) {
-            document.getElementById('trackName').textContent = data.data.spotify.song;
-            document.getElementById('trackArtist').textContent = data.data.spotify.artist;
-            document.getElementById('trackImg').src = data.data.spotify.album_art_url;
-        }
-        
-        // Update game status
-        if (data.data.activities.length > 0) {
-            document.getElementById('rpcName').textContent = data.data.activities[0].name;
-            document.getElementById('rpcDetails').textContent = data.data.activities[0].details || 'Playing';
-        }
-    } catch (error) {
-        console.log('Error fetching data:', error);
-    }
+  try {
+      const lanyard = await fetch('https://api.lanyard.rest/v1/users/759433582107426816');
+      const data = await lanyard.json();
+      
+      // Update Discord status
+      document.getElementById('discordName').textContent = data.data.discord_user.username;
+      document.getElementById('discordMotd').textContent = data.data.discord_status;
+      document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${data.data.discord_user.id}/${data.data.discord_user.avatar}`;
+      
+      // Update Spotify
+      if (data.data.spotify) {
+          document.getElementById('trackName').textContent = data.data.spotify.song;
+          document.getElementById('trackArtist').textContent = data.data.spotify.artist;
+          document.getElementById('trackImg').src = data.data.spotify.album_art_url;
+      }
+      
+      // Update game status
+      if (data.data.activities.length > 0) {
+          document.getElementById('rpcName').textContent = data.data.activities[0].name;
+          document.getElementById('rpcDetails').textContent = data.data.activities[0].details || 'Playing';
+      }
+  } catch (error) {
+      console.log('Error fetching data:', error);
+  }
 }
 
 // Update every second
@@ -222,3 +222,4 @@ setInterval(updateAllData, 1000);
 
 // Initial load
 updateAllData();
+
