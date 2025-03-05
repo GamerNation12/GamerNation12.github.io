@@ -35,10 +35,17 @@ document.addEventListener('DOMContentLoaded', function() {
           .then(response => response.json())
           .then(data => {
               const e = data;
-                
+            
+              // Add null checks for DOM elements
+              const discordName = document.getElementById('discordName');
+              const discordAvatar = document.getElementById('discordAvatar');
+              const avatarLink = document.getElementById('avatarLink');
+              const statusCircle = document.getElementById('statusCircle');
+              const discordMotd = document.getElementById('discordMotd');
+            
               if (e.data && e.data["discord_user"]) {
-                  discordName.innerText = `@${e.data.discord_user.username}`;
-                  avatarLink.href = `https://discord.com/users/${discordID}`;
+                  if (discordName) discordName.innerText = `@${e.data.discord_user.username}`;
+                  if (avatarLink) avatarLink.href = `https://discord.com/users/${discordID}`;
                   if (discordAvatar) {
                       discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
                   }
@@ -50,11 +57,11 @@ document.addEventListener('DOMContentLoaded', function() {
                           status === "dnd"    ? "#f23f43" : "#80848e";
                   }
                   const customStatus = (e.data.activities || []).find(activity => activity.type === 4);
-                  discordMotd.innerText = customStatus && customStatus.state
+                  if (discordMotd) discordMotd.innerText = customStatus && customStatus.state
                       ? customStatus.state
                       : e.data.discord_user.bio || "No status message";
               }
-                
+            
               if (e.data && e.data["listening_to_spotify"] &&
                   e.data.spotify && e.data.spotify.timestamps) {
                   trackName.innerText = e.data.spotify.song;
@@ -78,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
               console.error("Error fetching Lanyard data:", error);
           });
   }
-
   function animateProgress() {
       if (startTime && endTime && duration) {
           const currentTime = Date.now();
