@@ -1,108 +1,190 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const mobileMenu = document.getElementById('mobile-menu');
-  const navbarMenu = document.querySelector('.navbar-menu');
-  const discordID = '759433582107426816';
-  let startTime, endTime, duration;
+let trackName = document.getElementById("trackName");
+let trackArtist = document.getElementById("trackArtist");
+let trackLink = document.getElementById("trackLink");
 
-  const trackProgress = document.getElementById('trackProgress');
-  const timeElapsed = document.getElementById('timeElapsed');
-  const timeDuration = document.getElementById('timeDuration');
+let dscName = document.getElementById("nameNeksio");
+let discordName = document.getElementById("discordName");
+let discordMotd = document.getElementById("discordMotd");
+let avatarLink = document.getElementById("avatarLink");
 
-  function formatTime(ms) {
-      const seconds = Math.floor((ms / 1000) % 60);
-      const minutes = Math.floor(ms / 1000 / 60);
-      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  }
+let rpcName = document.getElementById("rpcName");
+let rpcDetails = document.getElementById("rpcDetails");
 
-  function updateSpotifyStatus(isPlaying, trackName, trackArtist, trackImg) {
-    const trackNameElement = document.getElementById('trackName');
-    const trackArtistElement = document.getElementById('trackArtist');
-    const trackImgElement = document.getElementById('trackImg');
+let webSocket = new WebSocket("wss://api.lanyard.rest/socket");
+let discordID = '759433582107426816';
 
-    if (isPlaying) {
-      trackNameElement.textContent = trackName;
-      trackArtistElement.textContent = trackArtist;
-      trackImgElement.src = trackImg;
+fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
+  .then((response) => response.json())
+  .then((e) => {
+    console.log(e);  // Log the entire response to check its structure
+
+    if (e.data["discord_user"]) {
+      discordName.innerText = `@${e.data.discord_user.username}`;
+      avatarLink.href = `https://discord.com/users/${discordID}`;
+      document.getElementById(
+        "discordAvatar"
+      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
+      if (e.data.discord_status == "online") {
+        document.getElementById("statusCircle").style.backgroundColor =
+          "#23a55a";
+      } else if (e.data.discord_status == "idle") {
+        document.getElementById("statusCircle").style.backgroundColor =
+          "#f0b232";
+      } else if (e.data.discord_status == "dnd") {
+        document.getElementById("statusCircle").style.backgroundColor =
+          "#f23f43";
+      } else if (e.data.discord_status == "offline") {
+        document.getElementById("statusCircle").style.backgroundColor =
+          "#80848e";
+      }
+    }
+
+    // Set custom or regular status message
+    const customStatus = e.data.activities.find(activity => activity.type === 4); // type 4 indicates custom status
+    if (customStatus && customStatus.state) {
+      discordMotd.innerText = customStatus.state;
+    } else if (e.data.discord_user.bio) {
+      discordMotd.innerText = e.data.discord_user.bio;
     } else {
-      trackNameElement.textContent = 'Nothing';
-      trackArtistElement.textContent = "I'm not currently listening to anything";
-      trackImgElement.src = 'music.png';
+      discordMotd.innerText = "No status message";
+    }
+
+    if (e.data["listening_to_spotify"]) {
+      trackName.innerText = `${e.data.spotify.song}`;
+      let artists = e.data.spotify.artist;
+      let artistFinal = artists.replaceAll(";", ",");
+      trackArtist.innerText = artistFinal;
+      document.getElementById("trackImg").src = e.data.spotify.album_art_url;
+      trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
+    } else {
+      trackName.innerText = "None";
+      trackArtist.innerText = "I'm not currently listening to anything";
+      document.getElementById("trackImg").src = "music.png";
+    }
+
+    if (e.data["activities"].length > 0) {
+      const gameActivity = e.data["activities"].find(activity => activity.type === 0);
+      if (gameActivity) {
+        rpcName.innerText = gameActivity.name;
+        rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
+        document.getElementById(
+          "rpcIcon"
+        ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        if (gameActivity.assets.small_image) {
+          document.getElementById(
+            "rpcSmallIcon"
+          ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
+        } else {
+          document.getElementById(
+            "rpcSmallIcon"
+          ).src = `./template/transparent.png`;
+        }
+      } else {
+        rpcName.innerText = "None";
+        rpcDetails.innerText = "I'm not currently playing anything";
+        document.getElementById("rpcIcon").src = `game.png`;
+        document.getElementById(
+          "rpcSmallIcon"
+        ).src = `gamer.png`;
+      }
+    } else {
+      rpcName.innerText = "None";
+      rpcDetails.innerText = "I'm not currently playing anything";
+      document.getElementById("rpcIcon").src = `gamer.png`;
+      document.getElementById(
+        "rpcSmallIcon"
+      ).src = `gamer.png`;
+    }
+  });
+
+webSocket.addEventListener("message", (event) => {
+  data = JSON.parse(event.data);
+
+  if (event.data == '{"op":1,"d":{"heartbeat_interval":30000}}') {
+    webSocket.send(
+      JSON.stringify({
+        op: 2,
+        d: {
+          subscribe_to_id: discordID,
+        },
+      })
+    );
+    setInterval(() => {
+      webSocket.send(
+        JSON.stringify({
+          op: 3,
+          d: {
+            heartbeat_interval: 30000,
+          },
+        })
+      );
+    }, 30000);
+  }
+  if (data.t == "PRESENCE_UPDATE") {
+    if (data.d.spotify) {
+      trackName.innerText = data.d.spotify.song;
+      let artists = data.d.spotify.artist;
+      let artistFinal = artists.replaceAll(";", ",");
+      trackArtist.innerText = artistFinal;
+      document.getElementById("trackImg").src = data.d.spotify.album_art_url;
+      trackLink.href = `https://open.spotify.com/track/${data.d.spotify.track_id}`;
+    } else if (data.d.activities.length > 0) {
+      const gameActivity = data.d.activities.find(activity => activity.type === 0);
+      if (gameActivity) {
+        rpcName.innerText = gameActivity.name;
+        rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
+        document.getElementById(
+          "rpcIcon"
+        ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+        if (gameActivity.assets.small_image) {
+          document.getElementById(
+            "rpcSmallIcon"
+          ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
+        } else {
+          document.getElementById(
+            "rpcSmallIcon"
+          ).src = `./template/transparent.png`;
+        }
+      } else {
+        rpcName.innerText = "None";
+        rpcDetails.innerText = "I'm not currently playing anything";
+        document.getElementById("rpcIcon").src = `gamer.png`;
+        document.getElementById(
+          "rpcSmallIcon"
+        ).src = `gamer.png`;
+      }
+    } else {
+      rpcName.innerText = "None";
+      rpcDetails.innerText = "I'm not currently playing anything";
+      document.getElementById("rpcIcon").src = `gamer.png`;
+      document.getElementById(
+        "rpcSmallIcon"
+      ).src = `gamer.png`;
     }
   }
-
-  function updateData() {
-      fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
-          .then(response => response.json())
-          .then(data => {
-              const e = data;
-            
-              // Add null checks for DOM elements
-              const discordName = document.getElementById('discordName');
-              const discordAvatar = document.getElementById('discordAvatar');
-              const avatarLink = document.getElementById('avatarLink');
-              const statusCircle = document.getElementById('statusCircle');
-              const discordMotd = document.getElementById('discordMotd');
-            
-              if (e.data && e.data["discord_user"]) {
-                  if (discordName) discordName.innerText = `@${e.data.discord_user.username}`;
-                  if (avatarLink) avatarLink.href = `https://discord.com/users/${discordID}`;
-                  if (discordAvatar) {
-                      discordAvatar.src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
-                  }
-                  if (statusCircle) {
-                      let status = e.data.discord_status;
-                      statusCircle.style.backgroundColor =
-                          status === "online" ? "#23a55a" :
-                          status === "idle"   ? "#f0b232" :
-                          status === "dnd"    ? "#f23f43" : "#80848e";
-                  }
-                  const customStatus = (e.data.activities || []).find(activity => activity.type === 4);
-                  if (discordMotd) discordMotd.innerText = customStatus && customStatus.state
-                      ? customStatus.state
-                      : e.data.discord_user.bio || "No status message";
-              }
-            
-              if (e.data && e.data["listening_to_spotify"] &&
-                  e.data.spotify && e.data.spotify.timestamps) {
-                  trackName.innerText = e.data.spotify.song;
-                  trackArtist.innerText = e.data.spotify.artist.replaceAll(";", ",");
-                  document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-                  trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-
-                  const rawStart = e.data.spotify.timestamps.start;
-                  const rawEnd = e.data.spotify.timestamps.end;
-                  startTime = rawStart < 1e11 ? rawStart * 1000 : rawStart;
-                  endTime = rawEnd < 1e11 ? rawEnd * 1000 : rawEnd;
-                  duration = endTime - startTime;
-
-                  updateSpotifyStatus(true, e.data.spotify.song, e.data.spotify.artist.replaceAll(";", ","), e.data.spotify.album_art_url);
-              } else {
-                  startTime = endTime = duration = null;
-                  updateSpotifyStatus(false);
-              }
-          })
-          .catch(error => {
-              console.error("Error fetching Lanyard data:", error);
-          });
-  }
-  function animateProgress() {
-      if (startTime && endTime && duration) {
-          const currentTime = Date.now();
-          const elapsed = currentTime - startTime;
-          const progressPercent = Math.min(Math.max((elapsed / duration) * 100, 0), 100);
-
-          trackProgress.style.width = `${progressPercent}%`;
-          timeElapsed.textContent = formatTime(elapsed);
-          timeDuration.textContent = formatTime(duration);
-      } else {
-          trackProgress.style.width = "0%";
-          timeElapsed.textContent = "0:00";
-          timeDuration.textContent = "0:00";
-      }
-      requestAnimationFrame(animateProgress);
-  }
-
-  updateData();
-  setInterval(updateData, 1000);
-  requestAnimationFrame(animateProgress);
 });
+
+function calculateAge(birthDate) {
+  var today = new Date();
+  var parts = birthDate.split(".");
+  var birthDay = parseInt(parts[0], 10);
+  var birthMonth = parseInt(parts[1], 10);
+  var birthYear = parseInt(parts[2], 10);
+
+  var ageYears = today.getFullYear() - birthYear;
+  var ageMonths = today.getMonth() + 1 - birthMonth;
+  var ageDays = today.getDate() - birthDay;
+
+  if (ageMonths < 0 || (ageMonths === 0 && ageDays < 0)) {
+    ageYears--;
+  }
+
+  return ageYears;
+}
+
+window.onload = function() {
+  var birthDate = "27.7.232323";
+  var age = calculateAge(birthDate);
+  var ageElement = document.getElementById("age");
+  ageElement.textContent = age;
+};
