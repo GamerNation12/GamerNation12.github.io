@@ -11,22 +11,25 @@ html {
     "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+
 @font-face {
     font-family: "AGRevueCyr Roman Medium";
     src: url("../images/bg.jpeg") format("truetype");
 }
-
 p.mal { 
     font-family: "AGRevueCyr Roman Medium", Verdana, Tahoma;
 }
 
+
 body {
   background:
-           /* top, transparent black, faked with gradient */ 
+           /* top, transparent black, faked with gradient */ linear-gradient(
+      rgba(10, 10, 12, 0.9),
+      rgba(10, 10, 12, 0.9)
+    ),
    url("../images/bg.jpg");
   background-size: cover;
   background-attachment: fixed;
-  background-repeat: no-repeat;
   /* background-position: bottom right, left, right; */
 }
 
@@ -35,134 +38,32 @@ body {
   visibility: hidden;
   opacity: 0;
 }
-.navbar {
-  background-color: #333;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  transition: background-color 0.3s ease;
-}
-
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 20px;
-}
-
-.navbar-logo {
-  color: #fff;
-  font-size: 24px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-
-.navbar-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-.navbar-item {
-  margin-left: 20px;
-}
-
-.navbar-link {
-  text-decoration: none;
-  color: gray;
-}
-
-.navbar-link:hover {
-  text-decoration: underline;
-  color: gray;
-}
-
-.navbar-logo:hover {
-  color: #ff8400;
-}
-
-/* Mobile menu styles */
-.navbar-toggle {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.navbar-toggle span {
-  height: 3px;
-  width: 25px;
-  background-color: #fff;
-  margin: 4px 0;
-  transition: 0.4s;
-}
-
-@media screen and (max-width: 768px) {
-  .navbar-menu {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .navbar-menu.active {
-    display: flex;
-  }
-
-  .navbar-item {
-    margin: 0;
-  }
-
-  .navbar-link {
-    padding: 14px;
-    text-align: center;
-  }
-
-  .navbar-toggle {
-    display: flex;
-  }
-}
-.countdown {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: rgba(15, 15, 18, 0.8); /* Slightly transparent */
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 14px;
-  z-index: 1000; 
-}
-
-.discordPanel {
-  margin-bottom: -80px;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  z-index: 3;
-  position: relative;
-}
 
 .spotifyPanel {
-  margin-bottom: -80px;
-  padding: 20px;
-  padding-top: 100px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  z-index: 2;
-  position: relative;
+  transition: 0.3s;
+  animation-name: init;
+  animation-duration: 1s;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #0f0f12;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
+  border: 1.5px solid hsla(0, 0%, 76%, 0.02);
+  width: 400px;
+  height: 75px;
 }
 
-.nowPlayingPanel {
-  padding: 20px;
-  padding-top: 100px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  z-index: 1;
-  position: relative;
-}.trackImg {
+@keyframes init {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+.trackImg {
   transition: 0.3s;
   margin-right: 15px;
   float: left;
@@ -183,82 +84,35 @@ body {
   color: #747474;
 }
 
-@keyframes progressAnimation {
-  0% { width: 0%; }
-  100% { width: 100%; }
-}
-
-/* Spotify-like progress container */
-.progressContainer {
-  position: absolute;
-  bottom: 10px; /* adjust spacing as needed */
-  left: 0;
-  right: 0;
-  height: 6px;  /* thicker than before */
-  background-color: rgba(255, 255, 255, 0.1); /* subtle dark track */
-  border-radius: 3px; /* Make the container slightly round */
-  overflow: hidden;
-}
-
-.track-progress-container {
-  position: absolute;
-  bottom: 15px;
-  left: 105px;
-  width: 260px;
-  height: 4px;
-  background-color: #4f4f4f;
-  border-radius: 2px;
-  margin: 8px auto 0;
-  overflow: hidden;
-}
-
-.track-progress {
-  height: 100%;
-  background-color: #1DB954;
-  border-radius: 2px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: width 1s linear;
-  z-index: 2;
-}
-
-.time-display {
-  text-align: center;
-  font-size: 12px;
-  color: #fff; /* Change color to white for better visibility */
-  margin-bottom: 5px; /* Space between time display and progress bar */
-  position: relative; /* Ensure it is positioned correctly */
-  z-index: 3; /* Ensure it is above the progress bar */
-}
 .discordPanel {
   transition: 0.3s;
   animation-name: init;
   animation-duration: 1s;
   border-radius: 10px;
+  padding: 15px;
+  background-color: #0f0f12;
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
   border: 1.5px solid hsla(0, 0%, 76%, 0.02);
   width: 400px;
-  position: relative;
-  height: 130px;
+  height: 75px;
 }
 
 .discordAvatar {
-    margin-right: 15px;
-    float: left;
-    border-radius: 10px;
-    width: 75px;
-    height: 75px;
+  margin-right: 15px;
+  float: left;
+  border-radius: 10px;
+  width: 75px;
+  height: 75px;
 }
 
 .discordName {
-    color: #fff;
-    margin-top: 5px;
+  color: #fff;
+  margin-top: 5px;
 }
 
 .discordMotd {
-    margin-top: -13px;
-    font-size: 12.5px;
+  margin-top: -13px;
+  font-size: 12.5px;
   color: #747474;
 }
 
@@ -279,7 +133,7 @@ body {
   animation-duration: 1s;
   border-radius: 10px;
   padding: 15px;
-  background-color: rgba(15, 15, 18, 0.8); /* Slightly transparent */
+  background-color: #0f0f12;
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
   border: 1.5px solid hsla(0, 0%, 76%, 0.02);
   width: 400px;
@@ -288,7 +142,7 @@ body {
 
 .discordBG {
   background-color: #7289DA;
-}
+ }
 
 .rpcIcon {
   margin-right: 15px;
@@ -322,6 +176,8 @@ body {
   color: #d9d9d9;
 }
 
+
+
 .center {
   top: 50%;
   left: 50%;
@@ -340,78 +196,6 @@ body {
 
 .smallerMain {
   text-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
-}
-
-#discordName, #discordMotd, #trackName, #trackArtist {
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.discord-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.avatar-container {
-  position: relative;
-}
-
-#discordAvatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-}
-
-#statusCircle {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-}
-
-.spotify-card {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.track-progress-container {
-  width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  margin: 8px 0;
-}
-
-#trackProgress {
-  height: 100%;
-  background: #1DB954;
-  border-radius: 2px;
-  transition: width 0.1s linear;
-}
-
-.time-display {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-#trackImg {
-  width: 64px;
-  height: 64px;
-  border-radius: 4px;
-}
   animation-name: init;
   animation-duration: 1s;
   margin-top: -25px;
@@ -468,6 +252,7 @@ body {
   color: white;
   /* color: #ffc107; */
 }
+
 
 .inviteURL a {
   position: absolute;
@@ -548,33 +333,3 @@ a:link { text-decoration: none; }
   -moz-box-shadow: 1px 1px 3px #333;
   box-shadow: 1px 1px 3px #333;
 }
-
-.panel-stack {
-  position: relative;
-  perspective: 1000px;
-}
-
-.discord-card, .spotify-card {
-  position: absolute;
-  width: 100%;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  transform-style: preserve-3d;
-  transition: transform 0.3s ease;
-}
-
-.discord-card {
-  top: 0;
-  z-index: 2;
-  transform: translateZ(20px);
-}
-
-.spotify-card {
-  top: 20px;
-  z-index: 1;
-  transform: translateZ(10px);
-}
-
-/* Keep your existing styles for the internal elements */
