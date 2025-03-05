@@ -13,89 +13,49 @@ let rpcDetails = document.getElementById("rpcDetails");
 let webSocket = new WebSocket("wss://api.lanyard.rest/socket");
 let discordID = '759433582107426816';
 
-fetch(`https://api.lanyard.rest/v1/users/${discordID}`)
-  .then((response) => response.json())
-  .then((e) => {
-    console.log(e);  // Log the entire response to check its structure
-
-    if (e.data["discord_user"]) {
-      discordName.innerText = `@${e.data.discord_user.username}`;
-      avatarLink.href = `https://discord.com/users/${discordID}`;
-      document.getElementById(
-        "discordAvatar"
-      ).src = `https://cdn.discordapp.com/avatars/${discordID}/${e.data["discord_user"].avatar}.png?size=4096`;
-      if (e.data.discord_status == "online") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#23a55a";
-      } else if (e.data.discord_status == "idle") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#f0b232";
-      } else if (e.data.discord_status == "dnd") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#f23f43";
-      } else if (e.data.discord_status == "offline") {
-        document.getElementById("statusCircle").style.backgroundColor =
-          "#80848e";
-      }
-    }
-
-    // Set custom or regular status message
-    const customStatus = e.data.activities.find(activity => activity.type === 4); // type 4 indicates custom status
-    if (customStatus && customStatus.state) {
-      discordMotd.innerText = customStatus.state;
-    } else if (e.data.discord_user.bio) {
-      discordMotd.innerText = e.data.discord_user.bio;
-    } else {
-      discordMotd.innerText = "No status message";
-    }
-
-    if (e.data["listening_to_spotify"]) {
-      trackName.innerText = `${e.data.spotify.song}`;
-      let artists = e.data.spotify.artist;
-      let artistFinal = artists.replaceAll(";", ",");
-      trackArtist.innerText = artistFinal;
-      document.getElementById("trackImg").src = e.data.spotify.album_art_url;
-      trackLink.href = `https://open.spotify.com/track/${e.data.spotify.track_id}`;
-    } else {
-      trackName.innerText = "None";
-      trackArtist.innerText = "I'm not currently listening to anything";
-      document.getElementById("trackImg").src = "music.png";
-    }
-
-    if (e.data["activities"].length > 0) {
-      const gameActivity = e.data["activities"].find(activity => activity.type === 0);
-      if (gameActivity) {
-        rpcName.innerText = gameActivity.name;
-        rpcDetails.innerText = gameActivity.details ? gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
-        document.getElementById(
-          "rpcIcon"
-        ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
-        if (gameActivity.assets.small_image) {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`;
-        } else {
-          document.getElementById(
-            "rpcSmallIcon"
-          ).src = `./template/transparent.png`;
+async function updateAllData() {
+    try {
+        const lanyard = await fetch('https://api.lanyard.rest/v1/users/759433582107426816');
+        const data = await lanyard.json();
+        
+        // Spotify panel color handling
+        if (data.data.spotify) {
+            const spotifyPanel = document.querySelector('.spotifyPanel');
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = data.data.spotify.album_art_url;
+            
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                // Get colors from left and right edges
+                const leftColor = ctx.getImageData(0, img.height/2, 1, 1).data;
+                const rightColor = ctx.getImageData(img.width-1, img.height/2, 1, 1).data;
+                
+                // Apply gradient
+                spotifyPanel.style.background = `linear-gradient(to right, 
+                    rgba(${leftColor[0]}, ${leftColor[1]}, ${leftColor[2]}, 0.3),
+                    rgba(${rightColor[0]}, ${rightColor[1]}, ${rightColor[2]}, 0.3))`;
+            }
+            
+            // Update other Spotify info
+            document.getElementById('trackName').textContent = data.data.spotify.song;
+            document.getElementById('trackArtist').textContent = data.data.spotify.artist;
+            document.getElementById('trackImg').src = data.data.spotify.album_art_url;
         }
-      } else {
-        rpcName.innerText = "None";
-        rpcDetails.innerText = "I'm not currently playing anything";
-        document.getElementById("rpcIcon").src = `game.png`;
-        document.getElementById(
-          "rpcSmallIcon"
-        ).src = `gamer.png`;
-      }
-    } else {
-      rpcName.innerText = "None";
-      rpcDetails.innerText = "I'm not currently playing anything";
-      document.getElementById("rpcIcon").src = `gamer.png`;
-      document.getElementById(
-        "rpcSmallIcon"
-      ).src = `gamer.png`;
+        
+        // Rest of your existing update code...
+    } catch (error) {
+        console.log('Error fetching data:', error);
     }
-  });
+}
+
+setInterval(updateAllData, 1000);
+updateAllData();
 
 webSocket.addEventListener("message", (event) => {
   data = JSON.parse(event.data);
