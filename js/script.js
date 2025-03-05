@@ -188,3 +188,18 @@ window.onload = function() {
   var ageElement = document.getElementById("age");
   ageElement.textContent = age;
 };
+
+// Function to update all data
+function updateAllData() {
+    // Call your existing data fetching functions here
+    updateDiscordStatus();
+    updateSpotifyStatus();
+    updateGameStatus();
+    updateClock();
+}
+
+// Run updates every second
+setInterval(updateAllData, 1000);
+
+// Initial load
+updateAllData();
