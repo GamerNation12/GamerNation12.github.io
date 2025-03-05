@@ -124,7 +124,6 @@ body {
     display: flex;
   }
 }
-
 .countdown {
   position: fixed;
   bottom: 20px;
@@ -137,20 +136,23 @@ body {
   z-index: 1000; 
 }
 
-.spotifyPanel {
-  transition: 0.3s;
-  animation-name: init;
-  animation-duration: 1s;
-  border-radius: 10px;
-  padding: 15px;
-  background-color: rgba(15, 15, 18, 0.8); /* Slightly transparent */
-  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
-  border: 1.5px solid hsla(0, 0%, 76%, 0.02);
-  width: 400px;
-  height: 120px; /* Increased height to accommodate time display */
-  position: relative; /* Added for progress bar positioning */
+.discordPanel {
+  margin-bottom: -80px;  /* Creates the overlap effect */
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 2;
+  position: relative;
 }
 
+.spotifyPanel {
+  padding: 20px;
+  padding-top: 100px;  /* Makes room for the overlapping discord panel */
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 1;
+  position: relative;
+}
 .trackImg {
   transition: 0.3s;
   margin-right: 15px;
@@ -339,12 +341,16 @@ body {
 }
 
 .discord-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
+
+
+
+
+  margin-bottom: -80px;  /* Creates the overlap effect */
+  padding: 20px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  z-index: 2;
+  position: relative;
 }
 
 .avatar-container {
