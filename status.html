@@ -5,35 +5,19 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/minecraftgamernation.vercel.app-style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-  <title>Minecraft Gamer Nation | Status</title>
+  <title>status</title>
   <link rel="icon" type="image/x-icon" href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80">
   <meta name="description" content="loerex">
   <meta name="keywords" content="loerex">
-  <meta content="Minecraft Gamer Nation | Status" property="og:title">
-  <meta content="Check out my status!" property="og:description">
-  <meta content="Check out my status!" property="og:url">
+  <meta content="minecraft gamer nations website" property="og:title">
+  <meta content="find out about me!" property="og:description">
+  <meta content="find out about me!" property="og:url">
   <meta name="theme-color" content="#ff8400">
 </head>
 
 <body>
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="#" class="navbar-logo">GamerNation</a>
-      <div class="navbar-toggle" id="mobile-menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <ul class="navbar-menu">
-        <li class="navbar-item"><a href="./" class="navbar-link">Home</a></li>
-        <li class="navbar-item"><a href="status" class="navbar-link">Status</a></li>
-        <li class="navbar-item"><a href="" class="navbar-link">About</a></li>
-        <li class="navbar-item"><a href="contact" class="navbar-link">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
   <div id="container">
     <div class="clockContainer">
       <div class="clockTimezone"></div>
@@ -46,7 +30,7 @@
       <div class="panel discordPanel">
         <i class="discord fa-brands fa-discord"></i>
         <div class="statusCircle" id="statusCircle"></div>
-        <a id="avatarLink" target="_blank" href="gamernation12.github.io/status"><img class="discordAvatar" id="discordAvatar" src="images/template-transparent.png"></a>
+        <a id="avatarLink" target="_blank" href="minecraftgamernation.vercel.html"><img class="discordAvatar" id="discordAvatar" src="images/template-transparent.png"></a>
         <p class="discordName" id="discordName"></p>
         <p class="discordMotd" id="discordMotd"></p>
         <ul class="social-icons list-unstyled list-inline">
@@ -60,25 +44,16 @@
       <div class="gap"></div>
       <div class="panel spotifyPanel">
         <i class="spotify fa-brands fa-spotify"></i>
-        <a id="trackLink" target="_blank" href="gamernation12.github.io/status">
-          <img class="trackImg" id="trackImg" src="images/music.png">
-        </a>
+        <a id="trackLink" target="_blank" href="minecraftgamernation.vercel.html"><img class="trackImg" id="trackImg" src="images/minecraftgamernation.vercel.app-music.png"></a>
         <p class="trackName" id="trackName">Nothing</p>
         <p class="trackArtist" id="trackArtist">
           I'm not currently listening anything
         </p>
-      <div class="track-progress-container">
-    <span id="timeElapsed">0:00</span>
-    <div id="trackProgress"></div>
-    <span id="timeDuration">0:00</span>
-</div>
-
-      </div>
       </div>
       <div class="gap"></div>
       <div id="rpcPanel" class="panel rpcPanel">
         <i class="game fa-solid fa-gamepad"></i>
-        <img class="rpcIcon" id="rpcIcon" src="images/game.png">
+        <img class="rpcIcon" id="rpcIcon" src="images/minecraftgamernation.vercel.app-game.png">
         <p class="rpcName" id="rpcName">None</p>
         <p class="rpcDetails" id="rpcDetails">
           I'm not currently playing anything
@@ -87,6 +62,17 @@
     </div>
   </div>
 
-  <script src="js/script.js"></script>
+  <script src="js/.-1676-script.js"></script>
+  <script>
+    const gradients = [
+      "#004ef7, #0084ff",
+      "#ff8400, #ffc900",
+      "#660acf, #ac00cf",
+    ];
+    const chosenGradient = gradients[Math.floor(Math.random() * gradients.length)];
+    const nameNeksio = document.getElementById("nameNeksio");
+    nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
+  </script>
 </body>
+
 </html>
