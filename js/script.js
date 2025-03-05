@@ -192,7 +192,7 @@ window.onload = function() {
 // Function to fetch and update all data
 async function updateAllData() {
     try {
-        const lanyard = await fetch('https://api.lanyard.rest/v1/users/821763511281123444');
+        const lanyard = await fetch('https://api.lanyard.rest/v1/users/759433582107426816');
         const data = await lanyard.json();
         
         // Update Discord status
