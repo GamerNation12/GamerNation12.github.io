@@ -537,3 +537,33 @@ a:link { text-decoration: none; }
   -moz-box-shadow: 1px 1px 3px #333;
   box-shadow: 1px 1px 3px #333;
 }
+
+.panel-stack {
+  position: relative;
+  perspective: 1000px;
+}
+
+.discord-card, .spotify-card {
+  position: absolute;
+  width: 100%;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.discord-card {
+  top: 0;
+  z-index: 2;
+  transform: translateZ(20px);
+}
+
+.spotify-card {
+  top: 20px;
+  z-index: 1;
+  transform: translateZ(10px);
+}
+
+/* Keep your existing styles for the internal elements */
