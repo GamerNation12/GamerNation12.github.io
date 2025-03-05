@@ -350,16 +350,12 @@ body {
 }
 
 .discord-card {
-
-
-
-
-  margin-bottom: -80px;  /* Creates the overlap effect */
-  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  z-index: 2;
-  position: relative;
 }
 
 .avatar-container {
