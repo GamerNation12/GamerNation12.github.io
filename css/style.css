@@ -137,23 +137,32 @@ body {
 }
 
 .discordPanel {
-  margin-bottom: -80px;  /* Creates the overlap effect */
+  margin-bottom: -80px;
   padding: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 3;
+  position: relative;
+}
+
+.spotifyPanel {
+  margin-bottom: -80px;
+  padding: 20px;
+  padding-top: 100px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 2;
   position: relative;
 }
 
-.spotifyPanel {
+.nowPlayingPanel {
   padding: 20px;
-  padding-top: 100px;  /* Makes room for the overlapping discord panel */
+  padding-top: 100px;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 1;
   position: relative;
-}
-.trackImg {
+}.trackImg {
   transition: 0.3s;
   margin-right: 15px;
   float: left;
