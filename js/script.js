@@ -148,3 +148,21 @@ window.onload = function() {
   var ageElement = document.getElementById("age");
   ageElement.textContent = age;
 };
+
+// Discord panel updates
+if (data.data.discord_user) {
+    // Update Discord username and avatar
+    discordName.textContent = data.data.discord_user.username;
+    avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${data.data.discord_user.avatar}`;
+    
+    // Update Discord status/MOTD
+    if (data.data.discord_status) {
+        discordMotd.textContent = data.data.discord_status;
+    }
+    
+    // Update custom status if available
+    const customStatus = data.data.activities.find(activity => activity.type === 4);
+    if (customStatus && customStatus.state) {
+        discordMotd.textContent = customStatus.state;
+    }
+}
