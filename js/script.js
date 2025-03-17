@@ -60,7 +60,7 @@ async function updateAllData() {
 setInterval(updateAllData, 1000);
 updateAllData();
 webSocket.addEventListener("message", (event) => {
-  data = JSON.parse(event.data);
+  let data = JSON.parse(event.data);  // Define data properly here
 
   if (event.data == '{"op":1,"d":{"heartbeat_interval":30000}}') {
     webSocket.send(
@@ -82,6 +82,24 @@ webSocket.addEventListener("message", (event) => {
       );
     }, 30000);
   }
+  
+  // Handle Discord panel updates here
+  if (data.t === "INIT_STATE" || data.t === "PRESENCE_UPDATE") {
+    if (data.d.discord_user) {
+      discordName.textContent = data.d.discord_user.username;
+      avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${data.d.discord_user.avatar}`;
+      
+      if (data.d.discord_status) {
+          discordMotd.textContent = data.d.discord_status;
+      }
+      
+      const customStatus = data.d.activities.find(activity => activity.type === 4);
+      if (customStatus && customStatus.state) {
+          discordMotd.textContent = customStatus.state;
+      }
+    }
+  }
+
   if (data.t == "PRESENCE_UPDATE") {
     if (data.d.spotify) {
       trackName.innerText = data.d.spotify.song;
@@ -145,26 +163,10 @@ function calculateAge(birthDate) {
 }
 
 window.onload = function() {
-  var birthDate = "27.7.232323";
-  var age = calculateAge(birthDate);
-  var ageElement = document.getElementById("age");
-  ageElement.textContent = age;
+  const ageElement = document.getElementById("age");
+  if (ageElement) {
+    const birthDate = "27.7.2323";
+    const age = calculateAge(birthDate);
+    ageElement.textContent = age;
+  }
 };
-
-// Discord panel updates
-if (data.data.discord_user) {
-    // Update Discord username and avatar
-    discordName.textContent = data.data.discord_user.username;
-    avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${data.data.discord_user.avatar}`;
-    
-    // Update Discord status/MOTD
-    if (data.data.discord_status) {
-        discordMotd.textContent = data.data.discord_status;
-    }
-    
-    // Update custom status if available
-    const customStatus = data.data.activities.find(activity => activity.type === 4);
-    if (customStatus && customStatus.state) {
-        discordMotd.textContent = customStatus.state;
-    }
-}
