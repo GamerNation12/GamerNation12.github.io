@@ -48,7 +48,6 @@ async function updateAllData() {
             document.getElementById('trackImg').src = data.data.spotify.album_art_url;
         }
         
-
         // Discord panel updates
         if (data.data.discord_user) {
             // Update Discord username and avatar
@@ -69,7 +68,6 @@ async function updateAllData() {
     } catch (error) {
         console.log('Error fetching data:', error);
     }
-
 }
 setInterval(updateAllData, 1000);
 updateAllData();
