@@ -85,57 +85,36 @@ body {
 }
 
 .discordPanel {
-  background: rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+  animation-name: init;
+  animation-duration: 1s;
   border-radius: 10px;
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
-  margin: 10px 0;
-}
-
-.discordInfo {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  position: relative;
+  padding: 15px;
+  background-color: #0f0f12;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
+  border: 1.5px solid hsla(0, 0%, 76%, 0.02);
+  width: 400px;
+  height: 75px;
 }
 
 .discordAvatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  flex-shrink: 0;
+  margin-right: 15px;
+  float: left;
+  border-radius: 10px;
+  width: 75px;
+  height: 75px;
 }
 
-.discordNames {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-#nameNeksio {
-  font-size: 1.4em;
-  font-weight: bold;
-  color: #ffffff;
-  margin: 0;
-}
-
-#discordName {
-  font-size: 1.1em;
-  color: #b9bbbe;
-  margin: 0;
-}
-
-#discordMotd {
-  font-size: 1em;
-  color: #dcddde;
+.discordName {
+  color: #fff;
   margin-top: 5px;
-  word-wrap: break-word;
 }
 
-
+.discordMotd {
+  margin-top: -13px;
+  font-size: 12.5px;
+  color: #747474;
+}
 
 .statusCircle {
   border-radius: 100%;
@@ -196,6 +175,7 @@ body {
 .discordTXT {
   color: #d9d9d9;
 }
+
 
 
 
