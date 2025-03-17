@@ -18,60 +18,47 @@ async function updateAllData() {
         const lanyard = await fetch('https://api.lanyard.rest/v1/users/759433582107426816');
         const data = await lanyard.json();
         
-        // Spotify panel color handling
-        if (data.data.spotify) {
-            const spotifyPanel = document.querySelector('.spotifyPanel');
-            const img = new Image();
-            img.crossOrigin = "Anonymous";
-            img.src = data.data.spotify.album_art_url;
-            
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-                
-                // Get colors from left and right edges
-                const leftColor = ctx.getImageData(0, img.height/2, 1, 1).data;
-                const rightColor = ctx.getImageData(img.width-1, img.height/2, 1, 1).data;
-                
-                // Apply gradient
-                spotifyPanel.style.background = `linear-gradient(to right, 
-                    rgba(${leftColor[0]}, ${leftColor[1]}, ${leftColor[2]}, 0.3),
-                    rgba(${rightColor[0]}, ${rightColor[1]}, ${rightColor[2]}, 0.3))`;
-            }
-            
-            // Update other Spotify info
-            document.getElementById('trackName').textContent = data.data.spotify.song;
-            document.getElementById('trackArtist').textContent = data.data.spotify.artist;
-            document.getElementById('trackImg').src = data.data.spotify.album_art_url;
-        }
-        
-        // Discord panel updates
+        // Discord data
         if (data.data.discord_user) {
-            // Update Discord username and avatar
+            dscName.textContent = data.data.discord_user.global_name;
             discordName.textContent = data.data.discord_user.username;
             avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${data.data.discord_user.avatar}`;
             
-            // Update Discord status/MOTD
-            if (data.data.discord_status) {
-                discordMotd.textContent = data.data.discord_status;
+            // Status message handling
+            const customStatus = data.data.activities.find(activity => activity.type === 4);
+            discordMotd.textContent = customStatus?.state || data.data.discord_status || 'Online';
+        }
+
+        // Spotify data
+        if (data.data.spotify) {
+            trackName.textContent = data.data.spotify.song;
+            trackArtist.textContent = data.data.spotify.artist;
+            document.getElementById('trackImg').src = data.data.spotify.album_art_url;
+            trackLink.href = `https://open.spotify.com/track/${data.data.spotify.track_id}`;
+        }
+
+        // Rich Presence data
+        const gameActivity = data.data.activities.find(activity => activity.type === 0);
+        if (gameActivity) {
+            rpcName.textContent = gameActivity.name;
+            rpcDetails.textContent = gameActivity.details ? 
+                gameActivity.details + (gameActivity.state ? "\n" + gameActivity.state : "") : "";
+            
+            if (gameActivity.assets?.large_image) {
+                document.getElementById("rpcIcon").src = 
+                    `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
             }
             
-            // Update custom status if available
-            const customStatus = data.data.activities.find(activity => activity.type === 4);
-            if (customStatus && customStatus.state) {
-                discordMotd.textContent = customStatus.state;
-            }
+            document.getElementById("rpcSmallIcon").src = gameActivity.assets?.small_image ? 
+                `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png` : 
+                './template/transparent.png';
         }
+
     } catch (error) {
         console.log('Error fetching data:', error);
     }
-}
 setInterval(updateAllData, 1000);
 updateAllData();
-
 webSocket.addEventListener("message", (event) => {
   data = JSON.parse(event.data);
 
