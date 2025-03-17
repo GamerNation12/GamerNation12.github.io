@@ -41,16 +41,16 @@ async function updateAllData() {
             document.getElementById('trackArtist').textContent = lanyardData.data.spotify.artist;
             document.getElementById('trackImg').src = lanyardData.data.spotify.album_art_url;
         }
-
         // Discord updates
         if (lanyardData.data.discord_user) {
-            discordName.textContent = lanyardData.data.discord_user.username;
-            avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${lanyardData.data.discord_user.avatar}`;
+            // Update avatar with the correct URL format
+            avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${lanyardData.data.discord_user.avatar}.png`;
             
+            // Rest of your Discord user updates
+            discordName.textContent = lanyardData.data.discord_user.username;
             const customStatus = lanyardData.data.activities.find(activity => activity.type === 4);
             discordMotd.textContent = customStatus?.state || lanyardData.data.discord_status || 'Online';
         }
-        
     } catch (error) {
         console.log('Error fetching data:', error);
     }
