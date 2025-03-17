@@ -3,30 +3,62 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize WebSocket connection
   let webSocket = new WebSocket("wss://api.lanyard.rest/socket");
   let discordID = '759433582107426816';
+// Canvas optimization for Spotify panel
+function createOptimizedCanvas() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    return { canvas, ctx };
+}
 
-  async function updateAllData() {
-      try {
-          const lanyard = await fetch('https://api.lanyard.rest/v1/users/759433582107426816');
-          const lanyardData = await lanyard.json();
+async function updateAllData() {
+    try {
+        const lanyard = await fetch('https://api.lanyard.rest/v1/users/759433582107426816');
+        const lanyardData = await lanyard.json();
+        
+        // Spotify panel color handling with optimized canvas
+        if (lanyardData.data.spotify) {
+            const spotifyPanel = document.querySelector('.spotifyPanel');
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = lanyardData.data.spotify.album_art_url;
             
-          // Update Discord info
-          if (lanyardData.data.discord_user) {
-              if (discordName) discordName.textContent = lanyardData.data.discord_user.username;
-              if (avatarLink) avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${lanyardData.data.discord_user.avatar}`;
-              if (discordMotd) {
-                  const customStatus = lanyardData.data.activities.find(activity => activity.type === 4);
-                  discordMotd.textContent = customStatus?.state || lanyardData.data.discord_status || 'Online';
-              }
-          }
-      } catch (error) {
-          console.log('Error fetching data:', error);
-      }
-  }
+            img.onload = function() {
+                const { canvas, ctx } = createOptimizedCanvas();
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                const leftColor = ctx.getImageData(0, img.height/2, 1, 1).data;
+                const rightColor = ctx.getImageData(img.width-1, img.height/2, 1, 1).data;
+                
+                spotifyPanel.style.background = `linear-gradient(to right, 
+                    rgba(${leftColor[0]}, ${leftColor[1]}, ${leftColor[2]}, 0.3),
+                    rgba(${rightColor[0]}, ${rightColor[1]}, ${rightColor[2]}, 0.3))`;
+            }
+            
+            // Update Spotify info
+            document.getElementById('trackName').textContent = lanyardData.data.spotify.song;
+            document.getElementById('trackArtist').textContent = lanyardData.data.spotify.artist;
+            document.getElementById('trackImg').src = lanyardData.data.spotify.album_art_url;
+        }
 
-  // Start the update cycle
-  setInterval(updateAllData, 1000);
-  updateAllData();
+        // Discord updates
+        if (lanyardData.data.discord_user) {
+            discordName.textContent = lanyardData.data.discord_user.username;
+            avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${lanyardData.data.discord_user.avatar}`;
+            
+            const customStatus = lanyardData.data.activities.find(activity => activity.type === 4);
+            discordMotd.textContent = customStatus?.state || lanyardData.data.discord_status || 'Online';
+        }
+        
+    } catch (error) {
+        console.log('Error fetching data:', error);
+    }
+}
 
+// Initialize updates
+setInterval(updateAllData, 1000);
+updateAllData();
   // Handle WebSocket messages
   webSocket.addEventListener("message", (event) => {
       const wsData = JSON.parse(event.data);
