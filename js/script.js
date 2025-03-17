@@ -48,12 +48,29 @@ async function updateAllData() {
             document.getElementById('trackImg').src = data.data.spotify.album_art_url;
         }
         
-        // Rest of your existing update code...
+
+        // Discord panel updates
+        if (data.data.discord_user) {
+            // Update Discord username and avatar
+            discordName.textContent = data.data.discord_user.username;
+            avatarLink.src = `https://cdn.discordapp.com/avatars/${discordID}/${data.data.discord_user.avatar}`;
+            
+            // Update Discord status/MOTD
+            if (data.data.discord_status) {
+                discordMotd.textContent = data.data.discord_status;
+            }
+            
+            // Update custom status if available
+            const customStatus = data.data.activities.find(activity => activity.type === 4);
+            if (customStatus && customStatus.state) {
+                discordMotd.textContent = customStatus.state;
+            }
+        }
     } catch (error) {
         console.log('Error fetching data:', error);
     }
-}
 
+}
 setInterval(updateAllData, 1000);
 updateAllData();
 
