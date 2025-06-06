@@ -27,20 +27,34 @@
       <p class="nameMain">
         <span id="nameNeksio" class="nameNeksio"></span>
       </p><div class="gap"></div>
-      <div class="panel discordPanel">
-        <i class="discord fa-brands fa-discord"></i>
-        <div class="statusCircle" id="statusCircle"></div>
-        <a id="avatarLink" target="_blank" href="gamernation12.github.io/status"><img class="discordAvatar" id="discordAvatar" src="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80"></a>
-        <p class="discordName" id="discordName">GamerNation12</p>
-        <p class="discordMotd" id="discordMotd">Online</p>
-        <ul class="social-icons list-unstyled list-inline">
-          <li><a target="&rdquo;_blank&rdquo;" href="https://www.youtube.com/c/MinecraftGamerNation0"><i class="fa-brands fa-youtube" style="color: #FF0033;"></i></a></li>
-          <li><a target="&rdquo;_blank&rdquo;" href="https://www.roblox.com/users/3380857326/profile"><i class="fa-solid fa-gamepad fa-lg" style="color: #ffffff;"></i></a>
-          </li>
-          <li><a target="&rdquo;_blank&rdquo;" href="mailto:Minecraft-Gamer-Nation@post.com%0A"><i class="fa-solid fa-envelope fa-xl" style="color: #ffffff;"></i></a>
-          </li>
-        </ul>
+      <div class="panel discordPanel" style="position:relative;display:flex;align-items:center;gap:1em;background:#23272a;padding:1em 2em;border-radius:12px;max-width:350px;">
+        <div style="position:relative;">
+          <a id="avatarLink" target="_blank" href="gamernation12.github.io/status">
+            <img
+              class="discordAvatar"
+              id="discordAvatar"
+              src="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80"
+              alt="Discord Avatar"
+              style="width:64px;height:64px;border-radius:50%;border:2px solid #5865f2;object-fit:cover;background:#23272a;"
+              onerror="this.onerror=null;this.src='https://cdn.discordapp.com/embed/avatars/0.png';"
+            >
+            <!-- Status indicator (static 'online') -->
+            <span style="position:absolute;bottom:6px;right:6px;width:16px;height:16px;background:#43b581;border:2px solid #23272a;border-radius:50%;display:block;z-index:2;"></span>
+          </a>
+        </div>
+        <div>
+          <p class="discordName" id="discordName" style="color:#fff;font-weight:bold;font-size:1.2em;margin:0;">GamerNation12</p>
+          <p class="discordMotd" id="discordMotd" style="color:#b9bbbe;font-size:0.95em;margin:0;">Online</p>
+        </div>
+        <!-- Social icons moved below for better layout -->
       </div>
+      <ul class="social-icons list-unstyled list-inline" style="margin-top:1em;">
+        <li><a target="_blank" href="https://www.youtube.com/c/MinecraftGamerNation0"><i class="fa-brands fa-youtube" style="color: #FF0033;"></i></a></li>
+        <li><a target="_blank" href="https://www.roblox.com/users/3380857326/profile"><i class="fa-solid fa-gamepad fa-lg" style="color: #ffffff;"></i></a>
+        </li>
+        <li><a target="_blank" href="mailto:Minecraft-Gamer-Nation@post.com"><i class="fa-solid fa-envelope fa-xl" style="color: #ffffff;"></i></a>
+        </li>
+      </ul>
       <div class="gap"></div>
       <div class="panel spotifyPanel">
         <i class="spotify fa-brands fa-spotify"></i>
