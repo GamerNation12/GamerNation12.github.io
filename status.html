@@ -29,24 +29,22 @@
       </p><div class="gap"></div>
       <div class="panel discordPanel" style="position:relative;display:flex;align-items:center;gap:1em;background:#23272a;padding:1em 2em;border-radius:12px;max-width:350px;">
         <div style="position:relative;">
-          <a id="avatarLink" target="_blank" href="gamernation12.github.io/status">
+          <a id="avatarLink" target="_blank" href="https://discord.com/users/759433582107426816">
             <img
               class="discordAvatar"
               id="discordAvatar"
-              src="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80"
+              src="https://cdn.discordapp.com/embed/avatars/0.png"
               alt="Discord Avatar"
               style="width:64px;height:64px;border-radius:50%;border:2px solid #5865f2;object-fit:cover;background:#23272a;"
-              onerror="this.onerror=null;this.src='https://cdn.discordapp.com/embed/avatars/0.png';"
             >
-            <!-- Status indicator (static 'online') -->
-            <span style="position:absolute;bottom:6px;right:6px;width:16px;height:16px;background:#43b581;border:2px solid #23272a;border-radius:50%;display:block;z-index:2;"></span>
+            <!-- Status indicator -->
+            <span id="discordStatusDot" style="position:absolute;bottom:6px;right:6px;width:16px;height:16px;background:#747f8d;border:2px solid #23272a;border-radius:50%;display:block;z-index:2;"></span>
           </a>
         </div>
         <div>
-          <p class="discordName" id="discordName" style="color:#fff;font-weight:bold;font-size:1.2em;margin:0;">GamerNation12</p>
-          <p class="discordMotd" id="discordMotd" style="color:#b9bbbe;font-size:0.95em;margin:0;">Online</p>
+          <p class="discordName" id="discordName" style="color:#fff;font-weight:bold;font-size:1.2em;margin:0;">Loading...</p>
+          <p class="discordMotd" id="discordMotd" style="color:#b9bbbe;font-size:0.95em;margin:0;">Loading...</p>
         </div>
-        <!-- Social icons moved below for better layout -->
       </div>
       <ul class="social-icons list-unstyled list-inline" style="margin-top:1em;">
         <li><a target="_blank" href="https://www.youtube.com/c/MinecraftGamerNation0"><i class="fa-brands fa-youtube" style="color: #FF0033;"></i></a></li>
@@ -86,6 +84,47 @@
     const chosenGradient = gradients[Math.floor(Math.random() * gradients.length)];
     const nameNeksio = document.getElementById("nameNeksio");
     nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
+  </script>
+  <script>
+    // Lanyard API integration
+    const DISCORD_USER_ID = "759433582107426816"; // <-- Updated to your Discord user ID
+    const lanyardUrl = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
+
+    function getStatusColor(status) {
+      switch (status) {
+        case "online": return "#43b581";
+        case "idle": return "#faa61a";
+        case "dnd": return "#f04747";
+        case "offline": return "#747f8d";
+        default: return "#747f8d";
+      }
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    fetch(lanyardUrl)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) return;
+        const user = data.data.discord_user;
+        const status = data.data.discord_status;
+        const avatar = user.avatar
+          ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=80`
+          : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
+
+        document.getElementById("discordAvatar").src = avatar;
+        document.getElementById("discordName").textContent = user.username;
+        document.getElementById("discordMotd").textContent = status === "dnd" ? "Do Not Disturb" : capitalize(status);
+        document.getElementById("discordStatusDot").style.background = getStatusColor(status);
+        document.getElementById("avatarLink").href = `https://discord.com/users/${user.id}`;
+      })
+      .catch(() => {
+        document.getElementById("discordName").textContent = "Unavailable";
+        document.getElementById("discordMotd").textContent = "Offline";
+        document.getElementById("discordStatusDot").style.background = "#747f8d";
+      });
   </script>
 </body>
 
