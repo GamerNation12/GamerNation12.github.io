@@ -1,152 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <title>status</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80"
+    />
+    <meta name="description" content="loerex" />
+    <meta name="keywords" content="loerex" />
+    <meta content="minecraft gamer nations website" property="og:title" />
+    <meta content="find out about me!" property="og:description" />
+    <meta content="find out about me!" property="og:url" />
+    <meta name="theme-color" content="#ff8400" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-  <title>status</title>
-  <link rel="icon" type="image/x-icon" href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80">
-  <meta name="description" content="loerex">
-  <meta name="keywords" content="loerex">
-  <meta content="minecraft gamer nations website" property="og:title">
-  <meta content="find out about me!" property="og:description">
-  <meta content="find out about me!" property="og:url">
-  <meta name="theme-color" content="#ff8400">
-</head>
-
-<body>
-  <div id="container">
-    <div class="clockContainer">
-      <div class="clockTimezone"></div>
-      <div class="clock"></div>
-    </div>
-    <div class="center">
-      <p class="nameMain">
-        <span id="nameNeksio" class="nameNeksio"></span>
-      </p><div class="gap"></div>
-      <div class="panel discordPanel"
-  style="position:relative;display:flex;flex-direction:row;align-items:center;gap:1.2em;
-         background:#23272a;padding:1.2em 1.5em;border-radius:16px;width:100%;max-width:400px;margin:0 auto 1.2em auto;box-sizing:border-box;">
-        <!-- Avatar + status dot -->
-        <div style="position:relative;min-width:80px;">
-          <a id="avatarLink" target="_blank" href="https://discord.com/users/759433582107426816">
-            <img
-              class="discordAvatar"
-              id="discordAvatar"
-              src="https://cdn.discordapp.com/embed/avatars/0.png"
-              alt="Discord Avatar"
-              style="width:80px;height:80px;border-radius:50%;border:3px solid #5865f2;object-fit:cover;background:#23272a;box-shadow:0 2px 12px #0004;"
+  <body>
+    <div id="container">
+      <div class="clockContainer">
+        <div class="clockTimezone"></div>
+        <div class="clock"></div>
+      </div>
+      <div class="center">
+        <p class="nameMain">
+          <span id="nameNeksio" class="nameNeksio"></span>
+        </p>
+        <div class="gap"></div>
+        <div
+          class="panel discordPanel"
+          style="
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.2em;
+            background: #23272a;
+            padding: 1.2em 1.5em;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1.2em auto;
+            box-sizing: border-box;
+          "
+        >
+          <!-- Avatar + status dot -->
+          <div style="position: relative; min-width: 80px">
+            <a
+              id="avatarLink"
+              target="_blank"
+              href="https://discord.com/users/759433582107426816"
             >
-            <!-- Status indicator with tooltip -->
-            <span id="discordStatusDot" style="position:absolute;bottom:10px;right:10px;width:18px;height:18px;background:#747f8d;border:3px solid #23272a;border-radius:50%;display:block;z-index:2;cursor:pointer;" title=""></span>
-          </a>
-        </div>
-        <!-- Username, Discord icon, custom status, and social icons -->
-        <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;flex:1;">
-          <div style="display:flex;align-items:center;gap:0.5em;">
-            <i class="fa-brands fa-discord" style="color:#5865f2;font-size:1.4em;"></i>
-            <span class="discordName" id="discordName" style="color:#fff;font-weight:bold;font-size:1.2em;">Loading...</span>
+              <img
+                class="discordAvatar"
+                id="discordAvatar"
+                src="https://cdn.discordapp.com/embed/avatars/0.png"
+                alt="Discord Avatar"
+                style="
+                  width: 80px;
+                  height: 80px;
+                  border-radius: 50%;
+                  border: 3px solid #5865f2;
+                  object-fit: cover;
+                  background: #23272a;
+                  box-shadow: 0 2px 12px #0004;
+                "
+              />
+              <!-- Status indicator with tooltip -->
+              <span
+                id="discordStatusDot"
+                style="
+                  position: absolute;
+                  bottom: 10px;
+                  right: 10px;
+                  width: 18px;
+                  height: 18px;
+                  background: #747f8d;
+                  border: 3px solid #23272a;
+                  border-radius: 50%;
+                  display: block;
+                  z-index: 2;
+                  cursor: pointer;
+                "
+                title=""
+              ></span>
+            </a>
           </div>
-          <span id="discordCustomStatus" style="color:#b9bbbe;font-size:1em;margin-top:0.2em;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-          <!-- Social icons under username -->
-          <ul class="social-icons list-unstyled list-inline" style="display:flex;gap:1em;align-items:center;justify-content:flex-start;margin:0.7em 0 0 0;padding:0;">
-            <li style="list-style:none;"><a target="_blank" href="https://www.youtube.com/c/MinecraftGamerNation0"><i class="fa-brands fa-youtube" style="color: #FF0033;font-size:1.5em;"></i></a></li>
-            <li style="list-style:none;"><a target="_blank" href="https://www.roblox.com/users/3380857326/profile"><i class="fa-solid fa-gamepad" style="color: #ffffff;font-size:1.3em;"></i></a></li>
-            <li style="list-style:none;"><a target="_blank" href="mailto:Minecraft-Gamer-Nation@post.com"><i class="fa-solid fa-envelope" style="color: #ffffff;font-size:1.3em;"></i></a></li>
-          </ul>
+          <!-- Username, Discord icon, custom status, and social icons -->
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              justify-content: center;
+              flex: 1;
+            "
+          >
+            <div style="display: flex; align-items: center; gap: 0.5em">
+              <i
+                class="fa-brands fa-discord"
+                style="color: #5865f2; font-size: 1.4em"
+              ></i>
+              <span
+                class="discordName"
+                id="discordName"
+                style="color: #fff; font-weight: bold; font-size: 1.2em"
+                >Loading...</span
+              >
+            </div>
+            <span
+              id="discordCustomStatus"
+              style="
+                color: #b9bbbe;
+                font-size: 1em;
+                margin-top: 0.2em;
+                max-width: 220px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+            ></span>
+            <!-- Social icons under username -->
+            <ul
+              class="social-icons list-unstyled list-inline"
+              style="
+                display: flex;
+                gap: 1em;
+                align-items: center;
+                justify-content: flex-start;
+                margin: 0.7em 0 0 0;
+                padding: 0;
+              "
+            >
+              <li style="list-style: none">
+                <a
+                  target="_blank"
+                  href="https://www.youtube.com/c/MinecraftGamerNation0"
+                  ><i
+                    class="fa-brands fa-youtube"
+                    style="color: #ff0033; font-size: 1.5em"
+                  ></i
+                ></a>
+              </li>
+              <li style="list-style: none">
+                <a
+                  target="_blank"
+                  href="https://www.roblox.com/users/3380857326/profile"
+                  ><i
+                    class="fa-solid fa-gamepad"
+                    style="color: #ffffff; font-size: 1.3em"
+                  ></i
+                ></a>
+              </li>
+              <li style="list-style: none">
+                <a target="_blank" href="mailto:Minecraft-Gamer-Nation@post.com"
+                  ><i
+                    class="fa-solid fa-envelope"
+                    style="color: #ffffff; font-size: 1.3em"
+                  ></i
+                ></a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="gap"></div>
-      <div class="panel spotifyPanel">
-        <i class="spotify fa-brands fa-spotify"></i>
-        <a id="trackLink" target="_blank" href="gamernation12.github.io/status"><img class="trackImg" id="trackImg" src="null"></a>
-        <p class="trackName" id="trackName">Nothing</p>
-        <p class="trackArtist" id="trackArtist">
-          I'm not currently listening anything
-        </p>
-      </div>
-      <div class="gap"></div>
-      <div id="rpcPanel" class="panel rpcPanel">
-        <i class="game fa-solid fa-gamepad"></i>
-        <img class="rpcIcon" id="rpcIcon" src="game.png">
-        <p class="rpcName" id="rpcName">None</p>
-        <p class="rpcDetails" id="rpcDetails">
-          I'm not currently playing anything
-        </p>
+        <div class="gap"></div>
+        <div class="panel spotifyPanel">
+          <i class="spotify fa-brands fa-spotify"></i>
+          <a
+            id="trackLink"
+            target="_blank"
+            href="gamernation12.github.io/status"
+            ><img class="trackImg" id="trackImg" src="null"
+          /></a>
+          <p class="trackName" id="trackName">Nothing</p>
+          <p class="trackArtist" id="trackArtist">
+            I'm not currently listening anything
+          </p>
+        </div>
+        <div class="gap"></div>
+        <div id="rpcPanel" class="panel rpcPanel">
+          <i class="game fa-solid fa-gamepad"></i>
+          <img class="rpcIcon" id="rpcIcon" src="game.png" />
+          <p class="rpcName" id="rpcName">None</p>
+          <p class="rpcDetails" id="rpcDetails">
+            I'm not currently playing anything
+          </p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="js/script.js"></script>
-  <script>
-    const gradients = [
-      "#004ef7, #0084ff",
-      "#ff8400, #ffc900",
-      "#660acf, #ac00cf",
-    ];
-    const chosenGradient = gradients[Math.floor(Math.random() * gradients.length)];
-    const nameNeksio = document.getElementById("nameNeksio");
-    nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
-  </script>
-  <script>
-    // Lanyard API integration
-    const DISCORD_USER_ID = "759433582107426816";
-    const lanyardUrl = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
+    <script src="js/script.js"></script>
+    <script>
+      const gradients = [
+        "#004ef7, #0084ff",
+        "#ff8400, #ffc900",
+        "#660acf, #ac00cf",
+      ];
+      const chosenGradient =
+        gradients[Math.floor(Math.random() * gradients.length)];
+      const nameNeksio = document.getElementById("nameNeksio");
+      nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
+    </script>
+    <script>
+      // Lanyard API integration
+      const DISCORD_USER_ID = "759433582107426816";
+      const lanyardUrl = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
 
-    function getStatusColor(status) {
-      switch (status) {
-        case "online": return "#43b581";
-        case "idle": return "#faa61a";
-        case "dnd": return "#f04747";
-        case "offline": return "#747f8d";
-        default: return "#747f8d";
+      function getStatusColor(status) {
+        switch (status) {
+          case "online":
+            return "#43b581";
+          case "idle":
+            return "#faa61a";
+          case "dnd":
+            return "#f04747";
+          case "offline":
+            return "#747f8d";
+          default:
+            return "#747f8d";
+        }
       }
-    }
 
-    function getStatusText(status) {
-      switch (status) {
-        case "online": return "Online";
-        case "idle": return "Idle";
-        case "dnd": return "Do Not Disturb";
-        case "offline": return "Offline";
-        default: return "Unknown";
+      function getStatusText(status) {
+        switch (status) {
+          case "online":
+            return "Online";
+          case "idle":
+            return "Idle";
+          case "dnd":
+            return "Do Not Disturb";
+          case "offline":
+            return "Offline";
+          default:
+            return "Unknown";
+        }
       }
-    }
 
-    fetch(lanyardUrl)
-      .then(res => res.json())
-      .then(data => {
-        if (!data.success) return;
-        const user = data.data.discord_user;
-        const status = data.data.discord_status;
-        const avatar = user.avatar
-          ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=80`
-          : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
+      fetch(lanyardUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.success) return;
+          const user = data.data.discord_user;
+          const status = data.data.discord_status;
+          const avatar = user.avatar
+            ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=80`
+            : `https://cdn.discordapp.com/embed/avatars/${
+                parseInt(user.discriminator) % 5
+              }.png`;
 
-        document.getElementById("discordAvatar").src = avatar;
-        document.getElementById("discordName").textContent = user.username;
-        // Set status dot color and tooltip
-        const statusDot = document.getElementById("discordStatusDot");
-        statusDot.style.background = getStatusColor(status);
-        statusDot.title = getStatusText(status);
-        document.getElementById("avatarLink").href = `https://discord.com/users/${user.id}`;
+          document.getElementById("discordAvatar").src = avatar;
+          document.getElementById("discordName").textContent = user.username;
+          // Set status dot color and tooltip
+          const statusDot = document.getElementById("discordStatusDot");
+          statusDot.style.background = getStatusColor(status);
+          statusDot.title = getStatusText(status);
+          document.getElementById(
+            "avatarLink"
+          ).href = `https://discord.com/users/${user.id}`;
 
-        // Show custom status if available
-        const activities = data.data.activities || [];
-        const customStatus = activities.find(act => act.type === 4 && act.state);
-        document.getElementById("discordCustomStatus").textContent = customStatus ? customStatus.state : "";
-      })
-      .catch(() => {
-        document.getElementById("discordName").textContent = "Unavailable";
-        const statusDot = document.getElementById("discordStatusDot");
-        statusDot.style.background = "#747f8d";
-        statusDot.title = "Offline";
-        document.getElementById("discordCustomStatus").textContent = "";
-      });
-  </script>
-</body>
+          // Show custom status if available
+          const activities = data.data.activities || [];
+          const customStatus = activities.find(
+            (act) => act.type === 4 && act.state
+          );
+          document.getElementById("discordCustomStatus").textContent =
+            customStatus ? customStatus.state : "";
 
+          // Show RPC / game activity if present
+          try {
+            const rpcNameEl = document.getElementById("rpcName");
+            const rpcDetailsEl = document.getElementById("rpcDetails");
+            const rpcIconEl = document.getElementById("rpcIcon");
+
+            // Prefer activities that represent a game/stream/watch (type 0,1,3)
+            const gameActivity = activities.find((a) =>
+              [0, 1, 3].includes(a.type)
+            );
+
+            if (gameActivity) {
+              rpcNameEl.textContent = gameActivity.name || "Playing";
+              // combine details and state if both exist
+              const details = [gameActivity.details, gameActivity.state]
+                .filter(Boolean)
+                .join(" - ");
+              rpcDetailsEl.textContent = details || "";
+
+              // Attempt to resolve an icon for the activity
+              let iconSet = false;
+              if (gameActivity.assets) {
+                const imgKey =
+                  gameActivity.assets.large_image ||
+                  gameActivity.assets.small_image;
+                if (imgKey) {
+                  if (imgKey.startsWith("http")) {
+                    rpcIconEl.src = imgKey;
+                    iconSet = true;
+                  } else if (
+                    gameActivity.application_id &&
+                    !imgKey.includes(":")
+                  ) {
+                    // construct app asset URL when possible
+                    rpcIconEl.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${imgKey}.png`;
+                    iconSet = true;
+                  }
+                }
+              }
+              if (!iconSet) rpcIconEl.src = "game.png";
+            } else {
+              // No game activity
+              document.getElementById("rpcName").textContent = "None";
+              document.getElementById("rpcDetails").textContent =
+                "I'm not currently playing anything";
+              document.getElementById("rpcIcon").src = "game.png";
+            }
+          } catch (e) {
+            // Fail silently but preserve previous default UI
+            console.warn("Error updating RPC panel:", e);
+          }
+        })
+        .catch(() => {
+          document.getElementById("discordName").textContent = "Unavailable";
+          const statusDot = document.getElementById("discordStatusDot");
+          statusDot.style.background = "#747f8d";
+          statusDot.title = "Offline";
+          document.getElementById("discordCustomStatus").textContent = "";
+        });
+    </script>
+  </body>
 </html>
