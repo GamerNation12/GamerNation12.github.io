@@ -55,6 +55,98 @@
         font-size: 12px;
         color: #8b8b8b;
       }
+      /* Enhanced Spotify panel styles (kept inline as requested) */
+      .spotifyPanel {
+        transition: transform 0.18s ease, box-shadow 0.18s ease,
+          background 0.25s ease;
+        border-radius: 12px;
+        padding: 12px 14px;
+        background-color: rgba(15, 15, 18, 0.85);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        width: 100%;
+        max-width: 420px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-sizing: border-box;
+      }
+
+      .spotifyPanel .trackImg {
+        width: 75px;
+        height: 75px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        cursor: pointer;
+        object-fit: cover;
+      }
+
+      .spotifyPanel .meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0; /* for text truncation */
+      }
+
+      .spotifyPanel .trackName {
+        color: #fff;
+        margin: 0;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 1.1;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .spotifyPanel .trackArtist {
+        margin: 4px 0 0 0;
+        font-size: 13px;
+        color: #c7c7c7;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .spotifyPanel .trackAlbum {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #a8a8a8;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* subtle overlay behind text to guarantee readability */
+      .spotifyPanel .meta::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 8px;
+        pointer-events: none;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.06));
+        mix-blend-mode: normal;
+        opacity: 0.9;
+      }
+
+      /* make sure layout collapses nicely on small screens */
+      @media screen and (max-width: 480px) {
+        .spotifyPanel {
+          max-width: 320px;
+          padding: 10px;
+        }
+        .spotifyPanel .trackName {
+          font-size: 14px;
+        }
+      }
     </style>
     <title>status</title>
     <link
@@ -223,11 +315,13 @@
           <a id="trackLink" target="_blank" href=""
             ><img class="trackImg" id="trackImg" src="null"
           /></a>
-          <p class="trackName" id="trackName">Nothing</p>
-          <p class="trackArtist" id="trackArtist">
-            I'm not currently listening anything
-          </p>
-          <p class="trackAlbum" id="trackAlbum"></p>
+          <div class="meta" style="position: relative">
+            <p class="trackName" id="trackName">Nothing</p>
+            <p class="trackArtist" id="trackArtist">
+              I'm not currently listening anything
+            </p>
+            <p class="trackAlbum" id="trackAlbum"></p>
+          </div>
         </div>
         <div class="gap"></div>
         <div id="rpcPanel" class="panel rpcPanel">
