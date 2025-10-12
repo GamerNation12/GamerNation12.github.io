@@ -55,6 +55,98 @@
         font-size: 12px;
         color: #8b8b8b;
       }
+      /* Enhanced Spotify panel styles (kept inline as requested) */
+      .spotifyPanel {
+        transition: transform 0.18s ease, box-shadow 0.18s ease,
+          background 0.25s ease;
+        border-radius: 12px;
+        padding: 12px 14px;
+        background-color: rgba(15, 15, 18, 0.85);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        width: 100%;
+        max-width: 420px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-sizing: border-box;
+      }
+
+      .spotifyPanel .trackImg {
+        width: 75px;
+        height: 75px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        cursor: pointer;
+        object-fit: cover;
+      }
+
+      .spotifyPanel .meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0; /* for text truncation */
+      }
+
+      .spotifyPanel .trackName {
+        color: #fff;
+        margin: 0;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 1.1;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .spotifyPanel .trackArtist {
+        margin: 4px 0 0 0;
+        font-size: 13px;
+        color: #c7c7c7;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .spotifyPanel .trackAlbum {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #a8a8a8;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* stronger overlay behind text for absolute readability */
+      .spotifyPanel .meta::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 8px;
+        pointer-events: none;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.65));
+        mix-blend-mode: normal;
+        .spotifyPanel .meta::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          border-radius: 8px;
+          pointer-events: none;
+          background: linear-gradient(transparent, rgba(0,0,0,0.06));
+          mix-blend-mode: normal;
+          opacity: 0.9;
+        }
     </style>
     <title>status</title>
     <link
@@ -223,11 +315,13 @@
           <a id="trackLink" target="_blank" href=""
             ><img class="trackImg" id="trackImg" src="null"
           /></a>
-          <p class="trackName" id="trackName">Nothing</p>
-          <p class="trackArtist" id="trackArtist">
-            I'm not currently listening anything
-          </p>
-          <p class="trackAlbum" id="trackAlbum"></p>
+          <div class="meta" style="position: relative">
+            <p class="trackName" id="trackName">Nothing</p>
+            <p class="trackArtist" id="trackArtist">
+              I'm not currently listening anything
+            </p>
+            <p class="trackAlbum" id="trackAlbum"></p>
+          </div>
         </div>
         <div class="gap"></div>
         <div id="rpcPanel" class="panel rpcPanel">
@@ -285,74 +379,6 @@
                 "aria-label",
                 `Open ${trackName}${albumLabel} on Spotify`
               );
-
-              // Improve contrast/readability by sampling the album art and adjusting colors
-              try {
-                if (spotify.album_art_url) {
-                  const img = new Image();
-                  img.crossOrigin = "Anonymous";
-                  img.src = spotify.album_art_url;
-                  img.onload = function () {
-                    try {
-                      const canvas = document.createElement("canvas");
-                      const ctx = canvas.getContext("2d", {
-                        willReadFrequently: true,
-                      });
-                      canvas.width = img.width;
-                      canvas.height = img.height;
-                      ctx.drawImage(img, 0, 0);
-                      const cx = Math.floor(img.width / 2);
-                      const cy = Math.floor(img.height / 2);
-                      const center = ctx.getImageData(cx, cy, 1, 1).data;
-                      const left = ctx.getImageData(0, cy, 1, 1).data;
-                      const right = ctx.getImageData(
-                        img.width - 1,
-                        cy,
-                        1,
-                        1
-                      ).data;
-
-                      // compute luminance for center pixel
-                      const r = center[0],
-                        g = center[1],
-                        b = center[2];
-                      const luminance =
-                        (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-
-                      // choose text colors based on luminance
-                      const primaryText =
-                        luminance < 0.6 ? "#ffffff" : "#000000";
-                      const secondaryText =
-                        luminance < 0.6
-                          ? "rgba(255,255,255,0.8)"
-                          : "rgba(0,0,0,0.65)";
-
-                      const trackNameEl = document.getElementById("trackName");
-                      const trackArtistEl =
-                        document.getElementById("trackArtist");
-                      if (trackNameEl) trackNameEl.style.color = primaryText;
-                      if (trackArtistEl)
-                        trackArtistEl.style.color = secondaryText;
-                      if (albumEl) albumEl.style.color = secondaryText;
-
-                      // stronger, more opaque gradient using sampled edge colors to improve contrast
-                      spotifyPanel.style.background = `linear-gradient(to right, rgba(${left[0]}, ${left[1]}, ${left[2]}, 0.7), rgba(${right[0]}, ${right[1]}, ${right[2]}, 0.7))`;
-                    } catch (e) {
-                      // ignore canvas or CORS errors
-                    }
-                  };
-                } else {
-                  // no album art - reset to defaults
-                  spotifyPanel.style.background = "";
-                  const trackNameEl = document.getElementById("trackName");
-                  const trackArtistEl = document.getElementById("trackArtist");
-                  if (trackNameEl) trackNameEl.style.color = "#ffffff";
-                  if (trackArtistEl) trackArtistEl.style.color = "#747474";
-                  if (albumEl) albumEl.style.color = "#8b8b8b";
-                }
-              } catch (e) {
-                // ignore
-              }
             } else {
               albumEl.textContent = "";
               albumEl.style.display = "none";
@@ -362,13 +388,6 @@
                   document.getElementById("trackName").textContent || "song"
                 } on Spotify`
               );
-              // reset colors to defaults when not listening
-              spotifyPanel.style.background = "";
-              const trackNameEl = document.getElementById("trackName");
-              const trackArtistEl = document.getElementById("trackArtist");
-              if (trackNameEl) trackNameEl.style.color = "#ffffff";
-              if (trackArtistEl) trackArtistEl.style.color = "#747474";
-              if (albumEl) albumEl.style.color = "#8b8b8b";
             }
           } catch (e) {
             // ignore errors; don't break page
