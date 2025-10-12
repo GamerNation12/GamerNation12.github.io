@@ -180,49 +180,6 @@
 
     <script src="js/script.js"></script>
     <script>
-      // Make only the cover clickable and point it to a fixed Spotify profile URL
-      (function () {
-        const PROFILE_URL = "https://open.spotify.com/user/qjopfnl6fsvtpqqs1abznvcys?si=79f9d28a42494658";
-
-        function applyLinkBehavior(linkEl) {
-          if (!linkEl) return;
-          const href = linkEl.getAttribute('href');
-          const valid = href && href.trim() !== '' && href.trim().toLowerCase() !== 'null';
-          if (valid) {
-            // override song link to point to profile instead
-            linkEl.setAttribute('href', PROFILE_URL);
-            linkEl.setAttribute('target', '_blank');
-            linkEl.setAttribute('rel', 'noopener noreferrer');
-            linkEl.style.cursor = 'pointer';
-          } else {
-            // ensure not clickable when no spotify data
-            linkEl.removeAttribute('href');
-            linkEl.removeAttribute('target');
-            linkEl.removeAttribute('rel');
-            linkEl.style.cursor = 'default';
-          }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-          const linkEl = document.getElementById('trackLink');
-          if (!linkEl) return;
-
-          // Apply once now
-          applyLinkBehavior(linkEl);
-
-          // Override whenever other scripts change href (e.g., js/script.js)
-          const mo = new MutationObserver((mutations) => {
-            for (const m of mutations) {
-              if (m.type === 'attributes' && m.attributeName === 'href') {
-                applyLinkBehavior(linkEl);
-              }
-            }
-          });
-          mo.observe(linkEl, { attributes: true, attributeFilter: ['href'] });
-        });
-      })();
-    </script>
-    <script>
       const gradients = [
         "#004ef7, #0084ff",
         "#ff8400, #ffc900",
