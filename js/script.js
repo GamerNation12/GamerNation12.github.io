@@ -205,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // fallback when not listening
         trackNameEl.textContent = "Nothing";
         trackArtistEl.textContent = "I'm not currently listening anything";
+        if (trackAlbumEl) trackAlbumEl.textContent = "";
         if (trackImgEl) trackImgEl.src = "null";
         const trackLinkEl = document.getElementById("trackLink");
         if (trackLinkEl) {

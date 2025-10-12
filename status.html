@@ -49,6 +49,12 @@
           rgba(0, 0, 0, 0.35) 0 8px 22px;
         border-color: rgba(29, 185, 84, 0.06);
       }
+      /* Album line styling kept inline so album behavior is self-contained */
+      .trackAlbum {
+        margin-top: -6px;
+        font-size: 12px;
+        color: #8b8b8b;
+      }
     </style>
     <title>status</title>
     <link
@@ -221,6 +227,7 @@
           <p class="trackArtist" id="trackArtist">
             I'm not currently listening anything
           </p>
+          <p class="trackAlbum" id="trackAlbum"></p>
         </div>
         <div class="gap"></div>
         <div id="rpcPanel" class="panel rpcPanel">
@@ -245,6 +252,58 @@
         gradients[Math.floor(Math.random() * gradients.length)];
       const nameNeksio = document.getElementById("nameNeksio");
       nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
+    </script>
+    <script>
+      // Inline album updater: fetch Lanyard separately so album logic stays in this file
+      (function () {
+        const DISCORD_USER_ID = "759433582107426816";
+        const LANYARD_URL = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
+
+        async function updateAlbum() {
+          try {
+            const res = await fetch(LANYARD_URL);
+            const json = await res.json();
+            if (!json.success) return;
+            const spotify = json.data.spotify;
+            const albumEl = document.getElementById("trackAlbum");
+            const spotifyPanel = document.querySelector(".spotifyPanel");
+            if (!albumEl || !spotifyPanel) return;
+
+            if (
+              spotify &&
+              (spotify.album || spotify.album_art_url || spotify.song)
+            ) {
+              albumEl.textContent = spotify.album || "";
+              albumEl.style.display = spotify.album ? "block" : "none";
+              // update aria-label to include album when available
+              const trackName =
+                spotify.song ||
+                document.getElementById("trackName").textContent ||
+                "song";
+              const albumLabel = spotify.album ? ` from ${spotify.album}` : "";
+              spotifyPanel.setAttribute(
+                "aria-label",
+                `Open ${trackName}${albumLabel} on Spotify`
+              );
+            } else {
+              albumEl.textContent = "";
+              albumEl.style.display = "none";
+              spotifyPanel.setAttribute(
+                "aria-label",
+                `Open ${
+                  document.getElementById("trackName").textContent || "song"
+                } on Spotify`
+              );
+            }
+          } catch (e) {
+            // ignore errors; don't break page
+          }
+        }
+
+        // initial run and periodic refresh to keep in sync with the external script
+        updateAlbum();
+        setInterval(updateAlbum, 15000);
+      })();
     </script>
     <script>
       // Make the whole spotify panel clickable (defined in this file per request)
