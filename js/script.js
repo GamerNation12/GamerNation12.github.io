@@ -170,30 +170,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.open(url, "_blank", "noopener,noreferrer");
               };
 
-              if (url) {
-                spotifyPanel.tabIndex = 0;
-                spotifyPanel.setAttribute("role", "link");
-                spotifyPanel.setAttribute(
-                  "aria-label",
-                  `Open ${data.spotify.song || "song"} on Spotify`
-                );
-                spotifyPanel.style.cursor = "pointer";
-                // use direct assignment to avoid stacking listeners on repeated updates
-                spotifyPanel.onclick = openUrl;
-                spotifyPanel.onkeydown = (e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    openUrl(e);
-                  }
-                };
-              } else {
-                spotifyPanel.removeAttribute("tabindex");
-                spotifyPanel.removeAttribute("role");
-                spotifyPanel.removeAttribute("aria-label");
-                spotifyPanel.style.cursor = "default";
-                spotifyPanel.onclick = null;
-                spotifyPanel.onkeydown = null;
-              }
+              // Per user request, do NOT make spotifyPanel clickable — leave it non-interactive
+              spotifyPanel.removeAttribute("tabindex");
+              spotifyPanel.removeAttribute("role");
+              // keep aria-label minimal (set elsewhere if needed)
+              spotifyPanel.style.cursor = "default";
+              spotifyPanel.onclick = null;
+              spotifyPanel.onkeydown = null;
             };
 
             makePanelInteractive();

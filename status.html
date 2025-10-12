@@ -309,6 +309,8 @@
       // Make the whole spotify panel clickable (defined in this file per request)
       (function () {
         function setPanelInteractive(enabled, panel, linkEl, songTitle) {
+          // Force disabled: never make the spotify panel clickable per user request
+          enabled = false;
           if (!panel) return;
           if (enabled) {
             panel.tabIndex = 0;
