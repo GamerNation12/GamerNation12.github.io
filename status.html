@@ -173,10 +173,7 @@
         <div class="gap"></div>
         <div class="panel spotifyPanel">
           <i class="spotify fa-brands fa-spotify"></i>
-          <a
-            id="trackLink"
-            target="_blank"
-            href=""
+          <a id="trackLink" target="_blank" href=""
             ><img class="trackImg" id="trackImg" src="null"
           /></a>
           <p class="trackName" id="trackName">Nothing</p>
@@ -207,6 +204,80 @@
         gradients[Math.floor(Math.random() * gradients.length)];
       const nameNeksio = document.getElementById("nameNeksio");
       nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
+    </script>
+    <script>
+      // Make the whole spotify panel clickable (defined in this file per request)
+      (function () {
+        function setPanelInteractive(enabled, panel, linkEl, songTitle) {
+          if (!panel) return;
+          if (enabled) {
+            panel.tabIndex = 0;
+            panel.setAttribute("role", "link");
+            panel.setAttribute(
+              "aria-label",
+              songTitle
+                ? `Open ${songTitle} on Spotify`
+                : "Open track on Spotify"
+            );
+            panel.style.cursor = "pointer";
+            panel.onclick = function (ev) {
+              // if click was directly on the anchor, let default happen
+              if (
+                ev.target &&
+                ev.target.closest &&
+                ev.target.closest("#trackLink")
+              )
+                return;
+              try {
+                const href = linkEl && linkEl.getAttribute("href");
+                if (href) window.open(href, "_blank", "noopener,noreferrer");
+              } catch (e) {}
+            };
+            panel.onkeydown = function (ev) {
+              if (ev.key === "Enter" || ev.key === " ") {
+                ev.preventDefault();
+                try {
+                  const href = linkEl && linkEl.getAttribute("href");
+                  if (href) window.open(href, "_blank", "noopener,noreferrer");
+                } catch (e) {}
+              }
+            };
+          } else {
+            panel.removeAttribute("tabindex");
+            panel.removeAttribute("role");
+            panel.removeAttribute("aria-label");
+            panel.style.cursor = "default";
+            panel.onclick = null;
+            panel.onkeydown = null;
+          }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const panel = document.querySelector(".spotifyPanel");
+          const linkEl = document.getElementById("trackLink");
+          const trackNameEl = document.getElementById("trackName");
+
+          if (!panel || !linkEl) return;
+
+          // initial enable/disable based on current href
+          const checkAndApply = () => {
+            const href = linkEl.getAttribute("href");
+            const valid =
+              href &&
+              href.trim() !== "" &&
+              href.trim().toLowerCase() !== "null";
+            const songTitle = trackNameEl ? trackNameEl.textContent : "";
+            setPanelInteractive(!!valid, panel, linkEl, songTitle);
+          };
+
+          // Observe changes to href attribute so when other script sets it we react
+          const mo = new MutationObserver(() => checkAndApply());
+          mo.observe(linkEl, { attributes: true, attributeFilter: ["href"] });
+
+          // Also run once now
+          checkAndApply();
+        });
+      })();
     </script>
     <script>
       // Lanyard API integration
