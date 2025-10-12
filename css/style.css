@@ -1,3 +1,25 @@
+
+html {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, "Segoe UI",
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+@font-face {
+  font-family: "AGRevueCyr Roman Medium";
+  src: url("../images/bg.jpeg") format("truetype");
+}
+p.mal {
+  font-family: "AGRevueCyr Roman Medium", Verdana, Tahoma;
+}
+
 body {
   background:
            /* top, transparent black, faked with gradient */ linear-gradient(
@@ -98,34 +120,26 @@ body {
   transition: 0.3s;
   animation-name: init;
   animation-duration: 1s;
-  border-radius: 16px;
-  background: #23272a;
-  padding: 1.2em 1.5em;
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1.2em;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto 1.2em auto;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #0f0f12;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 8px;
+  border: 1.5px solid hsla(0, 0%, 76%, 0.02);
+  width: 400px;
+  height: 75px;
 }
 
 .discordAvatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 3px solid #5865f2;
-  object-fit: cover;
-  background: #23272a;
-  box-shadow: 0 2px 12px #0004;
+  margin-right: 15px;
+  float: left;
+  border-radius: 10px;
+  width: 75px;
+  height: 75px;
 }
 
 .discordName {
   color: #fff;
-  font-weight: bold;
-  font-size: 1.2em;
+  margin-top: 5px;
 }
 
 .discordMotd {
@@ -338,54 +352,4 @@ a:link {
   -webkit-box-shadow: 1px 1px 3px #333;
   -moz-box-shadow: 1px 1px 3px #333;
   box-shadow: 1px 1px 3px #333;
-}
-
-#container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.clockContainer {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.clockTimezone {
-  font-size: 1.2em;
-  color: #fff;
-}
-
-.clock {
-  font-size: 2em;
-  color: #eee;
-}
-
-.social-icons {
-  margin-top: 10px;
-}
-
-.social-icons li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-.social-icons a {
-  color: #fff;
-  font-size: 1.5em;
-}
-
-.discordCustomStatus {
-  color: #b9bbbe;
-  font-size: 1em;
-  margin-top: 0.2em;
-  max-width: 220px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
