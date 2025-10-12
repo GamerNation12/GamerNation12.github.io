@@ -306,6 +306,31 @@
       })();
     </script>
     <script>
+      // Force cover link to specific Spotify profile and protect against overwrites
+      (function () {
+        const PROFILE_URL =
+          "https://open.spotify.com/user/qjopfnl6fsvtpqqs1abznvcys?si=79f9d28a42494658";
+        const link = document.getElementById("trackLink");
+        if (!link) return;
+        function apply() {
+          link.href = PROFILE_URL;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.style.cursor = "pointer";
+        }
+        apply();
+        // Observe attribute changes and restore if something else changes the href
+        const mo = new MutationObserver((mutations) => {
+          for (const m of mutations) {
+            if (m.type === "attributes" && m.attributeName === "href") {
+              if (link.getAttribute("href") !== PROFILE_URL) apply();
+            }
+          }
+        });
+        mo.observe(link, { attributes: true, attributeFilter: ["href"] });
+      })();
+    </script>
+    <script>
       // Make the whole spotify panel clickable (defined in this file per request)
       (function () {
         function setPanelInteractive(enabled, panel, linkEl, songTitle) {
