@@ -11,15 +11,13 @@ html {
     "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-
 @font-face {
-    font-family: "AGRevueCyr Roman Medium";
-    src: url("../images/bg.jpeg") format("truetype");
+  font-family: "AGRevueCyr Roman Medium";
+  src: url("../images/bg.jpeg") format("truetype");
 }
-p.mal { 
-    font-family: "AGRevueCyr Roman Medium", Verdana, Tahoma;
+p.mal {
+  font-family: "AGRevueCyr Roman Medium", Verdana, Tahoma;
 }
-
 
 body {
   background:
@@ -27,7 +25,7 @@ body {
       rgba(10, 10, 12, 0.9),
       rgba(10, 10, 12, 0.9)
     ),
-   url("../images/bg.jpg");
+    url("../images/bg.jpg");
   background-size: cover;
   background-attachment: fixed;
   /* background-position: bottom right, left, right; */
@@ -52,6 +50,26 @@ body {
   height: 75px;
 }
 
+/* General panel hover/focus/active effects (applies to discordPanel, spotifyPanel, rpcPanel) */
+.panel {
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+.panel:hover,
+.panel:focus-within,
+.panel[tabindex]:focus {
+  transform: translateY(-6px);
+  box-shadow: rgba(0, 0, 0, 0.55) 0 8px 22px;
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Make panels clearly focusable for keyboard users */
+.panel:focus-within,
+.panel[tabindex]:focus {
+  outline: 3px solid rgba(100, 150, 255, 0.12);
+  outline-offset: 4px;
+}
+
 @keyframes init {
   0% {
     opacity: 0;
@@ -71,6 +89,19 @@ body {
   width: 75px;
   height: 75px;
   cursor: pointer;
+}
+
+/* Slight image lift/scale on panel hover */
+.panel:hover .trackImg,
+.panel:focus-within .trackImg {
+  transform: scale(1.06);
+}
+
+.panel:hover .discordAvatar,
+.panel:focus-within .discordAvatar,
+.panel:hover .rpcIcon,
+.panel:focus-within .rpcIcon {
+  transform: scale(1.04);
 }
 
 .trackName {
@@ -141,8 +172,8 @@ body {
 }
 
 .discordBG {
-  background-color: #7289DA;
- }
+  background-color: #7289da;
+}
 
 .rpcIcon {
   margin-right: 15px;
@@ -175,9 +206,6 @@ body {
 .discordTXT {
   color: #d9d9d9;
 }
-
-
-
 
 .center {
   top: 50%;
@@ -242,7 +270,6 @@ body {
   /* color: #ffc107; */
 }
 
-
 .inviteURL a {
   position: absolute;
   color: #f2f2f2;
@@ -294,7 +321,8 @@ img {
   padding-right: 10px;
   padding-left: 10px;
 }
-.social-icons .fa-brands, .social-icons .mal {
+.social-icons .fa-brands,
+.social-icons .mal {
   font-size: 1.5em;
   line-height: 0px;
   text-align: center;
@@ -311,10 +339,12 @@ img {
   font-size: large;
 }
 
-a:link { text-decoration: none; }
+a:link {
+  text-decoration: none;
+}
 
 .social-icons .fa-brands:hover,
-.social-icons .fa-brands:active, 
+.social-icons .fa-brands:active,
 .social-icons .mal:hover,
 .social-icons .mal:active {
   color: #d8d8d8;
