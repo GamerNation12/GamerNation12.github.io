@@ -101,6 +101,27 @@ document.addEventListener("DOMContentLoaded", () => {
         trackNameEl &&
         trackArtistEl
       ) {
+        // Ensure track link element exists and set href to Spotify track URL
+        const trackLinkEl = document.getElementById("trackLink");
+        if (trackLinkEl) {
+          // lanyard provides a spotify.track_id which can be used to build the spotify URL
+          // fallback to direct url if provided on data.spotify.track_url
+          const spotifyUrl =
+            data.spotify.track_url ||
+            (data.spotify.track_id
+              ? `https://open.spotify.com/track/${data.spotify.track_id}`
+              : "");
+          trackLinkEl.href = spotifyUrl || "";
+          // if there's no URL, remove clickability
+          if (!spotifyUrl) {
+            trackLinkEl.removeAttribute("target");
+            trackLinkEl.style.cursor = "default";
+          } else {
+            trackLinkEl.target = "_blank";
+            trackLinkEl.rel = "noopener noreferrer";
+            trackLinkEl.style.cursor = "pointer";
+          }
+        }
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = data.spotify.album_art_url;
@@ -135,6 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
         trackNameEl.textContent = "Nothing";
         trackArtistEl.textContent = "I'm not currently listening anything";
         if (trackImgEl) trackImgEl.src = "null";
+        const trackLinkEl = document.getElementById("trackLink");
+        if (trackLinkEl) {
+          trackLinkEl.href = "";
+          trackLinkEl.removeAttribute("target");
+          trackLinkEl.style.cursor = "default";
+        }
       }
 
       // RPC / Game activity
