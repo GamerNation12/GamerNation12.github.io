@@ -37,63 +37,7 @@
       .panel:focus-within .rpcIcon {
         transform: scale(1.04);
       }
-      /* Spotify-specific active indicator (green glow/outline when interactive) */
-      .spotifyPanel[role="link"],
-      .spotifyPanel[tabindex],
-      .spotifyPanel[role="link"]:hover,
-      .spotifyPanel[tabindex]:hover,
-      .spotifyPanel[role="link"]:focus,
-      .spotifyPanel[tabindex]:focus {
-        outline: 3px solid rgba(29, 185, 84, 0.12);
-        box-shadow: 0 8px 30px rgba(29, 185, 84, 0.08),
-          rgba(0, 0, 0, 0.35) 0 8px 22px;
-        border-color: rgba(29, 185, 84, 0.06);
-      }
     </style>
-    <title>status</title>
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80"
-    />
-    <meta name="description" content="loerex" />
-    <meta name="keywords" content="loerex" />
-    <meta content="minecraft gamer nations website" property="og:title" />
-    <meta content="find out about me!" property="og:description" />
-    <meta content="find out about me!" property="og:url" />
-    <meta name="theme-color" content="#ff8400" />
-  </head>
-
-  <body>
-    <div id="container">
-      <div class="clockContainer">
-        <div class="clockTimezone"></div>
-        <div class="clock"></div>
-      </div>
-      <div class="center">
-        <p class="nameMain">
-          <span id="nameNeksio" class="nameNeksio"></span>
-        </p>
-        <div class="gap"></div>
-        <div
-          class="panel discordPanel"
-          style="
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 1.2em;
-            background: #23272a;
-            padding: 1.2em 1.5em;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto 1.2em auto;
-            box-sizing: border-box;
-          "
-        >
-          <!-- Avatar + status dot -->
-          <div style="position: relative; min-width: 80px">
             <a
               id="avatarLink"
               target="_blank"
@@ -236,6 +180,49 @@
 
     <script src="js/script.js"></script>
     <script>
+      // Make only the cover clickable and point it to a fixed Spotify profile URL
+      (function () {
+        const PROFILE_URL = "https://open.spotify.com/user/qjopfnl6fsvtpqqs1abznvcys?si=79f9d28a42494658";
+
+        function applyLinkBehavior(linkEl) {
+          if (!linkEl) return;
+          const href = linkEl.getAttribute('href');
+          const valid = href && href.trim() !== '' && href.trim().toLowerCase() !== 'null';
+          if (valid) {
+            // override song link to point to profile instead
+            linkEl.setAttribute('href', PROFILE_URL);
+            linkEl.setAttribute('target', '_blank');
+            linkEl.setAttribute('rel', 'noopener noreferrer');
+            linkEl.style.cursor = 'pointer';
+          } else {
+            // ensure not clickable when no spotify data
+            linkEl.removeAttribute('href');
+            linkEl.removeAttribute('target');
+            linkEl.removeAttribute('rel');
+            linkEl.style.cursor = 'default';
+          }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+          const linkEl = document.getElementById('trackLink');
+          if (!linkEl) return;
+
+          // Apply once now
+          applyLinkBehavior(linkEl);
+
+          // Override whenever other scripts change href (e.g., js/script.js)
+          const mo = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+              if (m.type === 'attributes' && m.attributeName === 'href') {
+                applyLinkBehavior(linkEl);
+              }
+            }
+          });
+          mo.observe(linkEl, { attributes: true, attributeFilter: ['href'] });
+        });
+      })();
+    </script>
+    <script>
       const gradients = [
         "#004ef7, #0084ff",
         "#ff8400, #ffc900",
@@ -247,78 +234,6 @@
       nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
     </script>
     <script>
-      // Make the whole spotify panel clickable (defined in this file per request)
-      (function () {
-        function setPanelInteractive(enabled, panel, linkEl, songTitle) {
-          if (!panel) return;
-          if (enabled) {
-            panel.tabIndex = 0;
-            panel.setAttribute("role", "link");
-            panel.setAttribute(
-              "aria-label",
-              songTitle
-                ? `Open ${songTitle} on Spotify`
-                : "Open track on Spotify"
-            );
-            panel.style.cursor = "pointer";
-            panel.onclick = function (ev) {
-              // if click was directly on the anchor, let default happen
-              if (
-                ev.target &&
-                ev.target.closest &&
-                ev.target.closest("#trackLink")
-              )
-                return;
-              try {
-                const href = linkEl && linkEl.getAttribute("href");
-                if (href) window.open(href, "_blank", "noopener,noreferrer");
-              } catch (e) {}
-            };
-            panel.onkeydown = function (ev) {
-              if (ev.key === "Enter" || ev.key === " ") {
-                ev.preventDefault();
-                try {
-                  const href = linkEl && linkEl.getAttribute("href");
-                  if (href) window.open(href, "_blank", "noopener,noreferrer");
-                } catch (e) {}
-              }
-            };
-          } else {
-            panel.removeAttribute("tabindex");
-            panel.removeAttribute("role");
-            panel.removeAttribute("aria-label");
-            panel.style.cursor = "default";
-            panel.onclick = null;
-            panel.onkeydown = null;
-          }
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-          const panel = document.querySelector(".spotifyPanel");
-          const linkEl = document.getElementById("trackLink");
-          const trackNameEl = document.getElementById("trackName");
-
-          if (!panel || !linkEl) return;
-
-          // initial enable/disable based on current href
-          const checkAndApply = () => {
-            const href = linkEl.getAttribute("href");
-            const valid =
-              href &&
-              href.trim() !== "" &&
-              href.trim().toLowerCase() !== "null";
-            const songTitle = trackNameEl ? trackNameEl.textContent : "";
-            setPanelInteractive(!!valid, panel, linkEl, songTitle);
-          };
-
-          // Observe changes to href attribute so when other script sets it we react
-          const mo = new MutationObserver(() => checkAndApply());
-          mo.observe(linkEl, { attributes: true, attributeFilter: ["href"] });
-
-          // Also run once now
-          checkAndApply();
-        });
-      })();
     </script>
     <script>
       // Lanyard API integration
