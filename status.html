@@ -281,9 +281,9 @@
               (spotify.album || spotify.album_art_url || spotify.song)
             ) {
               trackByEl.textContent = `By: ${spotify.artist}` || "";
-              trackByEl.style.display = spotify.artist ? "block" : "none";
-              albumEl.textContent = spotify.album || "";
-              albumEl.style.display = spotify.album ? "block" : "none";
+              trackByEl.style.display = "block";
+              albumEl.textContent = `Album: ${spotify.album}` || "";
+              albumEl.style.display = "block";
               // update aria-label to include album when available
               const trackName =
                 spotify.song ||
@@ -343,6 +343,7 @@
                       if (trackArtistEl)
                         trackArtistEl.style.color = secondaryText;
                       if (albumEl) albumEl.style.color = secondaryText;
+                      if (trackByEl) trackByEl.style.color = secondaryText;
 
                       // stronger, more opaque gradient using sampled edge colors to improve contrast
                       spotifyPanel.style.background = `linear-gradient(to right, rgba(${left[0]}, ${left[1]}, ${left[2]}, 0.7), rgba(${right[0]}, ${right[1]}, ${right[2]}, 0.7))`;
