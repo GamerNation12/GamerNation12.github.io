@@ -55,6 +55,12 @@
         font-size: 12px;
         color: #8b8b8b;
       }
+
+      .trackBy {
+        margin-top: -6px;
+        font-size: 12px;
+        color: #8b8b8b;
+      }
     </style>
     <title>status</title>
     <link
@@ -227,6 +233,7 @@
           <p class="trackArtist" id="trackArtist">
             I'm not currently listening anything
           </p>
+          <p class="trackBy" id="trackBy"></p>
           <p class="trackAlbum" id="trackAlbum"></p>
         </div>
         <div class="gap"></div>
@@ -273,6 +280,8 @@
               spotify &&
               (spotify.album || spotify.album_art_url || spotify.song)
             ) {
+              trackByEl.textContent = `By: ${spotify.artist}` || "";
+              trackByEl.style.display = spotify.artist ? "block" : "none";
               albumEl.textContent = spotify.album || "";
               albumEl.style.display = spotify.album ? "block" : "none";
               // update aria-label to include album when available
@@ -355,7 +364,9 @@
               }
             } else {
               albumEl.textContent = "";
+              trackByEl.textContent = "";
               albumEl.style.display = "none";
+              trackByEl.style.display = "none";
               spotifyPanel.setAttribute(
                 "aria-label",
                 `Open ${
