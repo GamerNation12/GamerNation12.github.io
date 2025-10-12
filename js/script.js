@@ -151,6 +151,56 @@ document.addEventListener("DOMContentLoaded", () => {
         trackNameEl.textContent = data.spotify.song || "";
         trackArtistEl.textContent = data.spotify.artist || "";
         trackImgEl.src = data.spotify.album_art_url || "";
+        // Make the whole spotify panel clickable and keyboard accessible
+        try {
+          if (spotifyPanel) {
+            const makePanelInteractive = () => {
+              const url = (trackLinkEl && trackLinkEl.href) || "";
+              // helper to open safely
+              const openUrl = (ev) => {
+                if (!url) return;
+                // if the click was on the inner anchor, let it handle navigation
+                if (
+                  ev &&
+                  ev.target &&
+                  ev.target.closest &&
+                  ev.target.closest("#trackLink")
+                )
+                  return;
+                window.open(url, "_blank", "noopener,noreferrer");
+              };
+
+              if (url) {
+                spotifyPanel.tabIndex = 0;
+                spotifyPanel.setAttribute("role", "link");
+                spotifyPanel.setAttribute(
+                  "aria-label",
+                  `Open ${data.spotify.song || "song"} on Spotify`
+                );
+                spotifyPanel.style.cursor = "pointer";
+                // use direct assignment to avoid stacking listeners on repeated updates
+                spotifyPanel.onclick = openUrl;
+                spotifyPanel.onkeydown = (e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openUrl(e);
+                  }
+                };
+              } else {
+                spotifyPanel.removeAttribute("tabindex");
+                spotifyPanel.removeAttribute("role");
+                spotifyPanel.removeAttribute("aria-label");
+                spotifyPanel.style.cursor = "default";
+                spotifyPanel.onclick = null;
+                spotifyPanel.onkeydown = null;
+              }
+            };
+
+            makePanelInteractive();
+          }
+        } catch (e) {
+          // non-fatal; leave panel as-is
+        }
       } else if (trackNameEl && trackArtistEl) {
         // fallback when not listening
         trackNameEl.textContent = "Nothing";
