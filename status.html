@@ -52,102 +52,7 @@
     transition: transform 0.3s ease-in-out;
   }
 
-  .social-icons li a:hover i {
-    animation: bounce 1s ease infinite;
-  }
-
-  @keyframes bounce {
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-      transform: translateY(0);
-    }
-
-    40% {
-      transform: translateY(-5px);
-    }
-
-    60% {
-      transform: translateY(-3px);
-    }
-  }
-
-  /* Inline panel hover/focus styles (duplicate of css/style.css for convenience) */
-  .panel {
-    transition: transform 0.18s ease, box-shadow 0.18s ease,
-      border-color 0.18s ease;
-  }
-
-  .panel:hover,
-  .panel:focus-within,
-  .panel[tabindex]:focus {
-    transform: translateY(-6px);
-    box-shadow: rgba(0, 0, 0, 0.55) 0 8px 22px;
-    border-color: rgba(255, 255, 255, 0.04);
-  }
-
-  .panel:focus-within,
-  .panel[tabindex]:focus {
-    outline: 3px solid rgba(100, 150, 255, 0.12);
-    outline-offset: 4px;
-  }
-
-  .panel:hover .trackImg,
-  .panel:focus-within .trackImg {
-    transform: scale(1.06);
-  }
-
-  .panel:hover .discordAvatar,
-  .panel:focus-within .discordAvatar,
-  .panel:hover .rpcIcon,
-  .panel:focus-within .rpcIcon {
-    transform: scale(1.04);
-  }
-
-  /* Spotify-specific active indicator (green glow/outline when interactive) */
-  .spotifyPanel[role="link"],
-  .spotifyPanel[tabindex],
-  .spotifyPanel[role="link":hover,
-  .spotifyPanel[tabindex:hover,
-  .spotifyPanel[role="link"]:focus,
-  .spotifyPanel[tabindex]:focus {
-    outline: 3px solid rgba(29, 185, 84, 0.12);
-    box-shadow: 0 8px 30px rgba(29, 185, 84, 0.08),
-      rgba(0, 0, 0, 0.35) 0 8px 22px;
-    border-color: rgba(29, 185, 84, 0.06);
-  }
-
-  /* Album line styling kept inline so album behavior is self-contained */
-  .trackAlbum {
-    margin-top: 0px;
-    font-size: 12px;
-    color: #8b8b8b;
-  }
-
-  .trackBy {
-    margin-top: 0px;
-    font-size: 12px;
-    color: #8b8b8b;
-    display: none
-  }
-
-  /* Default text color for dark background */
-  .spotifyPanel,
-  .spotifyPanel * {
-    color: white;
-  }
-
-  /* Media query for light theme */
-  @media (prefers-color-scheme: light) {
-
-    .spotifyPanel,
-    .spotifyPanel * {
-      color: black;
-    }
-  }
-</style>
+    </style>
     <title>status</title>
     <link rel="icon" type="image/x-icon"
         href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80" />
@@ -160,6 +65,17 @@
 </head>
 
 <body>
+    <nav style="
+        background-color: #333;
+        padding: 10px;
+        color: white;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      ">
+        <a href="index.html" style="color: white; text-decoration: none">Home</a>
+        <a href="status.html" style="color: white; text-decoration: none">Status</a>
+    </nav>
     <div id="container">
         <div class="clockContainer">
             <div class="clockTimezone"></div>
@@ -171,83 +87,84 @@
             </p>
             <div class="gap"></div>
             <div class="panel discordPanel" style="
-                    position: relative;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    gap: 1.2em;
-                    background: #23272a;
-                    padding: 1.2em 1.5em;
-                    border-radius: 16px;
-                    width: 100%;
-                    max-width: 400px;
-                    margin: 0 auto 1.2em auto;
-                    box-sizing: border-box;
-                ">
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.2em;
+            background: #23272a;
+            padding: 1.2em 1.5em;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1.2em auto;
+            box-sizing: border-box;
+          ">
                 <!-- Avatar + status dot -->
                 <div style="position: relative; min-width: 80px">
                     <a id="avatarLink" target="_blank"
                         href="https://discord.com/users/759433582107426816">
                         <img class="discordAvatar" id="discordAvatar"
                             src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" style="
-                                width: 80px;
-                                height: 80px;
-                                border-radius: 50%;
-                                border: 3px solid #5865f2;
-                                object-fit: cover;
-                                background: #23272a;
-                                box-shadow: 0 2px 12px #0004;
-                            " />
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                border: 3px solid #5865f2;
+                object-fit: cover;
+                background: #23272a;
+                box-shadow: 0 2px 12px #0004;
+              " />
                         <!-- Status indicator with tooltip -->
                         <span id="discordStatusDot" style="
-                                position: absolute;
-                                bottom: 10px;
-                                right: 10px;
-                                width: 18px;
-                                height: 18px;
-                                background: #747f8d;
-                                border: 3px solid #23272a;
-                                border-radius: 50%;
-                                display: block;
-                                z-index: 2;
-                                cursor: pointer;
-                            " title=""></span>
+                  position: absolute;
+                  bottom: 10px;
+                  right: 10px;
+                  width: 18px;
+                  height: 18px;
+                  background: #747f8d;
+                  border: 3px solid #23272a;
+                  border-radius: 50%;
+                  display: block;
+                  z-index: 2;
+                  cursor: pointer;
+                " title=""></span>
                     </a>
                 </div>
                 <!-- Username, Discord icon, custom status, and social icons -->
                 <div style="
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-start;
-                        justify-content: center;
-                        flex: 1;
-                    ">
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              justify-content: center;
+              flex: 1;
+            ">
                     <div style="display: flex; align-items: center; gap: 0.5em">
                         <i class="fa-brands fa-discord" style="color: #5865f2; font-size: 1.4em"></i>
                         <span class="discordName" id="discordName"
                             style="color: #fff; font-weight: bold; font-size: 1.2em">Loading...</span>
                     </div>
                     <span id="discordCustomStatus" style="
-                            color: #b9bbbe;
-                            font-size: 1em;
-                            margin-top: 0.2em;
-                            max-width: 220px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        "></span>
+                color: #b9bbbe;
+                font-size: 1em;
+                margin-top: 0.2em;
+                max-width: 220px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "></span>
                     <!-- Social icons under username -->
                     <ul class="social-icons list-unstyled list-inline" style="
-                            display: flex;
-                            gap: 1em;
-                            align-items: center;
-                            justify-content: flex-start;
-                            margin: 0.7em 0 0 0;
-                            padding: 0;
-                        ">
+                  display: flex;
+                  gap: 1em;
+                  align-items: center;
+                  justify-content: flex-start;
+                  margin: 0.7em 0 0 0;
+                  padding: 0;
+                ">
                         <li style="list-style: none">
                             <a target="_blank" href="https://www.youtube.com/c/MinecraftGamerNation0"><i
-                                    class="fa-brands fa-youtube" style="color: #ff0033; font-size: 1.5em"></i></a>
+                                    class="fa-brands fa-youtube"
+                                    style="color: #ff0033; font-size: 1.5em"></i></a>
                         </li>
                         <li style="list-style: none">
                             <a target="_blank" href="https://www.roblox.com/users/3380857326/profile"><i
@@ -306,7 +223,6 @@
                     const spotify = json.data.spotify;
                     const albumEl = document.getElementById("trackAlbum");
                     const spotifyPanel = document.querySelector(".spotifyPanel");
-                    if (!albumEl || !spotifyPanel) return;
                     if (
                         spotify &&
                         (spotify.album || spotify.album_art_url || spotify.song)
@@ -314,7 +230,6 @@
                         document.getElementById("trackArtist").textContent = `By: ${spotify.artist}` || "";
                         albumEl.textContent = `Album: ${spotify.album}` || "";
                         albumEl.style.display = "block";
-                         document.getElementById("trackArtist").style.display = "block";
                         // update aria-label to include album when available
                         const trackName =
                             spotify.song ||
@@ -325,87 +240,16 @@
                             "aria-label",
                             `Open ${trackName}${albumLabel} on Spotify`
                         );
-                        // Improve contrast/readability by sampling the album art and adjusting colors
-                        try {
-                            if (spotify.album_art_url) {
-                                const img = new Image();
-                                img.crossOrigin = "Anonymous";
-                                img.src = spotify.album_art_url;
-                                img.onload = function () {
-                                    try {
-                                        const canvas = document.createElement("canvas");
-                                        const ctx = canvas.getContext("2d", {
-                                            willReadFrequently: true,
-                                        });
-                                        canvas.width = img.width;
-                                        canvas.height = img.height;
-                                        ctx.drawImage(img, 0, 0);
-                                        const cx = Math.floor(img.width / 2);
-                                        const cy = Math.floor(img.height / 2);
-                                        const center = ctx.getImageData(cx, cy, 1, 1).data;
-                                        const left = ctx.getImageData(0, cy, 1, 1).data;
-                                        const right = ctx.getImageData(
-                                            img.width - 1,
-                                            cy,
-                                            1,
-                                            1
-                                        ).data;
-                                        // compute luminance for center pixel
-                                        const r = center[0],
-                                            g = center[1],
-                                            b = center[2];
-                                        const luminance =
-                                            (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-                                        // choose text colors based on luminance
-                                        const primaryText =
-                                            luminance < 0.6 ? "#ffffff" : "#000000";
-                                        const secondaryText =
-                                            luminance < 0.6
-                                                ? "rgba(255,255,255,0.8)"
-                                                : "rgba(0,0,0,0.65)";
-                                        const trackNameEl = document.getElementById("trackName");
-                                        const trackArtistEl =
-                                            document.getElementById("trackArtist");
-                                        if (trackNameEl) trackNameEl.style.color = primaryText;
-                                        if (trackArtistEl)
-                                            trackArtistEl.style.color = secondaryText;
-                                        if (albumEl) albumEl.style.color = secondaryText;
-                                        // stronger, more opaque gradient using sampled edge colors to improve contrast
-                                        spotifyPanel.style.background = `linear-gradient(to right, rgba(${left[0]}, ${left[1]}, ${left[2]}, 0.7), rgba(${right[0]}, ${right[1]}, ${right[2]}, 0.7))`;
-                                    } catch (e) {
-                                        // ignore canvas or CORS errors
-                                    }
-                                };
-                            } else {
-                                // no album art - reset to defaults
-                                spotifyPanel.style.background = "";
-                                const trackNameEl = document.getElementById("trackName");
-                                const trackArtistEl = document.getElementById("trackArtist");
-                                if (trackNameEl) trackNameEl.style.color = "#ffffff";
-                                if (trackArtistEl) trackArtistEl.style.color = "#747474";
-                                if (albumEl) albumEl.style.color = "#8b8b8b";
-                            }
-                        } catch (e) {
-                            // ignore
-                        }
                     } else {
                         albumEl.textContent = "";
                         albumEl.style.display = "none";
-                        document.getElementById("trackArtist").textContent = `I'm not currently listening anything`;
-                        document.getElementById("trackArtist").style.display = "block";
+                        document.getElementById("trackArtist").textContent =
+                            `I'm not currently listening anything`;
                         spotifyPanel.setAttribute(
                             "aria-label",
-                            `Open ${
-                            document.getElementById("trackName").textContent || "song"
+                            `Open ${document.getElementById("trackName").textContent || "song"
                             } on Spotify`
                         );
-                        // reset colors to defaults when not listening
-                        spotifyPanel.style.background = "";
-                        const trackNameEl = document.getElementById("trackName");
-                        const trackArtistEl = document.getElementById("trackArtist");
-                        if (trackNameEl) trackNameEl.style.color = "#ffffff";
-                        if (trackArtistEl) trackArtistEl.style.color = "#747474";
-                        if (albumEl) albumEl.style.color = "#8b8b8b";
                     }
                 } catch (e) {
                     // ignore errors; don't break page
@@ -552,8 +396,7 @@
                 const status = data.data.discord_status;
                 const avatar = user.avatar
                     ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=80`
-                    : `https://cdn.discordapp.com/embed/avatars/${
-                        parseInt(user.discriminator) % 5
+                    : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5
                     }.png`;
                 document.getElementById("discordAvatar").src = avatar;
                 document.getElementById("discordName").textContent = user.username;
@@ -565,7 +408,7 @@
                     "avatarLink"
                 ).href = `https://discord.com/users/${user.id}`;
                 // Show custom status if available
-                const activities = data.data.activities || [];
+                const activities = data.data.activities || [;
                 const customStatus = activities.find(
                     (act) => act.type === 4 && act.state
                 );
@@ -579,7 +422,7 @@
                     // Prefer activities that represent a game/stream/watch (type 0,1,3)
                     const gameActivity = activities.find((a) =>
                         [0, 1, 3.includes(a.type)
-                    );
+                        );
                     if (gameActivity) {
                         rpcNameEl.textContent = gameActivity.name || "Playing";
                         // combine details and state if both exist
