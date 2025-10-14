@@ -121,39 +121,15 @@
 
         /* Album line styling kept inline so album behavior is self-contained */
         .trackAlbum {
-            margin-top: 6px;
-            font-size: 14px;
-            color: #ddd;
+            margin-top: -6px;
+            font-size: 12px;
+            color: #8b8b8b;
         }
 
         .trackBy {
-            margin-top: 6px;
-            font-size: 14px;
-            color: #ddd;
-            display: none
-        }
-
-        .spotifyPanel {
-            padding: 1em;
-            border-radius: 10px;
-        }
-
-        .trackName {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 0.2em;
-        }
-
-        .trackArtist {
-            font-size: 1em;
-            color: #ddd;
-            margin-bottom: 0.4em;
-        }
-
-        .trackImg {
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            margin-top: -6px;
+            font-size: 12px;
+            color: #8b8b8b;
         }
     </style>
     <title>status</title>
@@ -313,16 +289,17 @@
                     if (!json.success) return;
                     const spotify = json.data.spotify;
                     const albumEl = document.getElementById("trackAlbum");
+                    const trackArtistEl = document.getElementById("trackArtist")
                     const spotifyPanel = document.querySelector(".spotifyPanel");
-                    if (!albumEl || !spotifyPanel) return;
+                    if (!albumEl || !spotifyPanel || !trackArtistEl) return;
                     if (
                         spotify &&
                         (spotify.album || spotify.album_art_url || spotify.song)
                     ) {
-                        document.getElementById("trackArtist").textContent = `By: ${spotify.artist}` || "";
+                        trackArtistEl.textContent = `By: ${spotify.artist}` || "";
                         albumEl.textContent = `Album: ${spotify.album}` || "";
                         albumEl.style.display = "block";
-                        document.getElementById("trackArtist").style.display = "block";
+                        trackArtistEl.style.display = "block";
                         // update aria-label to include album when available
                         const trackName =
                             spotify.song ||
@@ -359,7 +336,7 @@
                                             1
                                         ).data;
                                         // compute luminance for center pixel
-                                        const r = center[0],
+                                        const r = center[0,
                                             g = center[1],
                                             b = center[2];
                                         const luminance =
@@ -399,8 +376,8 @@
                     } else {
                         albumEl.textContent = "";
                         albumEl.style.display = "none";
-                        document.getElementById("trackArtist").textContent = `I'm not currently listening anything`;
-                        document.getElementById("trackArtist").style.display = "block";
+                        trackArtistEl.textContent = `I'm not currently listening anything`;
+                        trackArtistEl.style.display = "block";
                         spotifyPanel.setAttribute(
                             "aria-label",
                             `Open ${
@@ -446,7 +423,7 @@
                     }
                 }
             });
-            mo.observe(link, { attributes: true, attributeFilter: ["href"] });
+            mo.observe(link, { attributes: true, attributeFilter: ["href" });
         })();
     </script>
     <script>
