@@ -303,7 +303,7 @@ const gradients = [
 "#004ef7, #0084ff",
 "#ff8400, #ffc900",
 "#660acf, #ac00cf",
-;
+];
 const chosenGradient =
 gradients[Math.floor(Math.random() * gradients.length)];
 const nameNeksio = document.getElementById("nameNeksio");
@@ -320,17 +320,15 @@ const res = await fetch(LANYARD_URL);
 const json = await res.json();
 if (!json.success) return;
 const spotify = json.data.spotify;
-console.log("Spotify data:", spotify);
 const albumEl = document.getElementById("trackAlbum");
-const trackByEl = document.getElementById("trackBy"); // define trackByEl here
+const trackByEl = document.getElementById("trackBy");
 const spotifyPanel = document.querySelector(".spotifyPanel");
 if (!albumEl || !spotifyPanel || !trackByEl) return;
 if (
 spotify &&
 (spotify.album || spotify.album_art_url || spotify.song)
 ) {
-trackByEl.textContent = `By: ${spotify.artist}` || "";
-trackByEl.style.display = "block";
+document.getElementById("trackArtist").textContent = spotify.artist || "";
 albumEl.textContent = `Album: ${spotify.album}` || "";
 albumEl.style.display = "block";
 // update aria-label to include album when available
