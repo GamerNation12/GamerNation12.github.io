@@ -1,52 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
     <style>
         /* Add animation to Spotify icon */
         .spotify.fa-brands.fa-spotify {
             transition: transform 0.3s ease-in-out;
         }
+
         .spotify.fa-brands.fa-spotify:hover {
             animation: rotate-spotify 2s linear infinite;
         }
+
         @keyframes rotate-spotify {
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(360deg);
             }
         }
+
         /* Add animation to Discord icon */
         .fa-discord {
             transition: transform 0.3s ease-in-out;
         }
+
         .fa-discord:hover {
             animation: rotate-discord 2s linear infinite;
         }
+
         @keyframes rotate-discord {
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(360deg);
             }
         }
+
         /* Add animation to social icons */
         .social-icons li a i {
             transition: transform 0.3s ease-in-out;
         }
+
         .social-icons li a:hover i {
             animation: bounce 1s ease infinite;
         }
+
         @keyframes bounce {
             0%,
             20%,
@@ -55,18 +64,22 @@
             100% {
                 transform: translateY(0);
             }
+
             40% {
                 transform: translateY(-5px);
             }
+
             60% {
                 transform: translateY(-3px);
             }
         }
+
         /* Inline panel hover/focus styles (duplicate of css/style.css for convenience) */
         .panel {
             transition: transform 0.18s ease, box-shadow 0.18s ease,
                 border-color 0.18s ease;
         }
+
         .panel:hover,
         .panel:focus-within,
         .panel[tabindex]:focus {
@@ -74,21 +87,25 @@
             box-shadow: rgba(0, 0, 0, 0.55) 0 8px 22px;
             border-color: rgba(255, 255, 255, 0.04);
         }
+
         .panel:focus-within,
         .panel[tabindex]:focus {
             outline: 3px solid rgba(100, 150, 255, 0.12);
             outline-offset: 4px;
         }
+
         .panel:hover .trackImg,
         .panel:focus-within .trackImg {
             transform: scale(1.06);
         }
+
         .panel:hover .discordAvatar,
         .panel:focus-within .discordAvatar,
         .panel:hover .rpcIcon,
         .panel:focus-within .rpcIcon {
             transform: scale(1.04);
         }
+
         /* Spotify-specific active indicator (green glow/outline when interactive) */
         .spotifyPanel[role="link"],
         .spotifyPanel[tabindex],
@@ -101,24 +118,23 @@
                 rgba(0, 0, 0, 0.35) 0 8px 22px;
             border-color: rgba(29, 185, 84, 0.06);
         }
+
         /* Album line styling kept inline so album behavior is self-contained */
         .trackAlbum {
-            margin-top: -6px;
+            margin-top: 0px;
             font-size: 12px;
             color: #8b8b8b;
         }
+
         .trackBy {
-            margin-top: -6px;
+            margin-top: 0px;
             font-size: 12px;
             color: #8b8b8b;
         }
     </style>
     <title>status</title>
-    <link
-        rel="icon"
-        type="image/x-icon"
-        href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80"
-    />
+    <link rel="icon" type="image/x-icon"
+        href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80" />
     <meta name="description" content="loerex" />
     <meta name="keywords" content="loerex" />
     <meta content="minecraft gamer nations website" property="og:title" />
@@ -126,6 +142,7 @@
     <meta content="find out about me!" property="og:url" />
     <meta name="theme-color" content="#ff8400" />
 </head>
+
 <body>
     <div id="container">
         <div class="clockContainer">
@@ -137,9 +154,7 @@
                 <span id="nameNeksio" class="nameNeksio"></span>
             </p>
             <div class="gap"></div>
-            <div
-                class="panel discordPanel"
-                style="
+            <div class="panel discordPanel" style="
                     position: relative;
                     display: flex;
                     flex-direction: row;
@@ -152,21 +167,13 @@
                     max-width: 400px;
                     margin: 0 auto 1.2em auto;
                     box-sizing: border-box;
-                "
-            >
+                ">
                 <!-- Avatar + status dot -->
                 <div style="position: relative; min-width: 80px">
-                    <a
-                        id="avatarLink"
-                        target="_blank"
-                        href="https://discord.com/users/759433582107426816"
-                    >
-                        <img
-                            class="discordAvatar"
-                            id="discordAvatar"
-                            src="https://cdn.discordapp.com/embed/avatars/0.png"
-                            alt="Discord Avatar"
-                            style="
+                    <a id="avatarLink" target="_blank"
+                        href="https://discord.com/users/759433582107426816">
+                        <img class="discordAvatar" id="discordAvatar"
+                            src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" style="
                                 width: 80px;
                                 height: 80px;
                                 border-radius: 50%;
@@ -174,12 +181,9 @@
                                 object-fit: cover;
                                 background: #23272a;
                                 box-shadow: 0 2px 12px #0004;
-                            "
-                        />
+                            " />
                         <!-- Status indicator with tooltip -->
-                        <span
-                            id="discordStatusDot"
-                            style="
+                        <span id="discordStatusDot" style="
                                 position: absolute;
                                 bottom: 10px;
                                 right: 10px;
@@ -191,36 +195,23 @@
                                 display: block;
                                 z-index: 2;
                                 cursor: pointer;
-                            "
-                            title=""
-                        ></span>
+                            " title=""></span>
                     </a>
                 </div>
                 <!-- Username, Discord icon, custom status, and social icons -->
-                <div
-                    style="
+                <div style="
                         display: flex;
                         flex-direction: column;
                         align-items: flex-start;
                         justify-content: center;
                         flex: 1;
-                    "
-                >
+                    ">
                     <div style="display: flex; align-items: center; gap: 0.5em">
-                        <i
-                            class="fa-brands fa-discord"
-                            style="color: #5865f2; font-size: 1.4em"
-                        ></i>
-                        <span
-                            class="discordName"
-                            id="discordName"
-                            style="color: #fff; font-weight: bold; font-size: 1.2em"
-                            >Loading...</span
-                        >
+                        <i class="fa-brands fa-discord" style="color: #5865f2; font-size: 1.4em"></i>
+                        <span class="discordName" id="discordName"
+                            style="color: #fff; font-weight: bold; font-size: 1.2em">Loading...</span>
                     </div>
-                    <span
-                        id="discordCustomStatus"
-                        style="
+                    <span id="discordCustomStatus" style="
                             color: #b9bbbe;
                             font-size: 1em;
                             margin-top: 0.2em;
@@ -228,47 +219,27 @@
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
-                        "
-                    ></span>
+                        "></span>
                     <!-- Social icons under username -->
-                    <ul
-                        class="social-icons list-unstyled list-inline"
-                        style="
+                    <ul class="social-icons list-unstyled list-inline" style="
                             display: flex;
                             gap: 1em;
                             align-items: center;
                             justify-content: flex-start;
                             margin: 0.7em 0 0 0;
                             padding: 0;
-                        "
-                    >
+                        ">
                         <li style="list-style: none">
-                            <a
-                                target="_blank"
-                                href="https://www.youtube.com/c/MinecraftGamerNation0"
-                                ><i
-                                    class="fa-brands fa-youtube"
-                                    style="color: #ff0033; font-size: 1.5em"
-                                ></i
-                            ></a>
+                            <a target="_blank" href="https://www.youtube.com/c/MinecraftGamerNation0"><i
+                                    class="fa-brands fa-youtube" style="color: #ff0033; font-size: 1.5em"></i></a>
                         </li>
                         <li style="list-style: none">
-                            <a
-                                target="_blank"
-                                href="https://www.roblox.com/users/3380857326/profile"
-                                ><i
-                                    class="fa-solid fa-gamepad"
-                                    style="color: #ffffff; font-size: 1.3em"
-                                ></i
-                            ></a>
+                            <a target="_blank" href="https://www.roblox.com/users/3380857326/profile"><i
+                                    class="fa-solid fa-gamepad" style="color: #ffffff; font-size: 1.3em"></i></a>
                         </li>
                         <li style="list-style: none">
-                            <a target="_blank" href="mailto:Minecraft-Gamer-Nation@post.com"
-                                ><i
-                                    class="fa-solid fa-envelope"
-                                    style="color: #ffffff; font-size: 1.3em"
-                                ></i
-                            ></a>
+                            <a target="_blank" href="mailto:Minecraft-Gamer-Nation@post.com"><i
+                                    class="fa-solid fa-envelope" style="color: #ffffff; font-size: 1.3em"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -276,9 +247,7 @@
             <div class="gap"></div>
             <div class="panel spotifyPanel">
                 <i class="spotify fa-brands fa-spotify"></i>
-                <a id="trackLink" target="_blank" href=""
-                    ><img class="trackImg" id="trackImg" src="null"
-                /></a>
+                <a id="trackLink" target="_blank" href=""><img class="trackImg" id="trackImg" src="null" /></a>
                 <p class="trackName" id="trackName">Nothing</p>
                 <p class="trackArtist" id="trackArtist">
                     I'm not currently listening anything
@@ -328,9 +297,11 @@
                         spotify &&
                         (spotify.album || spotify.album_art_url || spotify.song)
                     ) {
-                        document.getElementById("trackArtist").textContent = `By: ${spotify.artist}` || "";
+                        trackByEl.textContent = `By: ${spotify.artist}` || "";
+                        document.getElementById("trackArtist").textContent = ``;
                         albumEl.textContent = `Album: ${spotify.album}` || "";
                         albumEl.style.display = "block";
+                        trackByEl.style.display = "block";
                         // update aria-label to include album when available
                         const trackName =
                             spotify.song ||
@@ -409,11 +380,11 @@
                         albumEl.textContent = "";
                         trackByEl.textContent = "";
                         albumEl.style.display = "none";
-		        trackByEl.style.display = "none";
+                        trackByEl.style.display = "none";
                         spotifyPanel.setAttribute(
                             "aria-label",
                             `Open ${
-                                document.getElementById("trackName").textContent || "song"
+                            document.getElementById("trackName").textContent || "song"
                             } on Spotify`
                         );
                         // reset colors to defaults when not listening
@@ -595,7 +566,7 @@
                     const rpcIconEl = document.getElementById("rpcIcon");
                     // Prefer activities that represent a game/stream/watch (type 0,1,3)
                     const gameActivity = activities.find((a) =>
-                        [0, 1, 3].includes(a.type)
+                        [0, 1, 3.includes(a.type)
                     );
                     if (gameActivity) {
                         rpcNameEl.textContent = gameActivity.name || "Playing";
@@ -646,4 +617,5 @@
             });
     </script>
 </body>
+
 </html>
