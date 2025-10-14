@@ -65,17 +65,13 @@
 </head>
 
 <body>
-    <nav style="
-        background-color: #333;
-        padding: 10px;
-        color: white;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-      ">
-        <a href="index.html" style="color: white; text-decoration: none">Home</a>
-        <a href="status.html" style="color: white; text-decoration: none">Status</a>
+    <nav>
+        <div><a href="index.html">Home</a></div>
+        <div class="nav-links">
+            <a href="status.html">Status</a>
+        </div>
     </nav>
+
     <div id="container">
         <div class="clockContainer">
             <div class="clockTimezone"></div>
@@ -204,7 +200,7 @@
             "#004ef7, #0084ff",
             "#ff8400, #ffc900",
             "#660acf, #ac00cf",
-        ];
+        ;
         const chosenGradient =
             gradients[Math.floor(Math.random() * gradients.length)];
         const nameNeksio = document.getElementById("nameNeksio");
