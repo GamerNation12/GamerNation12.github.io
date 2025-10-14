@@ -12,82 +12,82 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
 <style>
 /* Add animation to Spotify icon */
 .spotify.fa-brands.fa-spotify {
-  transition: transform 0.3s ease-in-out;
+transition: transform 0.3s ease-in-out;
 }
 .spotify.fa-brands.fa-spotify:hover {
-  animation: rotate-spotify 2s linear infinite;
+animation: rotate-spotify 2s linear infinite;
 }
 @keyframes rotate-spotify {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+from {
+transform: rotate(0deg);
+}
+to {
+transform: rotate(360deg);
+}
 }
 /* Add animation to Discord icon */
 .fa-discord {
-  transition: transform 0.3s ease-in-out;
+transition: transform 0.3s ease-in-out;
 }
 .fa-discord:hover {
-  animation: rotate-discord 2s linear infinite;
+animation: rotate-discord 2s linear infinite;
 }
 @keyframes rotate-discord {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+from {
+transform: rotate(0deg);
+}
+to {
+transform: rotate(360deg);
+}
 }
 /* Add animation to social icons */
 .social-icons li a i {
-  transition: transform 0.3s ease-in-out;
+transition: transform 0.3s ease-in-out;
 }
 .social-icons li a:hover i {
-  animation: bounce 1s ease infinite;
+animation: bounce 1s ease infinite;
 }
 @keyframes bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-5px);
-  }
-  60% {
-    transform: translateY(-3px);
-  }
+0%,
+20%,
+50%,
+80%,
+100% {
+transform: translateY(0);
+}
+40% {
+transform: translateY(-5px);
+}
+60% {
+transform: translateY(-3px);
+}
 }
 /* Inline panel hover/focus styles (duplicate of css/style.css for convenience) */
 .panel {
-  transition: transform 0.18s ease, box-shadow 0.18s ease,
-    border-color 0.18s ease;
+transition: transform 0.18s ease, box-shadow 0.18s ease,
+border-color 0.18s ease;
 }
 .panel:hover,
 .panel:focus-within,
 .panel[tabindex]:focus {
-  transform: translateY(-6px);
-  box-shadow: rgba(0, 0, 0, 0.55) 0 8px 22px;
-  border-color: rgba(255, 255, 255, 0.04);
+transform: translateY(-6px);
+box-shadow: rgba(0, 0, 0, 0.55) 0 8px 22px;
+border-color: rgba(255, 255, 255, 0.04);
 }
 .panel:focus-within,
 .panel[tabindex]:focus {
-  outline: 3px solid rgba(100, 150, 255, 0.12);
-  outline-offset: 4px;
+outline: 3px solid rgba(100, 150, 255, 0.12);
+outline-offset: 4px;
 }
 .panel:hover .trackImg,
 .panel:focus-within .trackImg {
-  transform: scale(1.06);
+transform: scale(1.06);
 }
 .panel:hover .discordAvatar,
 .panel:focus-within .discordAvatar,
 .panel:hover .rpcIcon,
 .panel:focus-within .rpcIcon {
-  transform: scale(1.04);
+transform: scale(1.04);
 }
 /* Spotify-specific active indicator (green glow/outline when interactive) */
 .spotifyPanel[role="link"],
@@ -96,24 +96,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
 .spotifyPanel[tabindex]:hover,
 .spotifyPanel[role="link"]:focus,
 .spotifyPanel[tabindex]:focus {
-  outline: 3px solid rgba(29, 185, 84, 0.12);
-  box-shadow: 0 8px 30px rgba(29, 185, 84, 0.08),
-    rgba(0, 0, 0, 0.35) 0 8px 22px;
-  border-color: rgba(29, 185, 84, 0.06);
+outline: 3px solid rgba(29, 185, 84, 0.12);
+box-shadow: 0 8px 30px rgba(29, 185, 84, 0.08),
+rgba(0, 0, 0, 0.35) 0 8px 22px;
+border-color: rgba(29, 185, 84, 0.06);
 }
 /* Album line styling kept inline so album behavior is self-contained */
 .trackAlbum {
-  margin-top: 0px;
-  font-size: 12px;
-  color: #8b8b8b;
+margin-top: -6px;
+font-size: 12px;
+color: #8b8b8b;
 }
 .trackBy {
-  margin-top: 0px;
-  font-size: 12px;
-  color: #8b8b8b;
-}
-.trackName {
-    margin-bottom: 0px;
+margin-top: -6px;
+font-size: 12px;
+color: #8b8b8b;
 }
 </style>
 <title>status</title>
@@ -393,7 +390,7 @@ trackArtistEl.style.color = secondaryText;
 if (albumEl) albumEl.style.color = secondaryText;
 if (trackByEl) trackByEl.style.color = secondaryText;
 // stronger, more opaque gradient using sampled edge colors to improve contrast
-spotifyPanel.style.background = `linear-gradient(to right, rgba(${left[0}, ${left[1]}, ${left[2]}, 0.7), rgba(${right[0]}, ${right[1]}, ${right[2]}, 0.7))`;
+spotifyPanel.style.background = `linear-gradient(to right, rgba(${left[0]}, ${left[1]}, ${left[2]}, 0.7), rgba(${right[0]}, ${right[1]}, ${right[2]}, 0.7))`;
 } catch (e) {
 // ignore canvas or CORS errors
 }
