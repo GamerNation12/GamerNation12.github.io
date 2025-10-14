@@ -10,6 +10,35 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     />
     <style>
+      #rpcPanel {
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  gap: 1em; /* Adjust the spacing between the icon and text as needed */
+}
+
+#rpcPanel > i.game.fa-solid.fa-gamepad {
+  /* Adjust the size and color of the gamepad icon here */
+  font-size: 1.4em; /* Example size, adjust as needed */
+  color: #ffffff; /* Example color, adjust as needed */
+  margin-right: 0.5em; /* Add some spacing between the icon and the image */
+}
+      /* Add animation to Spotify icon */
+.spotify.fa-brands.fa-spotify {
+  transition: transform 0.3s ease-in-out;
+}
+
+.spotify.fa-brands.fa-spotify:hover {
+  animation: rotate-spotify 2s linear infinite;
+}
+
+@keyframes rotate-spotify {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
       /* Add animation to Discord icon */
 .fa-discord {
   transition: transform 0.3s ease-in-out;
