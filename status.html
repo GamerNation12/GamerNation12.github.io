@@ -10,6 +10,48 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     />
     <style>
+      /* Add animation to Discord icon */
+.fa-discord {
+  transition: transform 0.3s ease-in-out;
+}
+
+.fa-discord:hover {
+  animation: rotate-discord 2s linear infinite;
+}
+
+@keyframes rotate-discord {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Add animation to social icons */
+.social-icons li a i {
+  transition: transform 0.3s ease-in-out;
+}
+
+.social-icons li a:hover i {
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
       /* Inline panel hover/focus styles (duplicate of css/style.css for convenience) */
       .panel {
         transition: transform 0.18s ease, box-shadow 0.18s ease,
