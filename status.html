@@ -320,121 +320,99 @@
       const nameNeksio = document.getElementById("nameNeksio");
       nameNeksio.style.backgroundImage = `linear-gradient(to right, ${chosenGradient})`;
     </script>
-    <script>
-      // Inline album updater: fetch Lanyard separately so album logic stays in this file
-      (function () {
-        const DISCORD_USER_ID = "759433582107426816";
-        const LANYARD_URL = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
+<script>
+  // Inline album updater: fetch Lanyard separately so album logic stays in this file
+  (function () {
+    const DISCORD_USER_ID = "759433582107426816";
+    const LANYARD_URL = `https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`;
 
-        async function updateAlbum() {
+    async function updateAlbum() {
+      try {
+        const res = await fetch(LANYARD_URL);
+        const json = await res.json();
+        if (!json.success) return;
+
+        const spotify = json.data.spotify;
+        const albumEl = document.getElementById("trackAlbum");
+        const trackByEl = document.getElementById("trackBy"); // define trackByEl here
+        const spotifyPanel = document.querySelector(".spotifyPanel");
+
+        if (!albumEl || !spotifyPanel || !trackByEl) return;
+
+        if (
+          spotify &&
+          (spotify.album || spotify.album_art_url || spotify.song)
+        ) {
+          trackByEl.textContent = `By: ${spotify.artist}` || "";
+          trackByEl.style.display = "block";
+          albumEl.textContent = `Album: ${spotify.album}` || "";
+          albumEl.style.display = "block";
+
+          // update aria-label to include album when available
+          const trackName =
+            spotify.song ||
+            document.getElementById("trackName").textContent ||
+            "song";
+          const albumLabel = spotify.album ? ` from ${spotify.album}` : "";
+          spotifyPanel.setAttribute(
+            "aria-label",
+            `Open ${trackName}${albumLabel} on Spotify`
+          );
+
+          // Improve contrast/readability by sampling the album art and adjusting colors
           try {
-            const res = await fetch(LANYARD_URL);
-            const json = await res.json();
-            if (!json.success) return;
-            const spotify = json.data.spotify;
-            const albumEl = document.getElementById("trackAlbum");
-            const spotifyPanel = document.querySelector(".spotifyPanel");
-            if (!albumEl || !spotifyPanel) return;
-
-            if (
-              spotify &&
-              (spotify.album || spotify.album_art_url || spotify.song)
-            ) {
-              trackByEl.textContent = `By: ${spotify.artist}` || "";
-              trackByEl.style.display = "block";
-              albumEl.textContent = `Album: ${spotify.album}` || "";
-              albumEl.style.display = "block";
-              // update aria-label to include album when available
-              const trackName =
-                spotify.song ||
-                document.getElementById("trackName").textContent ||
-                "song";
-              const albumLabel = spotify.album ? ` from ${spotify.album}` : "";
-              spotifyPanel.setAttribute(
-                "aria-label",
-                `Open ${trackName}${albumLabel} on Spotify`
-              );
-
-              // Improve contrast/readability by sampling the album art and adjusting colors
-              try {
-                if (spotify.album_art_url) {
-                  const img = new Image();
-                  img.crossOrigin = "Anonymous";
-                  img.src = spotify.album_art_url;
-                  img.onload = function () {
-                    try {
-                      const canvas = document.createElement("canvas");
-                      const ctx = canvas.getContext("2d", {
-                        willReadFrequently: true,
-                      });
-                      canvas.width = img.width;
-                      canvas.height = img.height;
-                      ctx.drawImage(img, 0, 0);
-                      const cx = Math.floor(img.width / 2);
-                      const cy = Math.floor(img.height / 2);
-                      const center = ctx.getImageData(cx, cy, 1, 1).data;
-                      const left = ctx.getImageData(0, cy, 1, 1).data;
-                      const right = ctx.getImageData(
-                        img.width - 1,
-                        cy,
-                        1,
-                        1
-                      ).data;
-
-                      // compute luminance for center pixel
-                      const r = center[0],
-                        g = center[1],
-                        b = center[2];
-                      const luminance =
-                        (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-
-                      // choose text colors based on luminance
-                      const primaryText =
-                        luminance < 0.6 ? "#ffffff" : "#000000";
-                      const secondaryText =
-                        luminance < 0.6
-                          ? "rgba(255,255,255,0.8)"
-                          : "rgba(0,0,0,0.65)";
-
-                      const trackNameEl = document.getElementById("trackName");
-                      const trackArtistEl =
-                        document.getElementById("trackArtist");
-                      if (trackNameEl) trackNameEl.style.color = primaryText;
-                      if (trackArtistEl)
-                        trackArtistEl.style.color = secondaryText;
-                      if (albumEl) albumEl.style.color = secondaryText;
-                      if (trackByEl) trackByEl.style.color = secondaryText;
-
-                      // stronger, more opaque gradient using sampled edge colors to improve contrast
-                      spotifyPanel.style.background = `linear-gradient(to right, rgba(${left[0]}, ${left[1]}, ${left[2]}, 0.7), rgba(${right[0]}, ${right[1]}, ${right[2]}, 0.7))`;
-                    } catch (e) {
-                      // ignore canvas or CORS errors
-                    }
-                  };
-                } else {
-                  // no album art - reset to defaults
-                  spotifyPanel.style.background = "";
+            if (spotify.album_art_url) {
+              const img = new Image();
+              img.crossOrigin = "Anonymous";
+              img.src = spotify.album_art_url;
+              img.onload = function () {
+                try {
+                  const canvas = document.createElement("canvas");
+                  const ctx = canvas.getContext("2d", {
+                    willReadFrequently: true,
+                  });
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  ctx.drawImage(img, 0, 0);
+                  const cx = Math.floor(img.width / 2);
+                  const cy = Math.floor(img.height / 2);
+                  const center = ctx.getImageData(cx, cy, 1, 1).data;
+                  const left = ctx.getImageData(0, cy, 1, 1).data;
+                  const right = ctx.getImageData(
+                    img.width - 1,
+                    cy,
+                    1,
+                    1
+                  ).data;
+                  // compute luminance for center pixel
+                  const r = center[0],
+                    g = center[1],
+                    b = center[2];
+                  const luminance =
+                    (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+                  // choose text colors based on luminance
+                  const primaryText =
+                    luminance < 0.6 ? "#ffffff" : "#000000";
+                  const secondaryText =
+                    luminance < 0.6
+                      ? "rgba(255,255,255,0.8)"
+                      : "rgba(0,0,0,0.65)";
                   const trackNameEl = document.getElementById("trackName");
-                  const trackArtistEl = document.getElementById("trackArtist");
-                  if (trackNameEl) trackNameEl.style.color = "#ffffff";
-                  if (trackArtistEl) trackArtistEl.style.color = "#747474";
-                  if (albumEl) albumEl.style.color = "#8b8b8b";
+                  const trackArtistEl =
+                    document.getElementById("trackArtist");
+                  if (trackNameEl) trackNameEl.style.color = primaryText;
+                  if (trackArtistEl)
+                    trackArtistEl.style.color = secondaryText;
+                  if (albumEl) albumEl.style.color = secondaryText;
+                  if (trackByEl) trackByEl.style.color = secondaryText;
+                  // stronger, more opaque gradient using sampled edge colors to improve contrast
+                  spotifyPanel.style.background = `linear-gradient(to right, rgba(${left[0]}, ${left[1}, ${left[2]}, 0.7), rgba(${right[0]}, ${right[1]}, ${right[2]}, 0.7))`;
+                } catch (e) {
+                  // ignore canvas or CORS errors
                 }
-              } catch (e) {
-                // ignore
-              }
+              };
             } else {
-              albumEl.textContent = "";
-              trackByEl.textContent = "";
-              albumEl.style.display = "none";
-              trackByEl.style.display = "none";
-              spotifyPanel.setAttribute(
-                "aria-label",
-                `Open ${
-                  document.getElementById("trackName").textContent || "song"
-                } on Spotify`
-              );
-              // reset colors to defaults when not listening
+              // no album art - reset to defaults
               spotifyPanel.style.background = "";
               const trackNameEl = document.getElementById("trackName");
               const trackArtistEl = document.getElementById("trackArtist");
@@ -443,15 +421,36 @@
               if (albumEl) albumEl.style.color = "#8b8b8b";
             }
           } catch (e) {
-            // ignore errors; don't break page
+            // ignore
           }
+        } else {
+          albumEl.textContent = "";
+          trackByEl.textContent = "";
+          albumEl.style.display = "none";
+          trackByEl.style.display = "none";
+          spotifyPanel.setAttribute(
+            "aria-label",
+            `Open ${
+              document.getElementById("trackName").textContent || "song"
+            } on Spotify`
+          );
+          // reset colors to defaults when not listening
+          spotifyPanel.style.background = "";
+          const trackNameEl = document.getElementById("trackName");
+          const trackArtistEl = document.getElementById("trackArtist");
+          if (trackNameEl) trackNameEl.style.color = "#ffffff";
+          if (trackArtistEl) trackArtistEl.style.color = "#747474";
+          if (albumEl) albumEl.style.color = "#8b8b8b";
         }
-
-        // initial run and periodic refresh to keep in sync with the external script
-        updateAlbum();
-        setInterval(updateAlbum, 15000);
-      })();
-    </script>
+      } catch (e) {
+        // ignore errors; don't break page
+      }
+    }
+    // initial run and periodic refresh to keep in sync with the external script
+    updateAlbum();
+    setInterval(updateAlbum, 15000);
+  })();
+</script>
     <script>
       // Force cover link to specific Spotify profile and protect against overwrites
       (function () {
