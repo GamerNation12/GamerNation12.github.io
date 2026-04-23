@@ -20,7 +20,7 @@
     <div class="main-container">
         <!-- Hero Section -->
         <section class="hero-section">
-            <img src="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=128" alt="Profile" class="profile-img">
+            <img src="images/bg.jpg" id="profileImg" alt="Profile" class="profile-img" style="object-fit: cover;">
             <h1 class="hero-title">Minecraft Gamer Nation</h1>
             <p class="hero-subtitle">Coding, Gaming, and Content Creation.</p>
             <div class="hero-buttons">
@@ -70,6 +70,20 @@
                 </div>
             </div>
         </section>
+        <!-- Fetch Discord Avatar -->
+        <script>
+            fetch("https://api.lanyard.rest/v1/users/759433582107426816")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.data.discord_user) {
+                        const user = data.data.discord_user;
+                        const avatar = user.avatar 
+                            ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp?size=128`
+                            : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
+                        document.getElementById("profileImg").src = avatar;
+                    }
+                });
+        </script>
     </div>
 </body>
 </html>
