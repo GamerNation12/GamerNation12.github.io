@@ -174,23 +174,61 @@
                 </div>
             </div>
             <div class="gap"></div>
-            <div class="panel spotifyPanel">
-                <i class="spotify fa-brands fa-spotify"></i>
-                <a id="trackLink" target="_blank" href=""><img class="trackImg" id="trackImg" src="null" /></a>
-                <p class="trackName" id="trackName">Nothing</p>
-                <p class="trackArtist" id="trackArtist">
-                    I'm not currently listening anything
-                </p>
-                <p class="trackAlbum" id="trackAlbum"></p>
+            <div class="panel spotifyPanel" style="
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.2em;
+            background: #23272a;
+            padding: 1.2em 1.5em;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1.2em auto;
+            box-sizing: border-box;
+            color: #fff;
+          ">
+                <div style="position: absolute; top: 10px; right: 10px;">
+                    <i class="spotify fa-brands fa-spotify" style="color: #1DB954; font-size: 1.5em;"></i>
+                </div>
+                <a id="trackLink" target="_blank" href="" style="flex-shrink: 0;">
+                    <img class="trackImg" id="trackImg" src="null" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; box-shadow: 0 2px 12px #0004;" />
+                </a>
+                <div style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; flex: 1; overflow: hidden;">
+                    <p class="trackName" id="trackName" style="margin: 0; font-weight: bold; font-size: 1.1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">Nothing</p>
+                    <p class="trackArtist" id="trackArtist" style="margin: 0.2em 0 0 0; color: #b9bbbe; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">
+                        I'm not currently listening anything
+                    </p>
+                    <p class="trackAlbum" id="trackAlbum" style="margin: 0.2em 0 0 0; color: #b9bbbe; font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;"></p>
+                </div>
             </div>
             <div class="gap"></div>
-            <div id="rpcPanel" class="panel rpcPanel">
-                <i class="game fa-solid fa-gamepad"></i>
-                <img class="rpcIcon" id="rpcIcon" src="game.png" />
-                <p class="rpcName" id="rpcName">None</p>
-                <p class="rpcDetails" id="rpcDetails">
-                    I'm not currently playing anything
-                </p>
+            <div id="rpcPanel" class="panel rpcPanel" style="
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.2em;
+            background: #23272a;
+            padding: 1.2em 1.5em;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1.2em auto;
+            box-sizing: border-box;
+            color: #fff;
+          ">
+                <div style="position: absolute; top: 10px; right: 10px;">
+                    <i class="game fa-solid fa-gamepad" style="color: #fff; font-size: 1.2em;"></i>
+                </div>
+                <img class="rpcIcon" id="rpcIcon" src="game.png" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; box-shadow: 0 2px 12px #0004; flex-shrink: 0;" />
+                <div style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; flex: 1; overflow: hidden;">
+                    <p class="rpcName" id="rpcName" style="margin: 0; font-weight: bold; font-size: 1.1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">None</p>
+                    <p class="rpcDetails" id="rpcDetails" style="margin: 0.2em 0 0 0; color: #b9bbbe; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">
+                        I'm not currently playing anything
+                    </p>
+                </div>
             </div>
         </div>
     </div>
