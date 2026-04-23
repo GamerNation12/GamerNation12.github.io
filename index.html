@@ -1,49 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Under Construction</title>
+    <title>GamerNation12 - Home</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        .container h1 {
-            font-size: 48px;
-            color: #333;
-        }
-
-        .container p {
-            font-size: 24px;
-            color: #666;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <meta name="theme-color" content="#0084ff" />
+    <link rel="icon" type="image/x-icon" href="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=80" />
 </head>
-
 <body>
     <nav>
-        <div><a href="index">Home</a></div>
+        <div><a href="index.html">Home</a></div>
         <div class="nav-links">
-            <a href="status">Status</a>
+            <a href="status.html">Status</a>
         </div>
     </nav>
-    <div class="container">
-        <h1>Page Under Construction</h1>
-        <p>This page is still being worked on. Please check back later!</p>
+
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <img src="https://cdn.discordapp.com/avatars/821763511281123444/6b6f2076e121f860fd540729ec91171c.webp?size=128" alt="Profile" class="profile-img">
+            <h1 class="hero-title">Minecraft Gamer Nation</h1>
+            <p class="hero-subtitle">Coding, Gaming, and Content Creation.</p>
+            <div class="hero-buttons">
+                <a href="status.html" class="btn btn-primary"><i class="fa-solid fa-gamepad"></i> Check My Status</a>
+                <a href="https://www.youtube.com/c/MinecraftGamerNation0" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-youtube"></i> YouTube Channel</a>
+            </div>
+        </section>
+
+        <!-- Games Grid -->
+        <section class="games-section">
+            <h2 class="section-title">Games I Play</h2>
+            <div class="grid-container">
+                <div class="card game-card">
+                    <i class="fa-solid fa-cube game-icon" style="color: #4CAF50;"></i>
+                    <h3>Minecraft</h3>
+                    <p>Building, surviving, and exploring the blocky universe.</p>
+                </div>
+                <div class="card game-card">
+                    <i class="fa-solid fa-gamepad game-icon" style="color: #ffffff;"></i>
+                    <h3>Roblox</h3>
+                    <p>Playing mini-games and creating endless adventures.</p>
+                </div>
+                <div class="card game-card">
+                    <i class="fa-solid fa-crosshairs game-icon" style="color: #0084ff;"></i>
+                    <h3>Fortnite</h3>
+                    <p>Dropping in, building up, and getting those Victory Royales.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- YouTube Section -->
+        <section class="youtube-section">
+            <h2 class="section-title">My Channel</h2>
+            <div class="card youtube-card">
+                <div class="yt-header">
+                    <i class="fa-brands fa-youtube" style="color: #ff0033; font-size: 3.5em;"></i>
+                    <div>
+                        <h3>Minecraft Gamer Nation</h3>
+                        <p>Subscribe for gaming content, livestreams, and more!</p>
+                    </div>
+                </div>
+                <!-- YouTube Subscribe Widget -->
+                <script src="https://apis.google.com/js/platform.js"></script>
+                <div class="g-ytsubscribe" data-channel="MinecraftGamerNation0" data-layout="full" data-theme="dark" data-count="default"></div>
+            </div>
+        </section>
     </div>
 </body>
-
 </html>
